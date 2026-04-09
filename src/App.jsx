@@ -4,7 +4,8 @@ import {
   Search, Box, DollarSign, Monitor, ArrowRight, ArrowDown, X,
   Filter, Download, Play, AlertTriangle, CheckCircle2, Clock,
   Settings, Database, ChevronRight, Zap, RefreshCw, ShoppingCart, ShieldAlert,
-  HardHat, BarChart3, Lock, ChevronDown, TrendingUp
+  HardHat, BarChart3, Lock, ChevronDown, TrendingUp,
+  FileCheck, Send
 } from 'lucide-react';
 
 const Badge = ({ children, variant = 'gray' }) => {
@@ -494,6 +495,170 @@ const MockBillingAnomaly = () => (
   </div>
 );
 
+const MockPreflightValidation = () => {
+  const lineItems = [
+    { item: 'Tower Crane 60T', taxonomy: 'pass', dateFeasibility: 'warn', dateNote: 'Lead time risk: 14 wks vs 10 wk request', specComplete: 'fail', specNote: 'Missing: load chart', sourcing: 'Internal Fleet', status: 'Warning' },
+    { item: 'Generator 200kW', taxonomy: 'pass', dateFeasibility: 'pass', dateNote: null, specComplete: 'pass', specNote: null, sourcing: 'MSA Vendor', status: 'Pass' },
+    { item: 'Boom Lift 80ft', taxonomy: 'pass', dateFeasibility: 'pass', dateNote: null, specComplete: 'pass', specNote: null, sourcing: 'Internal Fleet', status: 'Pass' },
+    { item: 'Telehandler 10K', taxonomy: 'pass', dateFeasibility: 'fail', dateNote: 'Vendor confirmed 6 wk delay', specComplete: 'pass', specNote: null, sourcing: 'No Path', status: 'Fail' },
+    { item: 'Light Tower 4kW', taxonomy: 'pass', dateFeasibility: 'pass', dateNote: null, specComplete: 'pass', specNote: null, sourcing: 'MSA Vendor', status: 'Pass' },
+    { item: 'Skid Steer Loader', taxonomy: 'pass', dateFeasibility: 'pass', dateNote: null, specComplete: 'pass', specNote: null, sourcing: 'Internal Fleet', status: 'Pass' },
+  ];
+  const statusVariant = { Pass: 'green', Warning: 'yellow', Fail: 'red' };
+  const sourcingVariant = (s) => s === 'No Path' ? 'red' : s === 'Internal Fleet' ? 'green' : 'blue';
+  const icon = (val, note) => {
+    if (val === 'pass') return <CheckCircle2 className="w-4 h-4 text-emerald-500" />;
+    if (val === 'warn') return <div className="flex items-center gap-1"><AlertTriangle className="w-4 h-4 text-amber-500" />{note && <span className="text-[9px] text-amber-600 max-w-[140px] leading-tight">{note}</span>}</div>;
+    return <div className="flex items-center gap-1"><X className="w-4 h-4 text-rose-500" />{note && <span className="text-[9px] text-rose-600 max-w-[140px] leading-tight">{note}</span>}</div>;
+  };
+  return (
+    <div className="flex flex-col h-full bg-slate-50">
+      <Toolbar
+        leftArea={<><ShieldAlert className="w-4 h-4 text-amber-500"/><span className="font-bold text-slate-800">Zone 6: Preflight Validation</span><span className="text-slate-400">|</span><span className="text-slate-600">Data Center TX</span></>}
+        rightArea={<button className="flex items-center gap-2 bg-amber-600 text-white px-3 py-1.5 rounded text-xs font-semibold hover:bg-amber-700"><Play className="w-3 h-3"/> Run Preflight</button>}
+      />
+      <div className="p-6 overflow-auto flex flex-col gap-5">
+        <div className="grid grid-cols-3 gap-4">
+          <KPI label="Line Items Checked" value="24 / 24" />
+          <div className="bg-white border border-slate-200 p-3 rounded-md shadow-sm">
+            <div className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold mb-1">Conflicts Found</div>
+            <div className="text-xl font-bold font-mono text-rose-600">2</div>
+          </div>
+          <div className="bg-white border border-slate-200 p-3 rounded-md shadow-sm">
+            <div className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold mb-1">Pass Rate</div>
+            <div className="text-xl font-bold font-mono text-amber-600">91.7%</div>
+          </div>
+        </div>
+        <div className="overflow-x-auto border border-slate-200 rounded-md bg-white">
+          <table className="w-full text-left text-xs">
+            <thead className="bg-slate-50 border-b border-slate-200 text-[10px] uppercase tracking-wider text-slate-500">
+              <tr>
+                <th className="px-3 py-2 font-semibold">Line Item</th>
+                <th className="px-3 py-2 font-semibold">Taxonomy</th>
+                <th className="px-3 py-2 font-semibold">Date Feasibility</th>
+                <th className="px-3 py-2 font-semibold">Spec Complete</th>
+                <th className="px-3 py-2 font-semibold">Sourcing Path</th>
+                <th className="px-3 py-2 font-semibold">Status</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {lineItems.map((row, i) => (
+                <tr key={i} className="hover:bg-slate-50 transition-colors">
+                  <td className="px-3 py-2.5 text-slate-800 font-medium">{row.item}</td>
+                  <td className="px-3 py-2.5">{icon(row.taxonomy, null)}</td>
+                  <td className="px-3 py-2.5">{icon(row.dateFeasibility, row.dateNote)}</td>
+                  <td className="px-3 py-2.5">{icon(row.specComplete, row.specNote)}</td>
+                  <td className="px-3 py-2.5"><Badge variant={sourcingVariant(row.sourcing)}>{row.sourcing}</Badge></td>
+                  <td className="px-3 py-2.5"><Badge variant={statusVariant[row.status]}>{row.status}</Badge></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="bg-white border border-rose-200 rounded-md p-4 shadow-sm">
+          <h4 className="text-xs font-bold text-rose-700 uppercase tracking-wider mb-3 flex items-center gap-2"><AlertTriangle className="w-4 h-4"/> Detected Conflicts</h4>
+          <div className="space-y-2">
+            <div className="flex items-start gap-2 text-sm text-slate-700 bg-rose-50 border border-rose-100 rounded p-3">
+              <span className="font-mono text-rose-500 font-bold shrink-0">1.</span>
+              <span>Tower crane radius overlaps with temporary power placement on Site Plan Rev 3.</span>
+            </div>
+            <div className="flex items-start gap-2 text-sm text-slate-700 bg-rose-50 border border-rose-100 rounded p-3">
+              <span className="font-mono text-rose-500 font-bold shrink-0">2.</span>
+              <span>Requested boom lift delivery (Nov 3) is 4 weeks before structural steel completion per P6 schedule.</span>
+            </div>
+          </div>
+        </div>
+        <div className="flex justify-end gap-3">
+          <button className="bg-white border border-slate-300 text-slate-700 font-semibold text-xs px-4 py-2 rounded hover:bg-slate-50 transition-colors">Resolve Conflicts & Revalidate</button>
+          <button className="bg-amber-600 text-white font-semibold text-xs px-4 py-2 rounded hover:bg-amber-700 transition-colors flex items-center gap-2">Assemble Request Pack <ArrowRight className="w-3 h-3"/></button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const MockFormalRequest = () => {
+  const lineItems = [
+    { item: 'Tower Crane 60T', pillar: 'Equipment', qty: 2, delivery: 'Nov 15, 2026', sourcing: 'Internal Fleet', sla: 'On Track' },
+    { item: 'Generator 200kW', pillar: 'Equipment', qty: 3, delivery: 'Nov 1, 2026', sourcing: 'MSA Vendor', sla: 'On Track' },
+    { item: 'Boom Lift 80ft', pillar: 'Equipment', qty: 14, delivery: 'Dec 3, 2026', sourcing: 'Internal Fleet', sla: 'On Track' },
+    { item: 'Telehandler 10K', pillar: 'Equipment', qty: 4, delivery: 'Nov 20, 2026', sourcing: 'MSA Vendor', sla: 'At Risk' },
+    { item: 'Light Tower 4kW', pillar: 'Equipment', qty: 8, delivery: 'Oct 28, 2026', sourcing: 'MSA Vendor', sla: 'On Track' },
+    { item: 'Skid Steer Loader', pillar: 'Equipment', qty: 3, delivery: 'Nov 8, 2026', sourcing: 'Internal Fleet', sla: 'On Track' },
+  ];
+  const lineageSteps = [
+    { zone: 2, label: 'Fit Score', color: 'bg-indigo-500' },
+    { zone: 3, label: 'Margin Plan', color: 'bg-indigo-500' },
+    { zone: 4, label: 'V0 Baseline', color: 'bg-emerald-500' },
+    { zone: 5, label: 'Refined Intent', color: 'bg-emerald-500' },
+    { zone: 6, label: 'Preflight Pass', color: 'bg-amber-500' },
+    { zone: 7, label: 'Submitted', color: 'bg-amber-500' },
+  ];
+  return (
+    <div className="flex flex-col h-full bg-slate-50">
+      <Toolbar
+        leftArea={<><Send className="w-4 h-4 text-indigo-500"/><span className="font-bold text-slate-800">Zone 7: Formal Request</span><span className="text-slate-400">|</span><Badge variant="green">Submitted — SLA Active</Badge></>}
+        rightArea={<div className="flex items-center gap-2 text-xs font-semibold text-slate-600"><Clock className="w-4 h-4 text-amber-500"/><span className="font-mono">SLA: 3d 14h remaining</span></div>}
+      />
+      <div className="p-6 overflow-auto flex flex-col gap-5">
+        <div className="grid grid-cols-4 gap-4">
+          <KPI label="Request ID" value="REQ-2024-0847" />
+          <KPI label="Line Items" value="22" />
+          <KPI label="Total Estimated Value" value="$1.24M" />
+          <KPI label="Routing" value="Equipment Ops" subtext="Auto-routed" />
+        </div>
+        <div className="overflow-x-auto border border-slate-200 rounded-md bg-white">
+          <table className="w-full text-left text-xs">
+            <thead className="bg-slate-50 border-b border-slate-200 text-[10px] uppercase tracking-wider text-slate-500">
+              <tr>
+                <th className="px-3 py-2 font-semibold">Line Item</th>
+                <th className="px-3 py-2 font-semibold">Pillar</th>
+                <th className="px-3 py-2 font-semibold text-right">Quantity</th>
+                <th className="px-3 py-2 font-semibold">Delivery Date</th>
+                <th className="px-3 py-2 font-semibold">Sourcing Path</th>
+                <th className="px-3 py-2 font-semibold">SLA Status</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {lineItems.map((row, i) => (
+                <tr key={i} className="hover:bg-slate-50 transition-colors">
+                  <td className="px-3 py-2.5 text-slate-800 font-medium">{row.item}</td>
+                  <td className="px-3 py-2.5 text-slate-600">{row.pillar}</td>
+                  <td className="px-3 py-2.5 text-slate-700 font-mono text-right">{row.qty}</td>
+                  <td className="px-3 py-2.5 text-slate-600 font-mono">{row.delivery}</td>
+                  <td className="px-3 py-2.5"><Badge variant={row.sourcing === 'Internal Fleet' ? 'green' : 'blue'}>{row.sourcing}</Badge></td>
+                  <td className="px-3 py-2.5"><Badge variant={row.sla === 'On Track' ? 'green' : 'yellow'}>{row.sla}</Badge></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="bg-white border border-slate-200 rounded-md p-4 shadow-sm">
+          <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3 flex items-center gap-2"><Database className="w-4 h-4 text-indigo-500"/> Lineage Trail</h4>
+          <div className="flex items-center gap-1 overflow-x-auto pb-1">
+            {lineageSteps.map((step, i) => (
+              <React.Fragment key={step.zone}>
+                {i > 0 && <ChevronRight className="w-4 h-4 text-slate-300 shrink-0" />}
+                <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-200 rounded-full px-3 py-1.5 shrink-0">
+                  <div className={`w-2.5 h-2.5 rounded-full ${step.color} shrink-0`} />
+                  <span className="text-[10px] font-bold text-slate-500">Z{step.zone}</span>
+                  <span className="text-[10px] text-slate-600 font-medium">{step.label}</span>
+                </div>
+              </React.Fragment>
+            ))}
+          </div>
+        </div>
+        <div className="bg-white border border-amber-200 rounded-md p-4 shadow-sm">
+          <h4 className="text-xs font-bold text-amber-700 uppercase tracking-wider mb-3 flex items-center gap-2"><Zap className="w-4 h-4"/> Post-Submission Changes</h4>
+          <div className="bg-amber-50 border border-amber-100 rounded p-3 text-sm text-slate-700">
+            <span className="font-semibold text-amber-700">Change #1:</span> Quantity adjustment — Boom Lifts 80ft: <span className="font-mono line-through text-slate-400">12</span> → <span className="font-mono font-bold text-slate-800">14</span> <Badge variant="gray">Minor — within threshold, auto-approved</Badge>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const MockFinancialModel = () => {
   const data = [
     { id: 'OPP-901', name: 'Project Alpha (HQ Build)', zone: 'Zone 2', stage: 'Early Pursuit', gross: 12500000, conf: 0.30, cost: 2600000 },
@@ -637,6 +802,8 @@ const CARD_REGISTRY = {
   'prepop-ops': { title: 'Pre-Population & Constraint Alerts', description: 'Pre-populate project-level equipment requests using demand forecasts, schedules, and historical patterns.', icon: Layers, colorClass: 'border-emerald-100', highlight: 'bg-emerald-100 text-emerald-600', resolveId: 'prepop' },
   optimize: { title: 'Owned vs Re-Rent Optimizer', description: 'Use enterprise-wide owned fleet visibility to recommend whether each request should be fulfilled with owned equipment or re-rent.', icon: Search, colorClass: 'border-amber-200 ring-2 ring-amber-50', highlight: 'bg-amber-500 text-white' },
   source: { title: 'Strategic Sourcing', description: 'Enable O2S to source from the right vendors at the right time using demand signals and supplier performance.', icon: Box, colorClass: 'border-amber-100', highlight: 'bg-amber-100 text-amber-600' },
+  preflight: { title: 'Preflight Validation', description: 'Validate request packs against taxonomy, date feasibility, specifications, and sourcing paths before formal submission.', icon: FileCheck, colorClass: 'border-amber-200', highlight: 'bg-amber-100 text-amber-600' },
+  formalrequest: { title: 'Formal Request & Handoff', description: 'Submit validated request packs with full lineage traceability and SLA-tracked routing to fulfillment teams.', icon: Send, colorClass: 'border-amber-100', highlight: 'bg-amber-100 text-amber-600' },
   lifecycle: { title: 'Asset Lifecycle Engine', description: 'Create a unified asset lifecycle view and support better keep / overhaul / redeploy / replace decisions.', icon: RotateCcw, colorClass: 'border-slate-300', highlight: 'bg-slate-200 text-slate-700' },
   capex: { title: 'CapEx Plan', description: 'Translate forward demand and available fleet supply into a prioritized, timing-specific CAPEX plan.', icon: Activity, colorClass: 'border-slate-300', highlight: 'bg-slate-200 text-slate-700' },
   margin: { title: 'Margin Plan', description: 'Define project-level O2S margin pre-go/no-go by pillar and product line, anchored to AOP targets.', icon: Target, colorClass: 'border-indigo-100', highlight: 'bg-indigo-100 text-indigo-600' },
@@ -648,13 +815,13 @@ const PERSONA_EQUIPMENT_GRID = {
   'project-teams': {
     'z1-3': { cards: ['quotes'], placeholders: [] },
     'z4-5': { cards: ['prepop', 'adhoc'], placeholders: [] },
-    'z6-7': { cards: [], placeholders: ['Preflight Validation — Coming in Prompt 3'] },
+    'z6-7': { cards: ['preflight'], placeholders: [] },
     'z8-9': { cards: [], placeholders: ['Execution Self-Service — Coming in Prompt 4'] },
   },
   'o2s-ops': {
     'z1-3': { cards: ['forecast'], placeholders: [] },
     'z4-5': { cards: ['prepop-ops'], placeholders: [] },
-    'z6-7': { cards: ['optimize', 'source'], placeholders: [] },
+    'z6-7': { cards: ['optimize', 'source', 'formalrequest'], placeholders: [] },
     'z8-9': { cards: [], placeholders: ['Utilization Monitoring — Coming in Prompt 4'] },
   },
   'leadership': {
@@ -761,6 +928,8 @@ const App = () => {
       case 'adhoc': return <MockAdHocIntake />;
       case 'optimize': return <MockOptimizer />;
       case 'source': return <MockStrategicSourcing />;
+      case 'preflight': return <MockPreflightValidation />;
+      case 'formalrequest': return <MockFormalRequest />;
       case 'anomaly': return <MockBillingAnomaly />;
       case 'fpa': return <MockFinancialModel />;
       default: return <div className="p-10 flex justify-center items-center h-full text-slate-400">Workflow simulation not mapped for this node.</div>;
