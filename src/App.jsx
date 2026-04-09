@@ -6,7 +6,7 @@ import {
   Settings, Database, ChevronRight, Zap, RefreshCw, ShoppingCart, ShieldAlert,
   HardHat, BarChart3, Lock, ChevronDown, TrendingUp,
   FileCheck, Send, Truck, Star, Repeat, GitBranch, Bell, Eye, Gauge, Crosshair, ClipboardList,
-  Users
+  Users, Rocket
 } from 'lucide-react';
 
 const Badge = ({ children, variant = 'gray' }) => {
@@ -1655,20 +1655,38 @@ const MockFinancialModel = () => {
   );
 };
 
-const Card = ({ id, title, description, icon: Icon, colorClass, highlight, connectionLabel, onClick, zone, isTourActive, isHighlighted }) => (
-  <div onClick={() => !isTourActive && onClick({ id, title, description, icon: Icon, colorClass, highlight, zone })}
-    className={`p-4 rounded-xl shadow-sm border bg-white flex flex-col relative transition-all ${isTourActive ? '' : 'cursor-pointer'} ${colorClass} 
-      ${isTourActive ? (isHighlighted ? 'ring-4 ring-indigo-500 shadow-2xl scale-105 z-20' : 'opacity-30 grayscale blur-[1px] pointer-events-none') : 'hover:shadow-md hover:ring-2 hover:ring-slate-300 hover:-translate-y-1 z-10'}`}>
-    <div className="flex items-start justify-between mb-3">
-      <div className="flex items-center gap-2 text-slate-800 font-semibold text-sm">
-        <div className={`p-2 rounded-lg ${highlight}`}><Icon className="w-4 h-4" /></div>
-        <h3 className="leading-tight">{title}</h3>
-      </div>
+const WaveBadge = ({ wave }) => {
+  const colors = WAVE_COLORS[wave];
+  if (!colors) return null;
+  return (
+    <div className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[9px] font-bold uppercase tracking-wider ${colors.bg} ${colors.text} ${colors.border} border`}>
+      <div className={`w-1.5 h-1.5 rounded-full ${colors.dot}`} />
+      W{wave}
     </div>
-    <p className="text-xs text-slate-600 leading-relaxed flex-grow">{description}</p>
-    {connectionLabel && <div className="mt-3 text-[10px] font-bold text-slate-400 uppercase tracking-wide flex items-center gap-1"><ArrowRight className="w-3 h-3" /> {connectionLabel}</div>}
-  </div>
-);
+  );
+};
+
+const Card = ({ id, title, description, icon: Icon, colorClass, highlight, connectionLabel, onClick, zone, isTourActive, isHighlighted, waveFilter }) => {
+  const waveInfo = WAVE_ASSIGNMENTS[id];
+  const cardWave = waveInfo ? waveInfo.wave : null;
+  const isWaveFiltered = waveFilter !== 'all' && cardWave !== waveFilter;
+  return (
+    <div onClick={() => !isTourActive && !isWaveFiltered && onClick({ id, title, description, icon: Icon, colorClass, highlight, zone })}
+      className={`p-4 rounded-xl shadow-sm border bg-white flex flex-col relative transition-all duration-300 ${isTourActive ? '' : isWaveFiltered ? '' : 'cursor-pointer'} ${colorClass}
+        ${isWaveFiltered ? 'opacity-20 grayscale scale-95 pointer-events-none' : ''}
+        ${isTourActive ? (isHighlighted ? 'ring-4 ring-indigo-500 shadow-2xl scale-105 z-20' : 'opacity-30 grayscale blur-[1px] pointer-events-none') : isWaveFiltered ? '' : 'hover:shadow-md hover:ring-2 hover:ring-slate-300 hover:-translate-y-1 z-10'}`}>
+      <div className="flex items-start justify-between mb-3">
+        <div className="flex items-center gap-2 text-slate-800 font-semibold text-sm">
+          <div className={`p-2 rounded-lg ${highlight}`}><Icon className="w-4 h-4" /></div>
+          <h3 className="leading-tight">{title}</h3>
+        </div>
+        {cardWave && <WaveBadge wave={cardWave} />}
+      </div>
+      <p className="text-xs text-slate-600 leading-relaxed flex-grow">{description}</p>
+      {connectionLabel && <div className="mt-3 text-[10px] font-bold text-slate-400 uppercase tracking-wide flex items-center gap-1"><ArrowRight className="w-3 h-3" /> {connectionLabel}</div>}
+    </div>
+  );
+};
 
 const PlaceholderCard = ({ label }) => (
   <div className="p-5 rounded-xl border-2 border-dashed border-slate-300 bg-slate-50/50 flex flex-col items-center justify-center text-center min-h-[120px] gap-2">
@@ -1723,6 +1741,57 @@ const CARD_REGISTRY = {
   vendorscorecard: { title: 'Vendor Performance Scorecard', description: 'Auto-compiled vendor scorecards from execution actuals covering delivery, billing accuracy, and safety.', icon: Star, colorClass: 'border-rose-100', highlight: 'bg-rose-100 text-rose-600' },
   flywheel: { title: 'Learning Flywheel', description: 'Capture actuals vs assumptions, analyze variance, and write back calibrated defaults to upstream templates.', icon: GitBranch, colorClass: 'border-rose-200 ring-2 ring-rose-50', highlight: 'bg-rose-500 text-white' },
   anomaly: { title: 'Billing Anomaly Detection', description: 'Detect and flag billing anomalies using project-level patterns before invoice posting.', icon: DollarSign, colorClass: 'border-rose-200 ring-2 ring-rose-50', highlight: 'bg-rose-500 text-white' },
+};
+
+const WAVE_META = [
+  { id: 'all', label: 'See All', shortLabel: 'All', color: 'slate', description: 'View all workflow cards across every build wave.' },
+  { id: 1, label: 'Wave 1', shortLabel: 'W1', color: 'indigo', description: 'Foundation — No prerequisites. Stand up core intake and margin planning to unlock project team experience immediately.' },
+  { id: 2, label: 'Wave 2', shortLabel: 'W2', color: 'emerald', description: 'Demand Intelligence — Builds on Wave 1 baselines. Aggregate demand signals, score clarity, and surface cost-of-delay.' },
+  { id: 3, label: 'Wave 3', shortLabel: 'W3', color: 'amber', description: 'Decision Engines — Builds on Wave 2 demand signals. Fit scoring, lifecycle analysis, quick quotes, and owned-vs-rent optimization.' },
+  { id: 4, label: 'Wave 4', shortLabel: 'W4', color: 'rose', description: 'Validate & Fulfill — Builds on Wave 3 decisions. Preflight validation, formal handoff, strategic sourcing, and CapEx planning.' },
+  { id: 5, label: 'Wave 5', shortLabel: 'W5', color: 'violet', description: 'Execute & Monitor — Builds on Wave 4 requests. Track deployments, score vendors, detect billing anomalies, and monitor regressions.' },
+  { id: 6, label: 'Wave 6', shortLabel: 'W6', color: 'sky', description: 'Learn & Compound — Builds on Wave 5 actuals. Close the loop with flywheel learning and calibrated FP&A sync.' },
+];
+
+const WAVE_ASSIGNMENTS = {
+  // Wave 1: Foundation — no prerequisites, can be executed immediately
+  prepop:           { wave: 1, rationale: 'Starting point — no prerequisites. Pre-populating baselines from templates and forecasts enables project teams to engage early and builds the data foundation for all downstream waves.' },
+  adhoc:            { wave: 1, rationale: 'No prerequisites. Giving project teams a structured intake channel early creates immediate value and captures demand signals that feed Wave 2 aggregation.' },
+  margin:           { wave: 1, rationale: 'Starting point for Finance & FP&A. Margin planning at pursuit stage anchors all downstream cost and revenue visibility.' },
+  // Wave 2: Demand Intelligence — builds on Wave 1 baseline data
+  forecast:         { wave: 2, rationale: 'Dependent on Wave 1 baselines and intakes to have demand data flowing. Aggregates project-level needs into portfolio-wide cat-class demand vs. supply.' },
+  clarityscoring:   { wave: 2, rationale: 'Needs baseline data from Wave 1 to score. Quantifies how complete each equipment need is — the scoring engine that powers cost-of-delay and preflight.' },
+  costofdelay:      { wave: 2, rationale: 'Dependent on demand forecasting and clarity scoring. Makes the financial consequence of late clarity visible — the behavioral nudge engine.' },
+  projectmaturity:  { wave: 2, rationale: 'Needs zone lifecycle data flowing from Wave 1 intakes. Shows where every package sits across zones — the portfolio-level progress view.' },
+  // Wave 3: Decision Engines — builds on Wave 2 demand signals
+  fitscore:         { wave: 3, rationale: 'Needs forecast data from Wave 2. Evaluates FP&A entries against equipment capabilities to recommend engagement strategy before designs lock.' },
+  lifecycle:        { wave: 3, rationale: 'Dependent on multiple data inputs (telematics, maintenance, etc.). Creates the unified asset view that feeds CapEx planning in Wave 4.' },
+  quotes:           { wave: 3, rationale: 'Same ML logic as demand forecasting but at lower fidelity for quick directional estimates. Feeds quick quotes to RSIs for early customer engagement.' },
+  optimize:         { wave: 3, rationale: 'Needs demand signals from Wave 2 plus fleet data. Determines owned vs. re-rent for each request — critical cost optimization before fulfillment.' },
+  // Wave 4: Validate & Fulfill — builds on Wave 3 decisions
+  preflight:        { wave: 4, rationale: 'Needs upstream clarity scoring and optimization from Waves 2-3. The hard validation gate — items must pass before formal submission.' },
+  formalrequest:    { wave: 4, rationale: 'Needs preflight validation. Submits validated request packs with full lineage — the handoff from planning to execution.' },
+  source:           { wave: 4, rationale: 'Needs optimizer output from Wave 3. Enables strategic vendor selection using demand signals and performance data.' },
+  capex:            { wave: 4, rationale: 'Needs lifecycle engine and demand-supply gap from Wave 3. Translates forward demand into prioritized CapEx waves for steering committee.' },
+  // Wave 5: Execute & Monitor — builds on Wave 4 submitted requests
+  execution:        { wave: 5, rationale: 'Needs formal requests flowing from Wave 4. Tracks active deployments, monitors utilization, flags exceptions — the operational cockpit.' },
+  vendorscorecard:  { wave: 5, rationale: 'Needs execution actuals accumulating. Auto-compiles vendor performance from delivery, billing accuracy, and safety data.' },
+  anomaly:          { wave: 5, rationale: 'Triggered post-fulfillment from Wave 4. Detects billing anomalies using project-level patterns before invoice posting.' },
+  regression:       { wave: 5, rationale: 'Needs gate conditions established across Waves 1-4. Monitors when gate conditions become false and fires regression-specific triggers.' },
+  // Wave 6: Learn & Compound — builds on Wave 5 execution actuals
+  flywheel:         { wave: 6, rationale: 'Needs actuals vs. assumptions from Wave 5 execution. Captures variance, analyzes patterns, and writes back calibrated defaults to upstream templates.' },
+  fpa:              { wave: 6, rationale: 'Needs calibrated data from flywheel learning. Syncs risk-adjusted, time-phased revenue and margin forecasts back to FP&A tools.' },
+  // Ops variant resolves to same wave as parent
+  'prepop-ops':     { wave: 1, rationale: 'Operations view of V0 Baseline — same Wave 1 foundation as project team view, with constraint alerting layered on.' },
+};
+
+const WAVE_COLORS = {
+  1: { bg: 'bg-indigo-100', text: 'text-indigo-700', border: 'border-indigo-200', dot: 'bg-indigo-500' },
+  2: { bg: 'bg-emerald-100', text: 'text-emerald-700', border: 'border-emerald-200', dot: 'bg-emerald-500' },
+  3: { bg: 'bg-amber-100', text: 'text-amber-700', border: 'border-amber-200', dot: 'bg-amber-500' },
+  4: { bg: 'bg-rose-100', text: 'text-rose-700', border: 'border-rose-200', dot: 'bg-rose-500' },
+  5: { bg: 'bg-violet-100', text: 'text-violet-700', border: 'border-violet-200', dot: 'bg-violet-500' },
+  6: { bg: 'bg-sky-100', text: 'text-sky-700', border: 'border-sky-200', dot: 'bg-sky-500' },
 };
 
 const PERSONA_EQUIPMENT_GRID = {
@@ -1830,6 +1899,7 @@ const App = () => {
   const [hoveredPhase, setHoveredPhase] = useState(null);
   const [triggerPanelOpen, setTriggerPanelOpen] = useState(false);
   const [triggerFilter, setTriggerFilter] = useState('all');
+  const [activeWave, setActiveWave] = useState('all');
 
   const tourDataByPersona = {
     'project-teams': [
@@ -2001,6 +2071,115 @@ const App = () => {
       {/* Main Content */}
       <div className="flex-grow p-4 md:p-8 overflow-x-auto">
         <div className={`transition-all duration-500 ${selectedNode ? 'blur-sm scale-95 opacity-50' : 'blur-0 scale-100 opacity-100'} min-w-[1000px] max-w-7xl mx-auto space-y-6`}>
+          {/* Wave Sequencing — Build Roadmap */}
+          <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+            {/* Wave Selector Row */}
+            <div className="bg-slate-900 px-6 py-3 flex items-center justify-between">
+              <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1.5 mr-3">
+                  <Rocket className="w-3.5 h-3.5 text-slate-500" />
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Build Wave</span>
+                </div>
+                {WAVE_META.map((wave) => {
+                  const isActive = activeWave === wave.id;
+                  const waveColors = wave.id === 'all' ? null : WAVE_COLORS[wave.id];
+                  if (wave.id === 'all') {
+                    return (
+                      <button
+                        key={wave.id}
+                        onClick={() => {
+                          setActiveWave(wave.id);
+                        }}
+                        className={`relative px-3 py-1.5 rounded-md text-[11px] font-bold tracking-wide transition-all ${
+                          isActive
+                            ? 'bg-white text-slate-900 shadow-sm'
+                            : 'text-slate-500 hover:text-slate-300 hover:bg-slate-800'
+                        }`}
+                      >
+                        <span className="flex items-center gap-1">
+                          <Eye className="w-3 h-3" />
+                          See All
+                        </span>
+                      </button>
+                    );
+                  }
+                  return (
+                    <React.Fragment key={wave.id}>
+                      <div className="relative group">
+                        <button
+                          onClick={() => {
+                            setActiveWave(wave.id);
+                            if (wave.id !== 'all' && isTourActive) {
+                              setIsTourActive(false);
+                              setTourStep(0);
+                            }
+                          }}
+                          className={`relative px-3 py-1.5 rounded-md text-[11px] font-bold tracking-wide transition-all ${
+                            isActive
+                              ? `${waveColors.bg} ${waveColors.text} shadow-sm`
+                              : 'text-slate-500 hover:text-slate-300 hover:bg-slate-800'
+                          }`}
+                        >
+                          <span className="flex items-center gap-1.5">
+                            <div className={`w-2 h-2 rounded-full ${isActive ? waveColors.dot : 'bg-slate-600'}`} />
+                            {wave.label}
+                          </span>
+                        </button>
+                        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-slate-800 text-white text-[10px] rounded-md shadow-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-30 max-w-xs">
+                          <div className="font-bold mb-1">{wave.label}: {wave.description.split(' — ')[0]}</div>
+                          {Object.entries(WAVE_ASSIGNMENTS)
+                            .filter(([, v]) => v.wave === wave.id)
+                            .map(([key]) => CARD_REGISTRY[CARD_REGISTRY[key]?.resolveId || key] || CARD_REGISTRY[key])
+                            .filter(Boolean)
+                            .map((card, i) => (
+                              <div key={i} className="text-slate-300">• {card.title}</div>
+                            ))
+                          }
+                          <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-px border-4 border-transparent border-t-slate-800" />
+                        </div>
+                      </div>
+                      {wave.id < 6 && (
+                        <ChevronRight className="w-3 h-3 text-slate-600 shrink-0 -mx-0.5" />
+                      )}
+                    </React.Fragment>
+                  );
+                })}
+              </div>
+              <div className="text-[10px] text-slate-500 italic">
+                {activeWave === 'all' ? '21 cards across 6 build waves' : `${Object.values(WAVE_ASSIGNMENTS).filter(v => v.wave === activeWave).length} cards in this wave`}
+              </div>
+            </div>
+
+            {/* Wave Description (only when a specific wave is selected) */}
+            {activeWave !== 'all' && (() => {
+              const waveMeta = WAVE_META.find(w => w.id === activeWave);
+              const waveColor = WAVE_COLORS[activeWave];
+              return (
+                <div className={`px-6 py-3 ${waveColor.bg} border-t ${waveColor.border}`}>
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <div className={`w-2.5 h-2.5 rounded-full ${waveColor.dot}`} />
+                        <span className={`text-sm font-bold ${waveColor.text}`}>
+                          {waveMeta.label}: {waveMeta.description.split(' — ')[0]}
+                        </span>
+                      </div>
+                      <p className="text-xs text-slate-600 leading-relaxed max-w-3xl pl-[18px]">
+                        {waveMeta.description.includes(' — ') ? waveMeta.description.split(' — ').slice(1).join(' — ') : waveMeta.description}
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => setActiveWave('all')}
+                      className={`text-xs font-semibold ${waveColor.text} hover:underline shrink-0 ml-4`}
+                    >
+                      ← See All Waves
+                    </button>
+                  </div>
+                </div>
+              );
+            })()}
+          </div>
+
           {/* Page Title */}
           <div className="mb-6 flex justify-between items-end">
             <div>
@@ -2009,9 +2188,29 @@ const App = () => {
               </h1>
               <p className="text-sm font-medium text-slate-500 mt-1">Demand Funnel Zones &middot; {activePillarObj.label} &middot; Click any workflow card to explore its interactive simulation.</p>
             </div>
-            <button onClick={() => { setIsTourActive(true); setTourStep(0); setSelectedNode(null); }} className="btn-interactive flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-bold shadow-sm transition-colors shrink-0">
-              <Play className="w-4 h-4" /> Walkthrough
-            </button>
+            <div className="relative group shrink-0">
+              <button
+                onClick={() => {
+                  if (activeWave !== 'all') return;
+                  setIsTourActive(true);
+                  setTourStep(0);
+                  setSelectedNode(null);
+                }}
+                className={`btn-interactive flex items-center gap-2 px-4 py-2 rounded-lg font-bold shadow-sm transition-colors ${
+                  activeWave === 'all'
+                    ? 'bg-indigo-600 hover:bg-indigo-700 text-white'
+                    : 'bg-slate-300 text-slate-500 cursor-not-allowed'
+                }`}
+              >
+                <Play className="w-4 h-4" /> Walkthrough
+              </button>
+              {activeWave !== 'all' && (
+                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-1.5 bg-slate-800 text-white text-[11px] font-medium rounded-md shadow-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                  Select "See All" to use the walkthrough
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-px border-4 border-transparent border-t-slate-800" />
+                </div>
+              )}
+            </div>
           </div>
 
           {/* Zone Progression Spine */}
@@ -2096,6 +2295,7 @@ const App = () => {
                           onClick={setSelectedNode}
                           isTourActive={isTourActive}
                           isHighlighted={isHighlighted(workflowId)}
+                          waveFilter={activeWave}
                         />
                       );
                     })}
@@ -2188,7 +2388,6 @@ const App = () => {
         <>
           <div className="fixed inset-0 z-40 bg-slate-900/20" onClick={() => setTriggerPanelOpen(false)} />
           <div className="fixed top-0 right-0 h-full w-[420px] bg-white shadow-2xl z-50 flex flex-col border-l border-slate-200">
-            {/* Header */}
             <div className="bg-slate-900 p-4 flex justify-between items-center shrink-0">
               <div className="flex items-center gap-2">
                 <Bell className="w-4 h-4 text-indigo-400" />
@@ -2197,8 +2396,6 @@ const App = () => {
               </div>
               <button onClick={() => setTriggerPanelOpen(false)} className="p-1 hover:bg-slate-800 rounded transition-colors"><X className="w-4 h-4 text-slate-400 hover:text-white" /></button>
             </div>
-
-            {/* Filter Bar */}
             <div className="px-4 py-3 border-b border-slate-200 bg-slate-50 flex gap-2 shrink-0">
               {[
                 { id: 'all', label: 'All', color: 'bg-slate-200 text-slate-700' },
@@ -2215,10 +2412,7 @@ const App = () => {
                 >{f.label}</button>
               ))}
             </div>
-
-            {/* Trigger Cards */}
             <div className="flex-grow overflow-y-auto p-4 space-y-4">
-              {/* Trigger 1: Critical — Long-Lead */}
               {(triggerFilter === 'all' || triggerFilter === 'critical') && (
                 <div className="border border-slate-200 rounded-lg shadow-sm overflow-hidden">
                   <div className="border-l-4 border-l-rose-500 p-4">
@@ -2233,19 +2427,16 @@ const App = () => {
                     <div className="text-xs text-slate-600 mb-3">
                       <span className="font-semibold text-slate-700">What happened:</span> V0 baseline includes switchgear with 16-week lead time. Current schedule shows 10-week window.
                     </div>
-
                     {activePersona === 'project-teams' ? (
-                      /* Project Teams see clarity demand */
                       <div className="bg-amber-50 border border-amber-200 rounded-md p-3">
                         <div className="text-xs font-bold text-amber-800 mb-2 flex items-center gap-1.5"><AlertTriangle className="w-3.5 h-3.5"/> Specifications Required</div>
                         <p className="text-xs text-amber-900 mb-3">Final specifications for Switchgear 480V are needed to unlock sourcing. Each week of delay increases projected cost by <strong>$4,200</strong>.</p>
                         <button className="w-full bg-indigo-600 text-white text-xs font-bold py-2 rounded hover:bg-indigo-700 transition-colors">Provide Specifications →</button>
                       </div>
                     ) : (
-                      /* All other personas see ops version */
                       <>
                         <div className="text-xs text-slate-600 mb-2">
-                          <span className="font-semibold text-slate-700">Clarity Status:</span> <span className="text-rose-600 font-semibold">❌ Project team has NOT provided final specifications</span>
+                          <span className="font-semibold text-slate-700">Clarity Status:</span> <span className="text-rose-600 font-semibold">Project team has NOT provided final specifications</span>
                         </div>
                         <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Constrained Path Actions</div>
                         <div className="space-y-2 mb-3">
@@ -2264,8 +2455,6 @@ const App = () => {
                   </div>
                 </div>
               )}
-
-              {/* Trigger 2: Action Required — Underutilized Asset */}
               {(triggerFilter === 'all' || triggerFilter === 'action') && (
                 <div className="border border-slate-200 rounded-lg shadow-sm overflow-hidden">
                   <div className="border-l-4 border-l-amber-500 p-4">
@@ -2298,8 +2487,6 @@ const App = () => {
                   </div>
                 </div>
               )}
-
-              {/* Trigger 3: Informational — Flywheel Update */}
               {(triggerFilter === 'all' || triggerFilter === 'info') && (
                 <div className="border border-slate-200 rounded-lg shadow-sm overflow-hidden">
                   <div className="border-l-4 border-l-slate-400 p-4">
@@ -2337,11 +2524,11 @@ const App = () => {
           </div>
           <p className="text-sm text-slate-600 leading-relaxed mb-4">{tourData[tourStep].transcript}</p>
           <div className="flex justify-between items-center">
-            <button onClick={() => setTourStep(Math.max(0, tourStep - 1))} disabled={tourStep === 0} className="text-xs font-semibold text-slate-500 hover:text-slate-700 disabled:opacity-30 disabled:cursor-not-allowed">← Previous</button>
+            <button onClick={() => setTourStep(Math.max(0, tourStep - 1))} disabled={tourStep === 0} className="text-xs font-semibold text-slate-500 hover:text-slate-700 disabled:opacity-30 disabled:cursor-not-allowed">{'\u2190'} Previous</button>
             {tourStep < tourData.length - 1 ? (
-              <button onClick={() => setTourStep(tourStep + 1)} className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-indigo-700 transition-colors">Next Step →</button>
+              <button onClick={() => setTourStep(tourStep + 1)} className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-indigo-700 transition-colors">Next Step {'\u2192'}</button>
             ) : (
-              <button onClick={() => { setIsTourActive(false); setTourStep(0); }} className="bg-emerald-600 text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-emerald-700 transition-colors">Finish Tour ✓</button>
+              <button onClick={() => { setIsTourActive(false); setTourStep(0); }} className="bg-emerald-600 text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-emerald-700 transition-colors">Finish Tour {'\u2713'}</button>
             )}
           </div>
         </div>
