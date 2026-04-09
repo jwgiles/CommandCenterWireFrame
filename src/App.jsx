@@ -5,7 +5,7 @@ import {
   Filter, Download, Play, AlertTriangle, CheckCircle2, Clock,
   Settings, Database, ChevronRight, Zap, RefreshCw, ShoppingCart, ShieldAlert,
   HardHat, BarChart3, Lock, ChevronDown, TrendingUp,
-  FileCheck, Send
+  FileCheck, Send, Truck, Star, Repeat
 } from 'lucide-react';
 
 const Badge = ({ children, variant = 'gray' }) => {
@@ -659,6 +659,166 @@ const MockFormalRequest = () => {
   );
 };
 
+const MockExecutionDashboard = () => {
+  const [statusFilter, setStatusFilter] = useState('All');
+  const orders = [
+    { id: 'ORD-4410', asset: 'Tower Crane 60T', project: 'Data Center TX', deploy: 'Sep 12', offRent: 'Dec 15', status: 'Active', days: 42, util: 78 },
+    { id: 'ORD-4411', asset: 'Generator 200kW', project: 'Data Center TX', deploy: 'Sep 20', offRent: 'Nov 30', status: 'Active', days: 34, util: 91 },
+    { id: 'ORD-4398', asset: 'Boom Lift 80ft', project: 'HQ Build', deploy: 'Aug 28', offRent: 'Nov 10', status: 'Exception', days: 57, util: 12 },
+    { id: 'ORD-4415', asset: 'Skid Steer Loader', project: 'Healthcare C', deploy: 'Oct 1', offRent: 'Jan 15', status: 'Active', days: 22, util: 65 },
+    { id: 'ORD-4389', asset: 'Light Tower 4kW', project: 'Logistics Hub NV', deploy: 'Aug 15', offRent: 'Oct 1', status: 'Overdue Closeout', days: 69, util: 44 },
+    { id: 'ORD-4420', asset: 'Telehandler 10K', project: 'Data Center TX', deploy: 'Oct 8', offRent: 'Feb 28', status: 'Active', days: 15, util: 82 },
+  ];
+  const filtered = statusFilter === 'All' ? orders : orders.filter(o => o.status === statusFilter);
+  const statusVariant = { Active: 'green', Exception: 'yellow', 'Overdue Closeout': 'red' };
+  return (
+    <div className="flex flex-col h-full bg-slate-50">
+      <Toolbar
+        leftArea={<><Truck className="w-4 h-4 text-rose-500"/><span className="font-bold text-slate-800">Zone 8: Execution & Exceptions</span><span className="text-slate-400">|</span><span className="text-slate-600">12 Active Orders</span></>}
+        rightArea={
+          <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} className="text-xs border border-slate-200 rounded px-2 py-1.5 bg-white outline-none focus:border-indigo-500">
+            <option>All</option><option>Active</option><option>Exception</option><option>Overdue Closeout</option>
+          </select>
+        }
+      />
+      <div className="p-6 overflow-auto flex flex-col gap-5">
+        <div className="grid grid-cols-4 gap-4">
+          <KPI label="Active Deployments" value="47 assets" />
+          <KPI label="On-Time Delivery" value="89%" trend="-3%" subtext="vs last month" />
+          <KPI label="Avg Days on Rent" value="34" />
+          <div className="bg-white border border-slate-200 p-3 rounded-md shadow-sm">
+            <div className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold mb-1">Cost vs Plan</div>
+            <div className="text-xl font-bold font-mono text-rose-600">+4.2%</div>
+          </div>
+        </div>
+        <div className="overflow-x-auto border border-slate-200 rounded-md bg-white">
+          <table className="w-full text-left text-xs">
+            <thead className="bg-slate-50 border-b border-slate-200 text-[10px] uppercase tracking-wider text-slate-500">
+              <tr>
+                <th className="px-3 py-2 font-semibold">Order ID</th>
+                <th className="px-3 py-2 font-semibold">Asset Description</th>
+                <th className="px-3 py-2 font-semibold">Project</th>
+                <th className="px-3 py-2 font-semibold">Deploy Date</th>
+                <th className="px-3 py-2 font-semibold">Off-Rent Date</th>
+                <th className="px-3 py-2 font-semibold">Status</th>
+                <th className="px-3 py-2 font-semibold text-right">Days on Site</th>
+                <th className="px-3 py-2 font-semibold">Utilization %</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {filtered.map((row, i) => (
+                <tr key={i} className="hover:bg-slate-50 transition-colors">
+                  <td className="px-3 py-2.5 font-mono text-indigo-600 font-semibold">{row.id}</td>
+                  <td className="px-3 py-2.5 text-slate-800 font-medium">{row.asset}</td>
+                  <td className="px-3 py-2.5 text-slate-600">{row.project}</td>
+                  <td className="px-3 py-2.5 text-slate-600 font-mono">{row.deploy}</td>
+                  <td className="px-3 py-2.5 text-slate-600 font-mono">{row.offRent}</td>
+                  <td className="px-3 py-2.5">
+                    <Badge variant={statusVariant[row.status]}>{row.status}</Badge>
+                    {row.util <= 20 && <Badge variant="red">Underutilized</Badge>}
+                  </td>
+                  <td className="px-3 py-2.5 text-slate-700 font-mono text-right">{row.days}</td>
+                  <td className="px-3 py-2.5">
+                    <div className="flex items-center gap-2">
+                      <div className="w-20 bg-slate-200 rounded-full h-2">
+                        <div className={`h-2 rounded-full ${row.util >= 60 ? 'bg-emerald-500' : row.util >= 30 ? 'bg-amber-500' : 'bg-rose-500'}`} style={{ width: `${row.util}%` }} />
+                      </div>
+                      <span className={`font-mono text-[10px] font-bold ${row.util >= 60 ? 'text-emerald-600' : row.util >= 30 ? 'text-amber-600' : 'text-rose-600'}`}>{row.util}%</span>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <div className="bg-white border border-slate-200 rounded-md p-4 shadow-sm">
+          <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3 flex items-center gap-2"><Zap className="w-4 h-4 text-indigo-500"/> Self-Serve Actions</h4>
+          <div className="grid grid-cols-3 gap-4">
+            {[
+              { label: 'Extend Rental', icon: Clock, color: 'text-indigo-600 bg-indigo-50 border-indigo-200' },
+              { label: 'Swap Asset', icon: Repeat, color: 'text-amber-600 bg-amber-50 border-amber-200' },
+              { label: 'Request Early Return', icon: RotateCcw, color: 'text-emerald-600 bg-emerald-50 border-emerald-200' },
+            ].map((action, i) => (
+              <button key={i} className={`flex flex-col items-center gap-1.5 p-4 rounded-lg border ${action.color} hover:shadow-md transition-shadow`}>
+                <action.icon className="w-5 h-5" />
+                <span className="text-xs font-bold">{action.label}</span>
+                <span className="text-[9px] text-slate-400 italic">(Creates auditable change record)</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const MockVendorScorecard = () => {
+  const engagements = [
+    { project: 'Data Center TX', asset: 'Generator 200kW', planned: 'Sep 20', actual: 'Sep 22', variance: 2, billing: '94%', flag: null },
+    { project: 'HQ Build', asset: 'Boom Lift 80ft', planned: 'Aug 28', actual: 'Aug 28', variance: 0, billing: '100%', flag: null },
+    { project: 'Healthcare C', asset: 'Light Tower 4kW', planned: 'Oct 1', actual: 'Oct 8', variance: 7, billing: '82%', flag: 'Billing Dispute' },
+    { project: 'Logistics Hub NV', asset: 'Skid Steer Loader', planned: 'Aug 15', actual: 'Aug 16', variance: 1, billing: '97%', flag: null },
+    { project: 'Data Center TX', asset: 'Telehandler 10K', planned: 'Oct 8', actual: 'Oct 8', variance: 0, billing: '100%', flag: 'Minor Damage' },
+  ];
+  return (
+    <div className="flex flex-col h-full bg-slate-50">
+      <Toolbar
+        leftArea={<><Star className="w-4 h-4 text-amber-500"/><span className="font-bold text-slate-800">Vendor Performance Scorecard</span><span className="text-slate-400">|</span><span className="text-slate-600">Sunbelt Rentals — Texas Region</span></>}
+        rightArea={<span className="text-xs text-slate-500 font-mono">Last compiled: Today, 06:00 AM</span>}
+      />
+      <div className="p-6 overflow-auto flex flex-col gap-5">
+        <div className="grid grid-cols-4 gap-4">
+          <KPI label="Engagements (12mo)" value="142" />
+          <KPI label="On-Time Delivery" value="87%" />
+          <KPI label="Billing Accuracy" value="91%" />
+          <div className="bg-white border border-slate-200 p-3 rounded-md shadow-sm">
+            <div className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold mb-1">Safety Incidents</div>
+            <div className="text-xl font-bold font-mono text-amber-600">2</div>
+          </div>
+        </div>
+        <div className="overflow-x-auto border border-slate-200 rounded-md bg-white">
+          <table className="w-full text-left text-xs">
+            <thead className="bg-slate-50 border-b border-slate-200 text-[10px] uppercase tracking-wider text-slate-500">
+              <tr>
+                <th className="px-3 py-2 font-semibold">Project</th>
+                <th className="px-3 py-2 font-semibold">Asset</th>
+                <th className="px-3 py-2 font-semibold">Planned Delivery</th>
+                <th className="px-3 py-2 font-semibold">Actual Delivery</th>
+                <th className="px-3 py-2 font-semibold text-right">Variance (days)</th>
+                <th className="px-3 py-2 font-semibold text-right">Billing Accuracy</th>
+                <th className="px-3 py-2 font-semibold">Damage / Safety</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100">
+              {engagements.map((row, i) => (
+                <tr key={i} className="hover:bg-slate-50 transition-colors">
+                  <td className="px-3 py-2.5 text-slate-800 font-medium">{row.project}</td>
+                  <td className="px-3 py-2.5 text-slate-600">{row.asset}</td>
+                  <td className="px-3 py-2.5 text-slate-600 font-mono">{row.planned}</td>
+                  <td className="px-3 py-2.5 text-slate-600 font-mono">{row.actual}</td>
+                  <td className="px-3 py-2.5 text-right font-mono">
+                    <span className={row.variance === 0 ? 'text-emerald-600 font-bold' : row.variance <= 2 ? 'text-amber-600 font-bold' : 'text-rose-600 font-bold'}>{row.variance === 0 ? '—' : `+${row.variance}`}</span>
+                  </td>
+                  <td className="px-3 py-2.5 text-right font-mono">
+                    <span className={parseInt(row.billing) >= 95 ? 'text-emerald-600' : parseInt(row.billing) >= 85 ? 'text-amber-600' : 'text-rose-600'}>{row.billing}</span>
+                  </td>
+                  <td className="px-3 py-2.5">
+                    {row.flag ? <Badge variant={row.flag === 'Minor Damage' ? 'yellow' : 'red'}>{row.flag}</Badge> : <span className="text-slate-400">—</span>}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="text-xs italic text-slate-400 text-center">Scorecard auto-compiled from Zone 8 closeout data. Final qualitative review required from project team.</p>
+        <div className="flex justify-center">
+          <button className="bg-indigo-600 text-white font-semibold text-xs px-5 py-2 rounded hover:bg-indigo-700 transition-colors">Approve & Publish to Enterprise Vendor Registry</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const MockFinancialModel = () => {
   const data = [
     { id: 'OPP-901', name: 'Project Alpha (HQ Build)', zone: 'Zone 2', stage: 'Early Pursuit', gross: 12500000, conf: 0.30, cost: 2600000 },
@@ -808,6 +968,8 @@ const CARD_REGISTRY = {
   capex: { title: 'CapEx Plan', description: 'Translate forward demand and available fleet supply into a prioritized, timing-specific CAPEX plan.', icon: Activity, colorClass: 'border-slate-300', highlight: 'bg-slate-200 text-slate-700' },
   margin: { title: 'Margin Plan', description: 'Define project-level O2S margin pre-go/no-go by pillar and product line, anchored to AOP targets.', icon: Target, colorClass: 'border-indigo-100', highlight: 'bg-indigo-100 text-indigo-600' },
   fpa: { title: 'FP&A Sync', description: 'Risk-adjusted, time-phased revenue and margin forecasts synced to FP&A tools like Anaplan.', icon: DollarSign, colorClass: 'border-emerald-200 ring-2 ring-emerald-50', highlight: 'bg-emerald-500 text-white' },
+  execution: { title: 'Execution Dashboard', description: 'Track active deployments, monitor utilization, flag exceptions, and take self-serve actions on in-process equipment orders.', icon: Truck, colorClass: 'border-rose-200', highlight: 'bg-rose-100 text-rose-600' },
+  vendorscorecard: { title: 'Vendor Performance Scorecard', description: 'Auto-compiled vendor scorecards from execution actuals covering delivery, billing accuracy, and safety.', icon: Star, colorClass: 'border-rose-100', highlight: 'bg-rose-100 text-rose-600' },
   anomaly: { title: 'Billing Anomaly Detection', description: 'Detect and flag billing anomalies using project-level patterns before invoice posting.', icon: DollarSign, colorClass: 'border-rose-200 ring-2 ring-rose-50', highlight: 'bg-rose-500 text-white' },
 };
 
@@ -816,13 +978,13 @@ const PERSONA_EQUIPMENT_GRID = {
     'z1-3': { cards: ['quotes'], placeholders: [] },
     'z4-5': { cards: ['prepop', 'adhoc'], placeholders: [] },
     'z6-7': { cards: ['preflight'], placeholders: [] },
-    'z8-9': { cards: [], placeholders: ['Execution Self-Service — Coming in Prompt 4'] },
+    'z8-9': { cards: ['execution'], placeholders: [] },
   },
   'o2s-ops': {
     'z1-3': { cards: ['forecast'], placeholders: [] },
     'z4-5': { cards: ['prepop-ops'], placeholders: [] },
     'z6-7': { cards: ['optimize', 'source', 'formalrequest'], placeholders: [] },
-    'z8-9': { cards: [], placeholders: ['Utilization Monitoring — Coming in Prompt 4'] },
+    'z8-9': { cards: ['execution', 'vendorscorecard'], placeholders: [] },
   },
   'leadership': {
     'z1-3': { cards: [], placeholders: ['Portfolio Watchlists — Coming in Prompt 9'] },
@@ -930,6 +1092,8 @@ const App = () => {
       case 'source': return <MockStrategicSourcing />;
       case 'preflight': return <MockPreflightValidation />;
       case 'formalrequest': return <MockFormalRequest />;
+      case 'execution': return <MockExecutionDashboard />;
+      case 'vendorscorecard': return <MockVendorScorecard />;
       case 'anomaly': return <MockBillingAnomaly />;
       case 'fpa': return <MockFinancialModel />;
       default: return <div className="p-10 flex justify-center items-center h-full text-slate-400">Workflow simulation not mapped for this node.</div>;
