@@ -1857,6 +1857,8 @@ const App = () => {
     ],
   };
 
+  const tourData = tourDataByPersona[activePersona] || tourDataByPersona['project-teams'];
+
   const renderWorkflowContent = (id) => {
     switch(id) {
       case 'lifecycle': return <MockAssetLifecycle />;
@@ -1992,7 +1994,7 @@ const App = () => {
               <p className="text-sm font-medium text-slate-500 mt-1">Demand Funnel Zones &middot; {activePillarObj.label} &middot; Click any workflow card to explore its interactive simulation.</p>
             </div>
             <button onClick={() => { setIsTourActive(true); setTourStep(0); setSelectedNode(null); }} className="btn-interactive flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-bold shadow-sm transition-colors shrink-0">
-              <Play className="w-4 h-4" /> Play 3.18 Podcast Walkthrough
+              <Play className="w-4 h-4" /> Walkthrough
             </button>
           </div>
 
