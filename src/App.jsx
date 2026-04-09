@@ -5,7 +5,7 @@ import {
   Filter, Download, Play, AlertTriangle, CheckCircle2, Clock,
   Settings, Database, ChevronRight, Zap, RefreshCw, ShoppingCart, ShieldAlert,
   HardHat, BarChart3, Lock, ChevronDown, TrendingUp,
-  FileCheck, Send, Truck, Star, Repeat, GitBranch, Bell, Eye, Gauge, Crosshair
+  FileCheck, Send, Truck, Star, Repeat, GitBranch, Bell, Eye, Gauge, Crosshair, ClipboardList
 } from 'lucide-react';
 
 const Badge = ({ children, variant = 'gray' }) => {
@@ -896,6 +896,112 @@ const MockFitScore = () => {
   );
 };
 
+const MockProjectMaturity = () => {
+  const zoneGroups = [
+    { zone: 8, label: 'Execution Active', color: 'emerald', items: [
+      { name: 'Generator 200kW (×3)', detail: 'Deployed', badge: 'green' },
+      { name: 'Boom Lift 60ft (×5)', detail: 'Deployed', badge: 'green' },
+    ]},
+    { zone: 7, label: 'Formally Submitted', color: 'emerald', items: [
+      { name: 'Tower Crane 60T (×1)', detail: 'SLA: 2d remaining', badge: 'yellow' },
+      { name: 'Excavator 30T (×4)', detail: 'SLA: On Track', badge: 'green' },
+    ]},
+    { zone: 5, label: 'Intent Refinement', color: 'amber', items: [
+      { name: 'Switchgear 480V (×2)', detail: 'Clarity: 60%', badge: 'yellow' },
+      { name: 'Scissor Lift (×2)', detail: 'Clarity: 85%', badge: 'green' },
+    ]},
+    { zone: 6, label: 'Preflight', color: 'amber', items: [
+      { name: 'Light Tower (×2)', detail: 'Preflight: 1 conflict pending', badge: 'yellow' },
+    ]},
+    { zone: 3, label: 'Early Planning', color: 'slate', items: [
+      { name: 'Temp Power Distribution (×3)', detail: 'Waiting on: MEP design package', badge: 'gray' },
+    ]},
+  ];
+  const headerColors = { emerald: 'bg-emerald-50 border-emerald-200 text-emerald-800', amber: 'bg-amber-50 border-amber-200 text-amber-800', slate: 'bg-slate-50 border-slate-200 text-slate-700' };
+  const dotColors = { emerald: 'bg-emerald-500', amber: 'bg-amber-500', slate: 'bg-slate-400' };
+  return (
+    <div className="flex flex-col h-full bg-slate-50">
+      <Toolbar
+        leftArea={<><ClipboardList className="w-4 h-4 text-indigo-500"/><span className="font-bold text-slate-800">Project Maturity Summary</span><span className="text-slate-400">|</span><span className="text-slate-600">Data Center TX</span></>}
+        rightArea={<span className="text-xs text-slate-500 font-mono">Last refreshed: Real-time from systems of record</span>}
+      />
+      <div className="px-6 py-2 bg-white border-b border-slate-200 shrink-0">
+        <p className="text-xs text-slate-500 italic">A project is rarely in a single zone. This view shows the distribution of packages and line items across the zone lifecycle.</p>
+      </div>
+      <div className="p-6 overflow-auto flex flex-col gap-5">
+        {/* Maturity Profile Bar */}
+        <div className="bg-white border border-slate-200 rounded-md p-4 shadow-sm">
+          <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">Zone Distribution</h4>
+          <div className="flex h-8 rounded-lg overflow-hidden border border-slate-200 mb-3">
+            <div className="bg-emerald-500 flex items-center justify-center text-white text-[10px] font-bold" style={{ width: '60%' }}>Zone 7+ — 60%</div>
+            <div className="bg-amber-400 flex items-center justify-center text-amber-900 text-[10px] font-bold" style={{ width: '25%' }}>Z5–6 — 25%</div>
+            <div className="bg-slate-300 flex items-center justify-center text-slate-700 text-[10px] font-bold" style={{ width: '15%' }}>Z3–4</div>
+          </div>
+          <div className="grid grid-cols-3 gap-3 text-[10px]">
+            <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0" /><span className="text-slate-600"><strong>13 line items</strong> submitted & in execution</span></div>
+            <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-amber-400 shrink-0" /><span className="text-slate-600"><strong>6 line items</strong> in refinement / preflight</span></div>
+            <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-slate-300 shrink-0" /><span className="text-slate-600"><strong>3 line items</strong> still in early planning</span></div>
+          </div>
+          <div className="mt-3 flex gap-6 text-xs text-slate-500">
+            <div><span className="font-semibold text-slate-700">Trailing Edge:</span> Zone 3 — Temp power specifications pending client MEP decision</div>
+            <div><span className="font-semibold text-slate-700">Leading Edge:</span> Zone 8 — 8 items actively deployed on site</div>
+          </div>
+        </div>
+
+        {/* Zone Distribution Drill-Down */}
+        <div className="bg-white border border-slate-200 rounded-md shadow-sm overflow-hidden">
+          <div className="p-3 border-b border-slate-200 bg-slate-50">
+            <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2"><Database className="w-4 h-4 text-indigo-500"/> Zone Distribution Drill-Down</h4>
+          </div>
+          <div className="divide-y divide-slate-100">
+            {zoneGroups.map((group, gi) => (
+              <div key={gi}>
+                <div className={`px-4 py-2.5 flex items-center gap-2 border-l-4 ${headerColors[group.color]} border-l-${group.color === 'emerald' ? 'emerald' : group.color === 'amber' ? 'amber' : 'slate'}-500`}>
+                  <div className={`w-6 h-6 rounded-full ${dotColors[group.color]} text-white text-[10px] font-bold flex items-center justify-center`}>{group.zone}</div>
+                  <span className="text-xs font-bold">{group.items.length} item{group.items.length !== 1 ? 's' : ''} — {group.label}</span>
+                </div>
+                {group.items.map((item, ii) => (
+                  <div key={ii} className="px-4 py-2 pl-14 flex items-center justify-between text-xs hover:bg-slate-50 transition-colors">
+                    <span className="text-slate-700 font-medium">{item.name}</span>
+                    <Badge variant={item.badge}>{item.detail}</Badge>
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Blocked Items */}
+        <div className="bg-white border border-rose-200 rounded-md p-4 shadow-sm">
+          <h4 className="text-xs font-bold text-rose-700 uppercase tracking-wider mb-3 flex items-center gap-2"><AlertTriangle className="w-4 h-4"/> 2 Items Blocked from Zone Progression</h4>
+          <div className="space-y-3">
+            <div className="bg-rose-50 border border-rose-100 rounded p-3">
+              <p className="text-sm text-slate-800 font-medium">Switchgear 480V</p>
+              <p className="text-xs text-slate-600 mt-1">Gate condition not met: <strong>Full taxonomy (specification) incomplete</strong></p>
+              <p className="text-[10px] text-indigo-600 font-semibold mt-1.5 cursor-pointer hover:underline">What would advance this? → Project team provides load chart and voltage requirements</p>
+            </div>
+            <div className="bg-rose-50 border border-rose-100 rounded p-3">
+              <p className="text-sm text-slate-800 font-medium">Temp Power Distribution</p>
+              <p className="text-xs text-slate-600 mt-1">Gate condition not met: <strong>MEP design package not released in document management system</strong></p>
+              <p className="text-[10px] text-indigo-600 font-semibold mt-1.5 cursor-pointer hover:underline">What would advance this? → Client releases MEP package Rev 2 into Procore / ACC</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Ready-to-Act Summary */}
+        <div className="bg-white border border-slate-200 rounded-md p-4 shadow-sm">
+          <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">Ready-to-Act Summary</h4>
+          <div className="space-y-2 text-sm">
+            <div className="flex items-center gap-2"><CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /><span className="text-slate-700"><strong>2 items</strong> ready for preflight submission</span></div>
+            <div className="flex items-center gap-2"><AlertTriangle className="w-4 h-4 text-amber-500 shrink-0" /><span className="text-slate-700"><strong>4 items</strong> need planning refinement</span></div>
+            <div className="flex items-center gap-2"><X className="w-4 h-4 text-rose-500 shrink-0" /><span className="text-slate-700"><strong>2 items</strong> blocked by missing gate conditions</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const CircularProgress = ({ value, size = 56, color = 'text-amber-500' }) => {
   const r = (size - 8) / 2;
   const circ = 2 * Math.PI * r;
@@ -1448,6 +1554,7 @@ const CARD_REGISTRY = {
   clarityscoring: { title: 'Clarity & Confidence Scoring', description: 'Assess and track how complete and confident each equipment need is across quantity, specification, and schedule.', icon: Gauge, colorClass: 'border-emerald-200', highlight: 'bg-emerald-100 text-emerald-600' },
   forecast: { title: 'Asset Demand Forecast', description: 'Generate a probability-weighted demand forecast by asset class spanning early pipeline through execution readiness.', icon: BarChart, colorClass: 'border-indigo-200 ring-2 ring-indigo-50', highlight: 'bg-indigo-500 text-white' },
   fitscore: { title: 'Fit Score & Opportunity Correlation', description: 'Evaluate FP&A committed forecast against equipment capabilities. Surface recommended engagement strategies before designs lock.', icon: Crosshair, colorClass: 'border-indigo-200', highlight: 'bg-indigo-100 text-indigo-600' },
+  projectmaturity: { title: 'Project Maturity & Zone Distribution', description: 'See where every package sits in the zone lifecycle. Identify trailing edges and blocked items.', icon: ClipboardList, colorClass: 'border-emerald-200', highlight: 'bg-emerald-100 text-emerald-600' },
   'prepop-ops': { title: 'Pre-Population & Constraint Alerts', description: 'Pre-populate project-level equipment requests using demand forecasts, schedules, and historical patterns.', icon: Layers, colorClass: 'border-emerald-100', highlight: 'bg-emerald-100 text-emerald-600', resolveId: 'prepop' },
   optimize: { title: 'Owned vs Re-Rent Optimizer', description: 'Use enterprise-wide owned fleet visibility to recommend whether each request should be fulfilled with owned equipment or re-rent.', icon: Search, colorClass: 'border-amber-200 ring-2 ring-amber-50', highlight: 'bg-amber-500 text-white' },
   source: { title: 'Strategic Sourcing', description: 'Enable O2S to source from the right vendors at the right time using demand signals and supplier performance.', icon: Box, colorClass: 'border-amber-100', highlight: 'bg-amber-100 text-amber-600' },
@@ -1466,19 +1573,19 @@ const CARD_REGISTRY = {
 const PERSONA_EQUIPMENT_GRID = {
   'project-teams': {
     'z1-3': { cards: ['quotes'], placeholders: [] },
-    'z4-5': { cards: ['prepop', 'adhoc', 'costofdelay', 'clarityscoring'], placeholders: [] },
+    'z4-5': { cards: ['prepop', 'adhoc', 'costofdelay', 'clarityscoring', 'projectmaturity'], placeholders: [] },
     'z6-7': { cards: ['preflight'], placeholders: [] },
     'z8-9': { cards: ['execution'], placeholders: [] },
   },
   'o2s-ops': {
     'z1-3': { cards: ['forecast', 'fitscore'], placeholders: [] },
-    'z4-5': { cards: ['prepop-ops', 'costofdelay', 'clarityscoring'], placeholders: [] },
+    'z4-5': { cards: ['prepop-ops', 'costofdelay', 'clarityscoring', 'projectmaturity'], placeholders: [] },
     'z6-7': { cards: ['optimize', 'source', 'formalrequest'], placeholders: [] },
     'z8-9': { cards: ['execution', 'vendorscorecard', 'flywheel'], placeholders: [] },
   },
   'leadership': {
     'z1-3': { cards: ['fitscore'], placeholders: [] },
-    'z4-5': { cards: [], placeholders: ['Project Maturity Summary — Coming in Prompt 10'] },
+    'z4-5': { cards: ['projectmaturity'], placeholders: [] },
     'z6-7': { cards: ['lifecycle'], placeholders: [] },
     'z8-9': { cards: ['capex', 'flywheel'], placeholders: [] },
   },
@@ -1579,6 +1686,7 @@ const App = () => {
       case 'margin': return <MockMarginPlan />;
       case 'forecast': return <MockAssetDemandForecasting />;
       case 'fitscore': return <MockFitScore />;
+      case 'projectmaturity': return <MockProjectMaturity />;
       case 'prepop': case 'prepop-ops': return <MockPrePopulation />;
       case 'costofdelay': return <MockCostOfDelay persona={activePersona} />;
       case 'clarityscoring': return <MockClarityScoring />;
