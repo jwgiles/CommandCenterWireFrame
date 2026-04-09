@@ -400,6 +400,29 @@ const MockPrePopulation = () => {
             </table>
           </div>
         </div>
+        <div className="mx-4 mb-4 grid grid-cols-2 gap-4">
+          <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              <h4 className="text-xs font-bold text-emerald-800 uppercase tracking-wider">Happy Path</h4>
+            </div>
+            <p className="text-xs text-emerald-700 leading-relaxed">
+              If project team confirms baseline within 10 business days, O2S secures preferred sourcing at MSA rates. Estimated savings vs. constrained path: <span className="font-bold font-mono">$21,400</span>.
+            </p>
+          </div>
+          <div className="bg-rose-50 border border-rose-200 rounded-lg p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <AlertTriangle className="w-4 h-4 text-rose-600" />
+              <h4 className="text-xs font-bold text-rose-800 uppercase tracking-wider">Constrained Path</h4>
+            </div>
+            <p className="text-xs text-rose-700 leading-relaxed">
+              If baseline remains unconfirmed, O2S begins constrained sourcing prep using baseline assumptions. Projected premium: <span className="font-bold font-mono">+22%</span> based on 14 similar historical projects.
+            </p>
+          </div>
+        </div>
+        <div className="px-4 pb-4">
+          <p className="text-[10px] text-slate-400 italic">O2S operations will execute regardless. Early confirmation determines the cost position from which fulfillment occurs.</p>
+        </div>
       </div>
     </div>
   );
