@@ -671,6 +671,68 @@ const PERSONA_EQUIPMENT_GRID = {
   },
 };
 
+const ZONE_SPINE = [
+  { phaseId: 'z1-3', color: 'indigo', label: 'Forecast & Shape', zones: [
+    { num: 1, name: 'Portfolio Forecast' },
+    { num: 2, name: 'Opportunity Correlation' },
+    { num: 3, name: 'Precon Decision Pack' },
+  ]},
+  { phaseId: 'z4-5', color: 'emerald', label: 'Baseline & Intent', zones: [
+    { num: 4, name: 'Baseline Generation' },
+    { num: 5, name: 'Intent Refinement' },
+  ]},
+  { phaseId: 'z6-7', color: 'amber', label: 'Validate & Request', zones: [
+    { num: 6, name: 'Preflight Validation' },
+    { num: 7, name: 'Formal Request & Handoff' },
+  ]},
+  { phaseId: 'z8-9', color: 'rose', label: 'Execute & Learn', zones: [
+    { num: 8, name: 'Execution & Exceptions' },
+    { num: 9, name: 'Learning Flywheel' },
+  ]},
+];
+
+const PHASE_DESCRIPTIONS = {
+  'z1-3': 'What demand is coming, where does it align, and which opportunities deserve early engagement?',
+  'z4-5': 'What do we need, when do we need it, and how confident are we in the plan?',
+  'z6-7': 'Is this ready for submission, and is it being acted upon?',
+  'z8-9': 'Is work happening as planned, what actually happened, and how do we get smarter?',
+};
+
+const SPINE_STYLES = {
+  indigo: {
+    activeBand: 'bg-indigo-50/80',
+    inactiveBand: 'bg-slate-50/50',
+    activeCircle: 'bg-indigo-500 text-white shadow-md ring-2 ring-indigo-200',
+    inactiveCircle: 'border-2 border-indigo-200 text-indigo-300 bg-white',
+    activeLine: 'bg-indigo-300',
+    inactiveLine: 'bg-indigo-200/50',
+  },
+  emerald: {
+    activeBand: 'bg-emerald-50/80',
+    inactiveBand: 'bg-slate-50/50',
+    activeCircle: 'bg-emerald-500 text-white shadow-md ring-2 ring-emerald-200',
+    inactiveCircle: 'border-2 border-emerald-200 text-emerald-300 bg-white',
+    activeLine: 'bg-emerald-300',
+    inactiveLine: 'bg-emerald-200/50',
+  },
+  amber: {
+    activeBand: 'bg-amber-50/80',
+    inactiveBand: 'bg-slate-50/50',
+    activeCircle: 'bg-amber-500 text-white shadow-md ring-2 ring-amber-200',
+    inactiveCircle: 'border-2 border-amber-200 text-amber-300 bg-white',
+    activeLine: 'bg-amber-300',
+    inactiveLine: 'bg-amber-200/50',
+  },
+  rose: {
+    activeBand: 'bg-rose-50/80',
+    inactiveBand: 'bg-slate-50/50',
+    activeCircle: 'bg-rose-500 text-white shadow-md ring-2 ring-rose-200',
+    inactiveCircle: 'border-2 border-rose-200 text-rose-300 bg-white',
+    activeLine: 'bg-rose-300',
+    inactiveLine: 'bg-rose-200/50',
+  },
+};
+
 const App = () => {
   const [selectedNode, setSelectedNode] = useState(null);
   const [isTourActive, setIsTourActive] = useState(false);
@@ -678,6 +740,7 @@ const App = () => {
   const [activePersona, setActivePersona] = useState('project-teams');
   const [activePillar, setActivePillar] = useState('equipment');
   const [pillarDropdownOpen, setPillarDropdownOpen] = useState(false);
+  const [hoveredPhase, setHoveredPhase] = useState(null);
 
   const tourData = [
     { id: 0, title: "Step 1: The Pipeline Handshake", targetNodes: ['fpa', 'margin'], transcript: "Welcome to the O2S Console tour. For years, the biggest gap in our operations was the disconnect between our CRM pipeline and FP&A systems. Opportunity data sat in one silo, and financial planning in another. By implementing the O2S Project Margin Plan in Zones 1 through 3, we force a handshake. We establish a pre-go/no-go baseline anchored to our annual operating targets, which directly feeds a risk-adjusted, time-phased payload back to Anaplan." },
@@ -710,6 +773,13 @@ const App = () => {
   const activePillarObj = PILLARS.find(p => p.id === activePillar);
   const isEquipment = activePillar === 'equipment';
   const grid = isEquipment ? PERSONA_EQUIPMENT_GRID[activePersona] : null;
+
+  const activePhases = new Set();
+  if (grid) {
+    ZONE_GROUPS.forEach(zg => {
+      if (grid[zg.id].cards.length > 0) activePhases.add(zg.id);
+    });
+  }
 
   const zoneColorMap = { indigo: 'border-t-indigo-500 bg-indigo-50', emerald: 'border-t-emerald-500 bg-emerald-50', amber: 'border-t-amber-500 bg-amber-50', rose: 'border-t-rose-500 bg-rose-50' };
   const zoneTextMap = { indigo: 'text-indigo-600', emerald: 'text-emerald-600', amber: 'text-amber-600', rose: 'text-rose-600' };
@@ -796,6 +866,56 @@ const App = () => {
             <button onClick={() => { setIsTourActive(true); setTourStep(0); setSelectedNode(null); }} className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-bold shadow-sm transition-colors shrink-0">
               <Play className="w-4 h-4" /> Play 3.18 Podcast Walkthrough
             </button>
+          </div>
+
+          {/* Zone Progression Spine */}
+          <div className="bg-white rounded-xl border border-slate-200 shadow-sm px-6 py-5">
+            <div className="flex items-center gap-1">
+              {ZONE_SPINE.map((phase, phaseIdx) => {
+                const styles = SPINE_STYLES[phase.color];
+                const isActive = activePhases.has(phase.phaseId);
+                return (
+                  <React.Fragment key={phase.phaseId}>
+                    {phaseIdx > 0 && <div className="w-3 h-0.5 bg-slate-300 shrink-0" />}
+                    <div
+                      className={`flex items-center rounded-lg px-3 py-2.5 transition-colors ${
+                        isActive ? styles.activeBand : styles.inactiveBand
+                      } ${phase.zones.length === 3 ? 'flex-[3]' : 'flex-[2]'}`}
+                      onMouseEnter={() => setHoveredPhase(phase.phaseId)}
+                      onMouseLeave={() => setHoveredPhase(null)}
+                    >
+                      {phase.zones.map((zone, zoneIdx) => (
+                        <React.Fragment key={zone.num}>
+                          {zoneIdx > 0 && (
+                            <div className={`flex-grow h-0.5 mx-1 ${isActive ? styles.activeLine : styles.inactiveLine}`} />
+                          )}
+                          <div className="relative group shrink-0">
+                            <div className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold transition-all cursor-default ${
+                              isActive ? styles.activeCircle : styles.inactiveCircle
+                            }`}>
+                              {zone.num}
+                            </div>
+                            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2.5 py-1.5 bg-slate-800 text-white text-[11px] font-medium rounded-md shadow-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+                              <div className="font-bold">Zone {zone.num}</div>
+                              <div className="text-slate-300">{zone.name}</div>
+                              <div className="absolute top-full left-1/2 -translate-x-1/2 -mt-px border-4 border-transparent border-t-slate-800" />
+                            </div>
+                          </div>
+                        </React.Fragment>
+                      ))}
+                    </div>
+                  </React.Fragment>
+                );
+              })}
+            </div>
+            <div className="mt-3 text-center h-5">
+              <p className={`text-sm text-slate-600 transition-opacity ${hoveredPhase ? 'opacity-100' : 'opacity-0'}`}>
+                {hoveredPhase ? PHASE_DESCRIPTIONS[hoveredPhase] : '\u00A0'}
+              </p>
+            </div>
+            <p className="text-center text-[11px] italic text-slate-400 mt-1">
+              Zone state is observed, never declared — progress is derived from system-of-record data, not manual status updates.
+            </p>
           </div>
 
           {isEquipment ? (
