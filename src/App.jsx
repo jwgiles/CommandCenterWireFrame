@@ -5,7 +5,7 @@ import {
   Filter, Download, Play, AlertTriangle, CheckCircle2, Clock,
   Settings, Database, ChevronRight, Zap, RefreshCw, ShoppingCart, ShieldAlert,
   HardHat, BarChart3, Lock, ChevronDown, TrendingUp,
-  FileCheck, Send, Truck, Star, Repeat, GitBranch, Bell, Eye, Gauge
+  FileCheck, Send, Truck, Star, Repeat, GitBranch, Bell, Eye, Gauge, Crosshair
 } from 'lucide-react';
 
 const Badge = ({ children, variant = 'gray' }) => {
@@ -819,6 +819,83 @@ const MockVendorScorecard = () => {
   );
 };
 
+const MockFitScore = () => {
+  const opportunities = [
+    { name: 'Hospital Expansion — Phoenix', region: 'Southwest', type: 'Healthcare', value: '$85M', fit: 92, drivers: 'Repetitive patient rooms → prefab, heavy MEP → crane + lifts', play: 'Early design-in meeting with prefab + equipment', zone: 'Zone 2' },
+    { name: 'Data Center — Dallas', region: 'South', type: 'Data Center', value: '$400M', fit: 88, drivers: 'Long-lead power gen, high crane utilization, temp power demand', play: 'Engage estimating for Quick Quote', zone: 'Zone 2' },
+    { name: 'Office TI — Chicago', region: 'Midwest', type: 'Office', value: '$12M', fit: 24, drivers: 'Light equipment needs, short duration', play: 'Standard catalog only', zone: 'Zone 1' },
+    { name: 'Warehouse — Atlanta', region: 'Southeast', type: 'Industrial', value: '$45M', fit: 61, drivers: 'Earthmoving + material handling demand', play: 'Monitor — engage at Zone 3 if awarded', zone: 'Zone 2' },
+  ];
+  const fitColor = (v) => v >= 75 ? 'bg-emerald-500' : v >= 50 ? 'bg-amber-500' : 'bg-slate-400';
+  const fitText = (v) => v >= 75 ? 'text-emerald-600' : v >= 50 ? 'text-amber-600' : 'text-slate-500';
+  return (
+    <div className="flex flex-col h-full bg-slate-50">
+      <Toolbar
+        leftArea={<><Crosshair className="w-4 h-4 text-indigo-500"/><span className="font-bold text-slate-800">Zone 2: Opportunity Correlation & Fit Scoring</span><span className="text-slate-400">|</span><span className="text-slate-600">FP&A Committed Forecast — Q3 FY26</span></>}
+        rightArea={<button className="flex items-center gap-2 bg-indigo-600 text-white px-3 py-1.5 rounded text-xs font-semibold hover:bg-indigo-700"><RefreshCw className="w-3 h-3"/> Refresh Fit Scores</button>}
+      />
+      <div className="px-6 py-2 bg-white border-b border-slate-200 shrink-0">
+        <p className="text-xs text-slate-500 italic">Opportunities originate in CRM but are evaluated here against the FP&A committed forecast — the enterprise's one version of truth.</p>
+      </div>
+      <div className="p-6 overflow-auto flex flex-col gap-5">
+        <div className="grid grid-cols-4 gap-4">
+          <KPI label="FP&A Forecast Entries" value="41" />
+          <KPI label="Correlated to CRM Opportunities" value="28" />
+          <KPI label="High Fit (Equipment)" value="6 opportunities" />
+          <KPI label="Est. O2S Revenue at Stake" value="$18.4M" />
+        </div>
+
+        <div className="overflow-x-auto border border-slate-200 rounded-md bg-white">
+          <table className="w-full text-left text-[10px]">
+            <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase tracking-wider">
+              <tr>
+                <th className="px-3 py-2 font-semibold">Opportunity (from FP&A)</th>
+                <th className="px-3 py-2 font-semibold">Region</th>
+                <th className="px-3 py-2 font-semibold">Project Type</th>
+                <th className="px-3 py-2 font-semibold text-right">Est. Value</th>
+                <th className="px-3 py-2 font-semibold">Equipment Fit Score</th>
+                <th className="px-3 py-2 font-semibold">Key Fit Drivers</th>
+                <th className="px-3 py-2 font-semibold">Recommended Play</th>
+                <th className="px-3 py-2 font-semibold">Zone</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 text-xs">
+              {opportunities.map((opp, i) => (
+                <tr key={i} className="hover:bg-slate-50 transition-colors">
+                  <td className="px-3 py-2.5 text-slate-800 font-semibold">{opp.name}</td>
+                  <td className="px-3 py-2.5 text-slate-600">{opp.region}</td>
+                  <td className="px-3 py-2.5 text-slate-600">{opp.type}</td>
+                  <td className="px-3 py-2.5 text-slate-700 font-mono text-right font-semibold">{opp.value}</td>
+                  <td className="px-3 py-2.5">
+                    <div className="flex items-center gap-2">
+                      <div className="w-20 bg-slate-200 rounded-full h-2">
+                        <div className={`h-2 rounded-full ${fitColor(opp.fit)}`} style={{ width: `${opp.fit}%` }} />
+                      </div>
+                      <span className={`font-mono font-bold text-[10px] ${fitText(opp.fit)}`}>{opp.fit}%</span>
+                    </div>
+                  </td>
+                  <td className="px-3 py-2.5 text-slate-500 max-w-[200px]"><span className="leading-snug">{opp.drivers}</span></td>
+                  <td className="px-3 py-2.5 text-indigo-600 font-medium max-w-[180px]">{opp.play}</td>
+                  <td className="px-3 py-2.5"><Badge variant={opp.zone === 'Zone 2' ? 'blue' : 'gray'}>{opp.zone}</Badge></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        <div className="bg-white border border-indigo-200 rounded-md p-4 shadow-sm">
+          <h4 className="text-xs font-bold text-indigo-700 uppercase tracking-wider mb-2 flex items-center gap-2"><Zap className="w-4 h-4"/> Elevated Attention: Hospital Expansion — Phoenix</h4>
+          <p className="text-sm text-slate-700">High fit score (92%) + long-lead crane risk + strategic client. <strong>Recommended:</strong> Pillar lead engagement before pursuit milestone.</p>
+        </div>
+
+        <div className="bg-white border border-slate-200 rounded-md p-3 shadow-sm">
+          <p className="text-[11px] italic text-slate-400 text-center">Fit scores are computed using pillar-specific criteria: Hero Product Lines, Capacity Lulls, High-ROI Equipment categories, and historical project-type demand patterns.</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const CircularProgress = ({ value, size = 56, color = 'text-amber-500' }) => {
   const r = (size - 8) / 2;
   const circ = 2 * Math.PI * r;
@@ -1370,6 +1447,7 @@ const CARD_REGISTRY = {
   costofdelay: { title: 'Cost of Delay Visibility', description: 'See the financial impact of providing or withholding clarity on each equipment need.', icon: Eye, colorClass: 'border-emerald-200 ring-2 ring-emerald-50', highlight: 'bg-emerald-500 text-white' },
   clarityscoring: { title: 'Clarity & Confidence Scoring', description: 'Assess and track how complete and confident each equipment need is across quantity, specification, and schedule.', icon: Gauge, colorClass: 'border-emerald-200', highlight: 'bg-emerald-100 text-emerald-600' },
   forecast: { title: 'Asset Demand Forecast', description: 'Generate a probability-weighted demand forecast by asset class spanning early pipeline through execution readiness.', icon: BarChart, colorClass: 'border-indigo-200 ring-2 ring-indigo-50', highlight: 'bg-indigo-500 text-white' },
+  fitscore: { title: 'Fit Score & Opportunity Correlation', description: 'Evaluate FP&A committed forecast against equipment capabilities. Surface recommended engagement strategies before designs lock.', icon: Crosshair, colorClass: 'border-indigo-200', highlight: 'bg-indigo-100 text-indigo-600' },
   'prepop-ops': { title: 'Pre-Population & Constraint Alerts', description: 'Pre-populate project-level equipment requests using demand forecasts, schedules, and historical patterns.', icon: Layers, colorClass: 'border-emerald-100', highlight: 'bg-emerald-100 text-emerald-600', resolveId: 'prepop' },
   optimize: { title: 'Owned vs Re-Rent Optimizer', description: 'Use enterprise-wide owned fleet visibility to recommend whether each request should be fulfilled with owned equipment or re-rent.', icon: Search, colorClass: 'border-amber-200 ring-2 ring-amber-50', highlight: 'bg-amber-500 text-white' },
   source: { title: 'Strategic Sourcing', description: 'Enable O2S to source from the right vendors at the right time using demand signals and supplier performance.', icon: Box, colorClass: 'border-amber-100', highlight: 'bg-amber-100 text-amber-600' },
@@ -1393,13 +1471,13 @@ const PERSONA_EQUIPMENT_GRID = {
     'z8-9': { cards: ['execution'], placeholders: [] },
   },
   'o2s-ops': {
-    'z1-3': { cards: ['forecast'], placeholders: [] },
+    'z1-3': { cards: ['forecast', 'fitscore'], placeholders: [] },
     'z4-5': { cards: ['prepop-ops', 'costofdelay', 'clarityscoring'], placeholders: [] },
     'z6-7': { cards: ['optimize', 'source', 'formalrequest'], placeholders: [] },
     'z8-9': { cards: ['execution', 'vendorscorecard', 'flywheel'], placeholders: [] },
   },
   'leadership': {
-    'z1-3': { cards: [], placeholders: ['Portfolio Watchlists — Coming in Prompt 9'] },
+    'z1-3': { cards: ['fitscore'], placeholders: [] },
     'z4-5': { cards: [], placeholders: ['Project Maturity Summary — Coming in Prompt 10'] },
     'z6-7': { cards: ['lifecycle'], placeholders: [] },
     'z8-9': { cards: ['capex', 'flywheel'], placeholders: [] },
@@ -1500,6 +1578,7 @@ const App = () => {
       case 'quotes': return <MockQuickQuotes />;
       case 'margin': return <MockMarginPlan />;
       case 'forecast': return <MockAssetDemandForecasting />;
+      case 'fitscore': return <MockFitScore />;
       case 'prepop': case 'prepop-ops': return <MockPrePopulation />;
       case 'costofdelay': return <MockCostOfDelay persona={activePersona} />;
       case 'clarityscoring': return <MockClarityScoring />;
