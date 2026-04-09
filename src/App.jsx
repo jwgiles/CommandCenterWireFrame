@@ -142,11 +142,21 @@ const MockCapexPlan = () => (
   </div>
 );
 
+const GateBadge = ({ macro, micro }) => (
+  <div className="flex items-center gap-1.5 text-[9px] text-slate-400 font-mono">
+    <Database className="w-3 h-3" />
+    <span>Gate: <span className="text-slate-600 font-semibold">{macro}</span></span>
+    {micro && <><span className="text-slate-300">|</span><span>{micro}</span></>}
+  </div>
+);
+
 const MockQuickQuotes = () => {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState(false);
   return (
-    <div className="flex h-full bg-slate-50">
+    <div className="flex flex-col h-full bg-slate-50">
+      <Toolbar leftArea={<><Zap className="w-4 h-4 text-indigo-500"/><span className="font-semibold text-slate-800">Zone 1: Quick Quotes</span><GateBadge macro="Forecast Exists" micro="Demand Signal Categorized"/></>} />
+      <div className="flex flex-grow overflow-hidden">
       <div className="w-1/3 bg-white border-r border-slate-200 p-6 flex flex-col gap-4">
         <h3 className="text-sm font-bold uppercase tracking-wider text-slate-800 mb-2">Estimate Parameters</h3>
         <div><label className="block text-xs font-semibold text-slate-500 mb-1">Project Type</label><select className="w-full text-sm border border-slate-200 rounded p-2 bg-slate-50 outline-none focus:border-indigo-500"><option>Commercial High-Rise</option><option>Data Center</option><option>Healthcare</option></select></div>
@@ -172,13 +182,14 @@ const MockQuickQuotes = () => {
           </div>
         )}
       </div>
+      </div>
     </div>
   );
 };
 
 const MockMarginPlan = () => (
   <div className="flex flex-col h-full bg-slate-50">
-    <Toolbar leftArea={<><div className="bg-blue-600 text-white text-[10px] font-bold px-2 py-0.5 rounded">OPP-9921</div><span className="font-semibold text-slate-800">Project Alpha (Pursuit)</span></>} rightArea={<span className="text-xs font-mono text-slate-500">Last updated: Today, 09:41 AM</span>}/>
+    <Toolbar leftArea={<><div className="bg-blue-600 text-white text-[10px] font-bold px-2 py-0.5 rounded">OPP-9921</div><span className="font-semibold text-slate-800">Project Alpha (Pursuit)</span><GateBadge macro="Active Pursuit" micro="Pursuit Shaped"/></>} rightArea={<span className="text-xs font-mono text-slate-500">Last updated: Today, 09:41 AM</span>}/>
     <div className="p-6">
       <div className="grid grid-cols-3 gap-4 mb-6">
         <KPI label="Target Revenue" value="$4.50M" />
@@ -230,7 +241,7 @@ const MockAssetDemandForecasting = () => {
   ];
   return (
     <div className="flex flex-col h-full bg-slate-50">
-      <Toolbar leftArea={<><div className="w-2 h-2 rounded-full bg-indigo-500"></div><span className="font-semibold text-slate-800">Portfolio Aggregation: Cat Class Demand vs Supply</span></>} rightArea={
+      <Toolbar leftArea={<><div className="w-2 h-2 rounded-full bg-indigo-500"></div><span className="font-semibold text-slate-800">Portfolio Aggregation: Cat Class Demand vs Supply</span><GateBadge macro="Opportunity Created" micro="Opportunity Qualified"/></>} rightArea={
         <div className="flex bg-slate-200 p-0.5 rounded-md">
           {['All', 'Z1-Z3', 'Z4-Z7'].map(f => <button key={f} onClick={() => setFilter(f)} className={`px-3 py-1 text-[10px] font-bold uppercase tracking-wider rounded-sm transition-all ${filter === f ? 'bg-white text-indigo-700 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}>{f === 'All' ? 'All (Z1-Z7)' : f === 'Z1-Z3' ? 'Early Forecasts (Z1-Z3)' : 'Intent & Planning (Z4-Z7)'}</button>)}
         </div>
@@ -334,7 +345,7 @@ const MockPrePopulation = () => {
   ];
   return (
     <div className="flex flex-col h-full bg-slate-50">
-      <Toolbar leftArea={<><div className="w-2 h-2 rounded-full bg-amber-500"></div><span className="font-semibold text-slate-800">Zone 4: V0 Baseline Review</span></>} rightArea={<button className="bg-indigo-600 text-white px-3 py-1.5 rounded text-xs font-semibold hover:bg-indigo-700">Approve Baseline & Promote to Intent</button>}/>
+      <Toolbar leftArea={<><div className="w-2 h-2 rounded-full bg-amber-500"></div><span className="font-semibold text-slate-800">Zone 4: V0 Baseline Review</span><GateBadge macro="Project Awarded" micro="Baseline Populated"/></>} rightArea={<button className="bg-indigo-600 text-white px-3 py-1.5 rounded text-xs font-semibold hover:bg-indigo-700">Approve Baseline & Promote to Intent</button>}/>
       <div className="p-4 flex-grow overflow-hidden flex flex-col">
         <div className="bg-white border border-slate-200 rounded-md shadow-sm flex flex-col h-full overflow-hidden">
           <div className="p-3 border-b border-slate-200 bg-slate-50 flex justify-between items-center shrink-0">
@@ -396,7 +407,8 @@ const MockPrePopulation = () => {
 
 const MockAdHocIntake = () => (
   <div className="flex flex-col h-full bg-slate-50">
-    <div className="p-6 flex gap-6 h-full">
+    <Toolbar leftArea={<><Box className="w-4 h-4 text-slate-500"/><span className="font-semibold text-slate-800">Zone 5: Ad-Hoc Equipment Intake</span><GateBadge macro="Plan Endorsed" micro="Intent Refined"/></>} />
+    <div className="p-6 flex gap-6 flex-grow overflow-hidden">
       <div className="w-2/3 flex flex-col gap-4">
         <div className="relative"><Search className="w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"/><input type="text" placeholder="Search equipment catalog (e.g. 'Excavator 30T')..." className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-md shadow-sm outline-none focus:ring-2 focus:ring-indigo-500 transition-shadow"/></div>
         <div className="grid grid-cols-3 gap-4 overflow-auto pb-4">
@@ -420,7 +432,7 @@ const MockAdHocIntake = () => (
 
 const MockOptimizer = () => (
   <div className="flex flex-col h-full bg-slate-50">
-    <Toolbar leftArea={<><ShieldAlert className="w-4 h-4 text-amber-500"/><span className="font-bold text-slate-800">Zone 6 Constraint Detected: Telehandler Need</span></>} rightArea={<span className="text-xs text-slate-500">Run Optimizer v2.4</span>}/>
+    <Toolbar leftArea={<><ShieldAlert className="w-4 h-4 text-amber-500"/><span className="font-bold text-slate-800">Zone 6 Constraint Detected: Telehandler Need</span><GateBadge macro="Preflight Passed" micro="Request Pack Assembled"/></>} rightArea={<span className="text-xs text-slate-500">Run Optimizer v2.4</span>}/>
     <div className="p-6 overflow-auto">
       <p className="text-sm text-slate-600 mb-6">The system has identified two fulfillment paths for Request <span className="font-mono bg-slate-200 px-1 rounded">REQ-0922</span>. Select the optimal scenario to proceed to Zone 7.</p>
       <div className="grid grid-cols-2 gap-6 h-64">
@@ -452,7 +464,7 @@ const MockOptimizer = () => (
 
 const MockStrategicSourcing = () => (
   <div className="flex flex-col h-full bg-slate-50">
-    <Toolbar leftArea={<span className="font-bold text-slate-800 text-sm">Zone 7: Active Sourcing Events</span>} rightArea={<Badge variant="blue">4 Open RFQs</Badge>}/>
+    <Toolbar leftArea={<><span className="font-bold text-slate-800 text-sm">Zone 7: Active Sourcing Events</span><GateBadge macro="Request Submitted" micro="Request Routed & Acknowledged"/></>} rightArea={<Badge variant="blue">4 Open RFQs</Badge>}/>
     <div className="p-6">
       <h3 className="text-sm font-bold text-slate-800 mb-3 uppercase tracking-wider text-[11px]">Vendor Comparison Matrix - RFQ-8812 (Generators)</h3>
       <div className="overflow-x-auto border border-slate-200 rounded-md bg-white">
@@ -488,7 +500,7 @@ const MockStrategicSourcing = () => (
 
 const MockBillingAnomaly = () => (
   <div className="flex flex-col h-full bg-slate-50">
-    <Toolbar leftArea={<><div className="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></div><span className="font-bold text-slate-800">Zone 9: Post-Fulfillment Audit</span></>} rightArea={<span className="text-xs text-slate-500 font-medium tracking-wide">3 Anomalies Detected</span>}/>
+    <Toolbar leftArea={<><div className="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></div><span className="font-bold text-slate-800">Zone 9: Post-Fulfillment Audit</span><GateBadge macro="Closeout Recorded" micro="Flywheel Feedback Complete"/></>} rightArea={<span className="text-xs text-slate-500 font-medium tracking-wide">3 Anomalies Detected</span>}/>
     <div className="p-6">
       <DenseTable headers={['Invoice ID', 'Vendor', 'Project', 'Expected', 'Actual Billed', 'Anomaly Type', 'Confidence']} actionBtn="Investigate" rows={[
         [<span className="font-mono text-xs">INV-992-A</span>, 'Sunbelt', 'Project Alpha', '$4,200', <span className="font-bold text-rose-600">$5,800</span>, <Badge variant="red">Rate Variance</Badge>, '98%'],
