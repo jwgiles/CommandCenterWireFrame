@@ -60,25 +60,25 @@ const DenseTable = ({ headers, rows, actionBtn }) => (
   </div>
 );
 
-const Toolbar = ({ leftArea, rightArea }) => (
+const Toolbar = ({ leftArea, rightArea, showObserved = true }) => (
   <div className="bg-white border-b border-slate-200 px-6 py-2 flex justify-between items-center shrink-0 text-sm">
     <div className="flex items-center gap-4">{leftArea}</div>
-    <div className="flex items-center gap-2">
-      {rightArea}
-      <div className="relative group ml-2">
-        <Lock className="w-3 h-3 text-slate-300" />
-        <div className="absolute bottom-full right-0 mb-1.5 px-2 py-1 bg-slate-800 text-white text-[10px] rounded shadow-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
-          Zone state derived from system-of-record data
-          <div className="absolute top-full right-2 -mt-px border-4 border-transparent border-t-slate-800" />
+    <div className="flex items-center gap-3">
+      {showObserved && (
+        <div className="flex items-center gap-1 text-[9px] text-slate-400 italic" title="Zone state derived from system-of-record data — not manual status updates">
+          <Lock className="w-3 h-3" />
+          <span>Observed</span>
         </div>
-      </div>
+      )}
+      {rightArea}
     </div>
   </div>
 );
 
 const MockAssetLifecycle = () => (
   <div className="flex flex-col h-full bg-slate-50">
-    <Toolbar 
+    <Toolbar
+      showObserved={false}
       leftArea={<><Database className="w-4 h-4 text-slate-400"/> <span className="font-medium">Fleet Database</span> <span className="text-slate-400">|</span> <span>4,291 Active Assets</span></>}
       rightArea={<button className="flex items-center gap-2 bg-slate-800 text-white px-3 py-1.5 rounded text-xs font-semibold hover:bg-slate-700"><Play className="w-3 h-3"/> Run Replacement Model</button>}
     />
@@ -106,7 +106,8 @@ const MockAssetLifecycle = () => (
 
 const MockCapexPlan = () => (
   <div className="flex flex-col h-full bg-slate-50">
-    <Toolbar 
+    <Toolbar
+      showObserved={false}
       leftArea={<span className="font-medium text-slate-700">FY26 Q3 Planning Cycle</span>}
       rightArea={<button className="bg-indigo-600 text-white px-3 py-1.5 rounded text-xs font-semibold hover:bg-indigo-700">Submit to Steering</button>}
     />
