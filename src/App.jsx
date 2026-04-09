@@ -5,7 +5,7 @@ import {
   Filter, Download, Play, AlertTriangle, CheckCircle2, Clock,
   Settings, Database, ChevronRight, Zap, RefreshCw, ShoppingCart, ShieldAlert,
   HardHat, BarChart3, Lock, ChevronDown, TrendingUp,
-  FileCheck, Send, Truck, Star, Repeat, GitBranch
+  FileCheck, Send, Truck, Star, Repeat, GitBranch, Bell
 } from 'lucide-react';
 
 const Badge = ({ children, variant = 'gray' }) => {
@@ -1204,6 +1204,8 @@ const App = () => {
   const [activePillar, setActivePillar] = useState('equipment');
   const [pillarDropdownOpen, setPillarDropdownOpen] = useState(false);
   const [hoveredPhase, setHoveredPhase] = useState(null);
+  const [triggerPanelOpen, setTriggerPanelOpen] = useState(false);
+  const [triggerFilter, setTriggerFilter] = useState('all');
 
   const tourData = [
     { id: 0, title: "Step 1: The Pipeline Handshake", targetNodes: ['fpa', 'margin'], transcript: "Welcome to the O2S Console tour. For years, the biggest gap in our operations was the disconnect between our CRM pipeline and FP&A systems. Opportunity data sat in one silo, and financial planning in another. By implementing the O2S Project Margin Plan in Zones 1 through 3, we force a handshake. We establish a pre-go/no-go baseline anchored to our annual operating targets, which directly feeds a risk-adjusted, time-phased payload back to Anaplan." },
@@ -1280,6 +1282,16 @@ const App = () => {
               })}
             </div>
 
+            <div className="flex items-center gap-3">
+              {/* Trigger Bell */}
+              <button
+                onClick={() => setTriggerPanelOpen(!triggerPanelOpen)}
+                className="relative p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all"
+              >
+                <Bell className="w-5 h-5" />
+                <span className="absolute -top-0.5 -right-0.5 w-4.5 h-4.5 bg-rose-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center ring-2 ring-slate-900">3</span>
+              </button>
+
             {/* Pillar Selector */}
             <div className="relative">
               <button
@@ -1315,6 +1327,7 @@ const App = () => {
                   </div>
                 </>
               )}
+            </div>
             </div>
           </div>
         </div>
@@ -1452,6 +1465,148 @@ const App = () => {
           </div>
         </div>
       </div>
+
+      {/* Trigger Panel */}
+      {triggerPanelOpen && (
+        <>
+          <div className="fixed inset-0 z-40 bg-slate-900/20" onClick={() => setTriggerPanelOpen(false)} />
+          <div className="fixed top-0 right-0 h-full w-[420px] bg-white shadow-2xl z-50 flex flex-col border-l border-slate-200">
+            {/* Header */}
+            <div className="bg-slate-900 p-4 flex justify-between items-center shrink-0">
+              <div className="flex items-center gap-2">
+                <Bell className="w-4 h-4 text-indigo-400" />
+                <h2 className="font-bold text-white text-sm">Active Triggers</h2>
+                <span className="bg-rose-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">3</span>
+              </div>
+              <button onClick={() => setTriggerPanelOpen(false)} className="p-1 hover:bg-slate-800 rounded transition-colors"><X className="w-4 h-4 text-slate-400 hover:text-white" /></button>
+            </div>
+
+            {/* Filter Bar */}
+            <div className="px-4 py-3 border-b border-slate-200 bg-slate-50 flex gap-2 shrink-0">
+              {[
+                { id: 'all', label: 'All', color: 'bg-slate-200 text-slate-700' },
+                { id: 'critical', label: 'Critical', color: 'bg-rose-100 text-rose-700 border-rose-200' },
+                { id: 'action', label: 'Action Required', color: 'bg-amber-100 text-amber-700 border-amber-200' },
+                { id: 'info', label: 'Informational', color: 'bg-slate-100 text-slate-500 border-slate-200' },
+              ].map(f => (
+                <button
+                  key={f.id}
+                  onClick={() => setTriggerFilter(f.id)}
+                  className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border transition-all ${
+                    triggerFilter === f.id ? f.color + ' ring-2 ring-offset-1 ring-slate-300' : 'bg-white text-slate-400 border-slate-200 hover:bg-slate-50'
+                  }`}
+                >{f.label}</button>
+              ))}
+            </div>
+
+            {/* Trigger Cards */}
+            <div className="flex-grow overflow-y-auto p-4 space-y-4">
+              {/* Trigger 1: Critical — Long-Lead */}
+              {(triggerFilter === 'all' || triggerFilter === 'critical') && (
+                <div className="border border-slate-200 rounded-lg shadow-sm overflow-hidden">
+                  <div className="border-l-4 border-l-rose-500 p-4">
+                    <div className="flex items-start justify-between mb-2">
+                      <h4 className="text-sm font-bold text-slate-800">Long-Lead Detected: Switchgear 480V</h4>
+                      <Badge variant="red">Critical</Badge>
+                    </div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded">Zone 4 → Zone 5</span>
+                      <span className="text-[10px] text-slate-400">Data Center TX | 2 hours ago</span>
+                    </div>
+                    <div className="text-xs text-slate-600 mb-3">
+                      <span className="font-semibold text-slate-700">What happened:</span> V0 baseline includes switchgear with 16-week lead time. Current schedule shows 10-week window.
+                    </div>
+
+                    {activePersona === 'project-teams' ? (
+                      /* Project Teams see clarity demand */
+                      <div className="bg-amber-50 border border-amber-200 rounded-md p-3">
+                        <div className="text-xs font-bold text-amber-800 mb-2 flex items-center gap-1.5"><AlertTriangle className="w-3.5 h-3.5"/> Specifications Required</div>
+                        <p className="text-xs text-amber-900 mb-3">Final specifications for Switchgear 480V are needed to unlock sourcing. Each week of delay increases projected cost by <strong>$4,200</strong>.</p>
+                        <button className="w-full bg-indigo-600 text-white text-xs font-bold py-2 rounded hover:bg-indigo-700 transition-colors">Provide Specifications →</button>
+                      </div>
+                    ) : (
+                      /* All other personas see ops version */
+                      <>
+                        <div className="text-xs text-slate-600 mb-2">
+                          <span className="font-semibold text-slate-700">Clarity Status:</span> <span className="text-rose-600 font-semibold">❌ Project team has NOT provided final specifications</span>
+                        </div>
+                        <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Constrained Path Actions</div>
+                        <div className="space-y-2 mb-3">
+                          <button className="w-full bg-indigo-600 text-white text-xs font-bold py-2 rounded hover:bg-indigo-700 transition-colors flex flex-col items-center">
+                            <span>Send Clarity Demand to Project Team</span>
+                            <span className="text-[9px] font-normal opacity-70 mt-0.5">Includes deadline + cost-of-delay summary</span>
+                          </button>
+                          <button className="w-full bg-white border border-slate-300 text-slate-700 text-xs font-bold py-2 rounded hover:bg-slate-50 transition-colors">Begin Constrained Sourcing with Baseline Specs</button>
+                          <button className="w-full bg-white border border-slate-300 text-slate-700 text-xs font-bold py-2 rounded hover:bg-slate-50 transition-colors">Escalate to Ops Director with Risk Summary</button>
+                        </div>
+                        <div className="bg-amber-50 border border-amber-200 rounded p-2.5 text-xs text-amber-800">
+                          <span className="font-bold">Cost of delay:</span> Each week increases projected cost by $4,200 based on historical spot-market premium for this asset class.
+                        </div>
+                      </>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Trigger 2: Action Required — Underutilized Asset */}
+              {(triggerFilter === 'all' || triggerFilter === 'action') && (
+                <div className="border border-slate-200 rounded-lg shadow-sm overflow-hidden">
+                  <div className="border-l-4 border-l-amber-500 p-4">
+                    <div className="flex items-start justify-between mb-2">
+                      <h4 className="text-sm font-bold text-slate-800">Underutilized Asset: Crawler Crane CRN-0092</h4>
+                      <Badge variant="yellow">Action Required</Badge>
+                    </div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="text-[10px] font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded">Zone 8</span>
+                      <span className="text-[10px] text-slate-400">Detected via telematics | 6 hours ago</span>
+                    </div>
+                    <div className="text-xs text-slate-600 mb-2">
+                      <span className="font-semibold text-slate-700">What happened:</span> Telematics show 12% utilization over 14 days. Daily cost: $2,800.
+                    </div>
+                    <div className="text-xs text-slate-600 mb-3">
+                      <span className="font-semibold text-emerald-700">Redeployment Match Found:</span> Project Healthcare Facility C (AZ) has open demand for same crane class.
+                    </div>
+                    <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Happy Path Actions</div>
+                    <div className="space-y-2">
+                      <button className="w-full bg-emerald-600 text-white text-xs font-bold py-2 rounded hover:bg-emerald-700 transition-colors flex flex-col items-center">
+                        <span>Initiate Cross-Regional Transfer</span>
+                        <span className="text-[9px] font-normal opacity-70 mt-0.5">Transfer cost $18K vs rental savings $67K</span>
+                      </button>
+                      <button className="w-full bg-white border border-slate-300 text-slate-700 text-xs font-bold py-2 rounded hover:bg-slate-50 transition-colors">Extend Current Deployment with Justification</button>
+                      <button className="w-full bg-white border border-slate-300 text-slate-700 text-xs font-bold py-2 rounded hover:bg-slate-50 transition-colors">Begin Off-Rent Process</button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Trigger 3: Informational — Preflight Passed */}
+              {(triggerFilter === 'all' || triggerFilter === 'info') && (
+                <div className="border border-slate-200 rounded-lg shadow-sm overflow-hidden">
+                  <div className="border-l-4 border-l-slate-300 p-4">
+                    <div className="flex items-start justify-between mb-2">
+                      <h4 className="text-sm font-bold text-slate-800">Preflight Passed: REQ-2024-0847</h4>
+                      <Badge variant="gray">Info</Badge>
+                    </div>
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="text-[10px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded">Zone 6 → Zone 7</span>
+                      <span className="text-[10px] text-slate-400">1 hour ago</span>
+                    </div>
+                    <p className="text-xs text-slate-600 mb-3">22 line items validated. Ready for formal submission.</p>
+                    <button className="text-xs font-bold text-indigo-600 hover:text-indigo-800 transition-colors flex items-center gap-1">View Request Pack <ArrowRight className="w-3 h-3"/></button>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Footer */}
+            <div className="p-4 border-t border-slate-200 bg-slate-50 shrink-0">
+              <p className="text-[11px] text-slate-400 italic leading-relaxed text-center">
+                Triggers serve two audiences simultaneously. O2S Operations sees action options. Project Teams see clarity demands with downstream cost consequences.
+              </p>
+            </div>
+          </div>
+        </>
+      )}
 
       {/* Tour Overlay */}
       {isTourActive && (
