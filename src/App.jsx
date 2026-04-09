@@ -63,7 +63,16 @@ const DenseTable = ({ headers, rows, actionBtn }) => (
 const Toolbar = ({ leftArea, rightArea }) => (
   <div className="bg-white border-b border-slate-200 px-6 py-2 flex justify-between items-center shrink-0 text-sm">
     <div className="flex items-center gap-4">{leftArea}</div>
-    <div className="flex items-center gap-2">{rightArea}</div>
+    <div className="flex items-center gap-2">
+      {rightArea}
+      <div className="relative group ml-2">
+        <Lock className="w-3 h-3 text-slate-300" />
+        <div className="absolute bottom-full right-0 mb-1.5 px-2 py-1 bg-slate-800 text-white text-[10px] rounded shadow-lg whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none z-10">
+          Zone state derived from system-of-record data
+          <div className="absolute top-full right-2 -mt-px border-4 border-transparent border-t-slate-800" />
+        </div>
+      </div>
+    </div>
   </div>
 );
 
@@ -1779,11 +1788,13 @@ const App = () => {
   const [triggerFilter, setTriggerFilter] = useState('all');
 
   const tourData = [
-    { id: 0, title: "Step 1: The Pipeline Handshake", targetNodes: ['fpa', 'margin'], transcript: "Welcome to the O2S Console tour. For years, the biggest gap in our operations was the disconnect between our CRM pipeline and FP&A systems. Opportunity data sat in one silo, and financial planning in another. By implementing the O2S Project Margin Plan in Zones 1 through 3, we force a handshake. We establish a pre-go/no-go baseline anchored to our annual operating targets, which directly feeds a risk-adjusted, time-phased payload back to Anaplan." },
-    { id: 1, title: "Step 2: Early Demand Shaping", targetNodes: ['forecast', 'quotes'], transcript: "But a financial target isn't an operational plan. We need to know what physical assets are actually required. That's where early demand shaping comes in. We take those early pipeline signals and generate a probability-weighted Asset-Level Demand Forecast spanning Zones 1 through 7. This early visibility is what allows our estimators to generate Quick Quotes for project teams with high confidence, long before the final blueprints are drawn." },
-    { id: 2, title: "Step 3: Translating Forecasts to Intents", targetNodes: ['prepop', 'adhoc'], transcript: "As a project matures into Zones 4 and 5, the abstract forecast must become a concrete operational intent. The system doesn't make project teams start from scratch; it uses AI to pre-populate request intakes based on the V0 baseline and historical patterns. However, we know reality on the ground changes. That's why we pair it with an Ad-Hoc Request Intake tool, giving project teams the flexibility to refine quantities, adjust schedules, and officially declare what they actually need." },
-    { id: 3, title: "Step 4: Fulfillment & Sourcing", targetNodes: ['optimize', 'source'], transcript: "Now we hit the execution threshold in Zones 6 and 7: Preflight Validation. We have a validated intent, but how do we fulfill it profitably? The Owned vs. Re-rent Optimizer evaluates our enterprise-wide fleet visibility. It makes a ruthless, margin-optimized recommendation. And when internal capacity falls short, the system automatically triggers Strategic Sourcing workflows, pushing the demand signal directly to our procurement teams." },
-    { id: 4, title: "Step 5: Execution & The Flywheel", targetNodes: ['anomaly', 'lifecycle', 'capex'], transcript: "Finally, the equipment hits the dirt. In Zones 8 and 9, the data flywheel completes its circuit. As invoices roll in, Billing Anomaly Detection models flag discrepancies before they impact the bottom line. More importantly, every actualized cost and duration is fed back into the Asset Lifecycle decision engine. This closed-loop system continually refines our CAPEX planning and makes the next V0 baseline even more accurate." }
+    { id: 0, title: "Step 1: The Fragmentation Problem", targetNodes: [], transcript: "Welcome to the O2S Command Center. Today, equipment operations run on disconnected spreadsheets, tribal knowledge, and point solutions that can't talk to each other. A project team in Texas requests a crane through email. Operations checks availability in one system, pricing in another, and vendor options in a third. Finance reconciles invoices weeks later with no link back to the original forecast. The result: margin leakage, duplicated rentals, and zero organizational learning. This platform exists to replace that fragmentation with a single, observable demand funnel." },
+    { id: 1, title: "Step 2: The Zone Model — An Ungameable Spine", targetNodes: [], highlightSpine: true, transcript: "Everything in the Command Center is organized around nine zones — a lifecycle spine that tracks equipment demand from earliest forecast through execution and learning. Critically, zone state is observed, not declared. A project doesn't manually move itself from Zone 4 to Zone 5; the system infers progression from system-of-record data — CRM stage changes, specification submissions, PO issuance. This makes the model ungameable: you can't claim progress you haven't actually made. The spine you see above is the shared map that every persona — project teams, operations, leadership, and finance — navigates from." },
+    { id: 2, title: "Step 3: Early Demand Shaping (Zones 1–3)", targetNodes: ['fitscore', 'quotes', 'forecast', 'margin', 'fpa'], transcript: "The funnel begins with pipeline intelligence. The Fit Score correlates CRM opportunities against historical equipment patterns to surface which deals are likely to generate real demand. Asset-Level Demand Forecasting translates those signals into probability-weighted equipment needs spanning Zones 1 through 7. Meanwhile, the Project Margin Plan and Financial Model force a handshake between operational forecasts and FP&A targets — establishing a risk-adjusted baseline before a single asset is committed. Quick Quotes give project teams early pricing confidence, long before blueprints are finalized." },
+    { id: 3, title: "Step 4: Baseline, Intent & Clarity (Zones 4–5)", targetNodes: ['prepop', 'adhoc', 'clarityscoring', 'costofdelay', 'projectmaturity'], transcript: "As opportunities mature, abstract forecasts must become concrete operational intents. The system pre-populates request intakes using AI and the V0 baseline — project teams don't start from scratch. Ad-Hoc Intake captures the inevitable ground-level changes. Clarity Scoring quantifies how 'decision-ready' each request is across multiple dimensions. Cost of Delay calculates the real financial impact of missing information, creating urgency without requiring nagging. Project Maturity tracks multi-zone coexistence — because a project isn't simply 'in Zone 5'; different line items may span Zones 3 through 7 simultaneously." },
+    { id: 4, title: "Step 5: Validation, Request & Triggers (Zones 6–7)", targetNodes: ['preflight', 'formalrequest', 'optimize', 'source', 'regression'], transcript: "Before anything crosses the execution threshold, Preflight Validation runs every line item through business rules — budget checks, specification completeness, lead-time feasibility. Items that pass move to Formal Request for submission and handoff. The Owned vs. Re-rent Optimizer evaluates enterprise-wide fleet capacity and makes margin-optimized sourcing decisions. Strategic Sourcing pushes demand directly to procurement. And when conditions change — a project delays, specs get revised — the Regression Event engine detects the backward movement and propagates impact across dependent zones, pausing SLAs and recalculating downstream effects." },
+    { id: 5, title: "Step 6: Execution & Exceptions (Zone 8)", targetNodes: ['execution', 'vendorscorecard'], transcript: "Equipment hits the dirt. The Execution Dashboard tracks utilization, mobilization status, and exception rates in real time. Every vendor interaction feeds the Vendor Scorecard — on-time delivery, damage rates, pricing accuracy — creating an institutional memory that makes future sourcing decisions smarter. Triggers fire automatically when anomalies appear: underutilized assets get flagged for redeployment, vendor SLA breaches escalate to the right persona, and cost overruns surface before they compound." },
+    { id: 6, title: "Step 7: The Learning Flywheel (Zone 9)", targetNodes: ['anomaly', 'flywheel'], transcript: "Zone 9 is where the system learns. Billing Anomaly Detection catches invoice discrepancies before they impact the bottom line. But the real value is the Learning Flywheel: every actualized cost, duration, and vendor outcome is compared against the original V0 baseline. Variances are analyzed, and the resulting insights are written back into estimation templates, sourcing logic, and forecasting models. The next project that looks like this one starts with a better baseline. This closed-loop architecture means the platform gets smarter with every cycle — not through manual process improvement, but through structured organizational learning." }
   ];
 
   const renderWorkflowContent = (id) => {
@@ -1916,9 +1927,9 @@ const App = () => {
           <div className="mb-6 flex justify-between items-end">
             <div>
               <h1 className="text-3xl font-bold text-slate-900 tracking-tight">
-                {activePersonaObj.label} — {activePillarObj.label}
+                O2S Command Center — {activePersonaObj.label}
               </h1>
-              <p className="text-sm font-medium text-slate-500 mt-1">Click any workflow card to explore its interactive simulation.</p>
+              <p className="text-sm font-medium text-slate-500 mt-1">Demand Funnel Zones &middot; {activePillarObj.label} &middot; Click any workflow card to explore its interactive simulation.</p>
             </div>
             <button onClick={() => { setIsTourActive(true); setTourStep(0); setSelectedNode(null); }} className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-bold shadow-sm transition-colors shrink-0">
               <Play className="w-4 h-4" /> Play 3.18 Podcast Walkthrough
@@ -1926,7 +1937,7 @@ const App = () => {
           </div>
 
           {/* Zone Progression Spine */}
-          <div className="bg-white rounded-xl border border-slate-200 shadow-sm px-6 py-5">
+          <div className={`bg-white rounded-xl border shadow-sm px-6 py-5 transition-all ${isTourActive && tourData[tourStep].highlightSpine ? 'border-indigo-400 ring-4 ring-indigo-500/30' : 'border-slate-200'}`}>
             <div className="flex items-center gap-1">
               {ZONE_SPINE.map((phase, phaseIdx) => {
                 const styles = SPINE_STYLES[phase.color];
@@ -2022,14 +2033,32 @@ const App = () => {
             </div>
           ) : (
             /* Non-Equipment Pillar Message */
-            <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-16 text-center">
+            <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-12 text-center">
               <Lock className="w-10 h-10 text-slate-300 mx-auto mb-4" />
               <h2 className="text-xl font-bold text-slate-700 mb-2">{activePillarObj.label} workflows are under development.</h2>
-              <p className="text-sm text-slate-500 max-w-xl mx-auto leading-relaxed">
-                The zone model, trigger engine, and persona-based views you see for Equipment will extend to this pillar.
+              <p className="text-sm text-slate-500 max-w-xl mx-auto leading-relaxed mb-8">
+                The same zone model, trigger engine, and persona-based navigation you see for Equipment will extend to this pillar.
               </p>
+              <div className="grid grid-cols-4 gap-4 max-w-3xl mx-auto">
+                {ZONE_GROUPS.map(zg => (
+                  <div key={zg.id} className={`rounded-lg border-t-4 ${zoneColorMap[zg.color]} p-4`}>
+                    <div className={`text-[10px] font-bold uppercase tracking-widest ${zoneTextMap[zg.color]} mb-1`}>{zg.zones}</div>
+                    <div className="text-xs font-bold text-slate-700 leading-tight">{zg.label}</div>
+                    <div className="mt-3 h-16 bg-slate-100 rounded border border-dashed border-slate-300 flex items-center justify-center">
+                      <span className="text-[10px] text-slate-400 italic">Coming soon</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
+
+          {/* Orchestration Footer */}
+          <div className="bg-slate-50 border border-slate-200 rounded-lg px-6 py-4 text-center">
+            <p className="text-xs text-slate-500 leading-relaxed max-w-3xl mx-auto">
+              <span className="font-semibold text-slate-600">The O2S Command Center is an orchestration layer</span> — it does not replace ERP, CRM, or telematics systems. It connects them into a single demand funnel where every persona sees the same zone-based truth, triggers fire from observed data, and organizational learning compounds automatically.
+            </p>
+          </div>
 
           {/* Bottom Bar */}
           <div className="mt-8 border-t-4 border-t-sky-500 bg-sky-900 text-white p-5 rounded-b-2xl shadow-lg flex items-center gap-4">
@@ -2189,7 +2218,7 @@ const App = () => {
         <div className="fixed bottom-8 right-8 w-96 bg-white rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-slate-200 z-[100] flex flex-col overflow-hidden">
           <div className="bg-slate-900 p-4 flex justify-between items-start text-white">
             <div>
-              <div className="text-[10px] font-bold uppercase tracking-widest text-indigo-400 mb-1 flex items-center gap-2"><Play className="w-3 h-3"/> Podcast Tour - Step {tourStep + 1} of 5</div>
+              <div className="text-[10px] font-bold uppercase tracking-widest text-indigo-400 mb-1 flex items-center gap-2"><Play className="w-3 h-3"/> Podcast Tour - Step {tourStep + 1} of {tourData.length}</div>
               <h3 className="font-bold text-sm leading-tight">{tourData[tourStep].title}</h3>
             </div>
             <button onClick={() => setIsTourActive(false)} className="p-1 hover:bg-slate-800 rounded transition-colors"><X className="w-4 h-4 text-slate-400 hover:text-white"/></button>
