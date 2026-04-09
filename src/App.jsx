@@ -5,7 +5,7 @@ import {
   Filter, Download, Play, AlertTriangle, CheckCircle2, Clock,
   Settings, Database, ChevronRight, Zap, RefreshCw, ShoppingCart, ShieldAlert,
   HardHat, BarChart3, Lock, ChevronDown, TrendingUp,
-  FileCheck, Send, Truck, Star, Repeat, GitBranch, Bell
+  FileCheck, Send, Truck, Star, Repeat, GitBranch, Bell, Eye
 } from 'lucide-react';
 
 const Badge = ({ children, variant = 'gray' }) => {
@@ -819,6 +819,145 @@ const MockVendorScorecard = () => {
   );
 };
 
+const MockCostOfDelay = ({ persona = 'project-teams' }) => {
+  const isOps = persona === 'o2s-ops';
+  const clarityDims = [
+    { label: 'Quantity / Count', status: 'pass', detail: 'Confirmed: 1 unit', rationale: 'Per structural package Rev 4' },
+    { label: 'Full Taxonomy (Specification)', status: 'fail', detail: 'Missing: Load chart & radius requirements', rationale: 'Last requested: 3 days ago' },
+    { label: 'Schedule', status: 'warn', detail: 'Partial: Structural completion TBD', rationale: 'Per P6 update pending' },
+  ];
+  const confirmed = clarityDims.filter(d => d.status === 'pass').length;
+  const statusIcon = (s) => {
+    if (s === 'pass') return <CheckCircle2 className="w-5 h-5 text-emerald-500" />;
+    if (s === 'warn') return <AlertTriangle className="w-5 h-5 text-amber-500" />;
+    return <X className="w-5 h-5 text-rose-500" />;
+  };
+  const statusBorder = (s) => s === 'pass' ? 'border-emerald-200 bg-emerald-50/50' : s === 'warn' ? 'border-amber-200 bg-amber-50/50' : 'border-rose-200 bg-rose-50/50';
+  return (
+    <div className="flex flex-col h-full bg-slate-50">
+      <Toolbar
+        leftArea={<><Eye className="w-4 h-4 text-indigo-500"/><span className="font-bold text-slate-800">Duality View: Tower Crane Sourcing</span><span className="text-slate-400">|</span><span className="text-slate-600">Data Center TX</span></>}
+        rightArea={<span className="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded border border-emerald-200">Zone 5 — Intent Refinement</span>}
+      />
+      <div className="px-6 py-2 bg-white border-b border-slate-200 shrink-0">
+        <p className="text-xs text-slate-500 italic">This view shows the financial impact of the current clarity state on fulfillment options.</p>
+      </div>
+      <div className="p-6 overflow-auto flex flex-col gap-6">
+        {/* Clarity Status Dashboard */}
+        <div>
+          <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3">Clarity Status</h3>
+          <div className="grid grid-cols-3 gap-4 mb-3">
+            {clarityDims.map((dim, i) => (
+              <div key={i} className={`border rounded-md p-3 ${statusBorder(dim.status)}`}>
+                <div className="flex items-center gap-2 mb-1.5">
+                  {statusIcon(dim.status)}
+                  <span className="text-xs font-bold text-slate-800">{dim.label}</span>
+                </div>
+                <p className="text-xs text-slate-700 font-medium">{dim.detail}</p>
+                <p className="text-[10px] text-slate-400 mt-0.5">{dim.rationale}</p>
+              </div>
+            ))}
+          </div>
+          <div className="bg-white border border-slate-200 rounded-md p-3 flex items-center justify-between shadow-sm">
+            <span className="text-xs font-semibold text-slate-700">Overall Clarity Score</span>
+            <div className="flex items-center gap-3">
+              <div className="w-32 bg-slate-200 rounded-full h-2.5">
+                <div className="h-2.5 rounded-full bg-amber-500" style={{ width: '33%' }} />
+              </div>
+              <span className="text-sm font-bold font-mono text-amber-600">33%</span>
+              <span className="text-[10px] text-slate-400">{confirmed} of {clarityDims.length} dimensions confirmed</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Two-Column Comparison */}
+        <div className="grid grid-cols-2 gap-5">
+          {/* Happy Path */}
+          <div className="border-2 border-emerald-300 rounded-xl overflow-hidden">
+            <div className="bg-emerald-500 text-white p-3">
+              <h4 className="font-bold text-sm flex items-center gap-2"><CheckCircle2 className="w-4 h-4"/> Happy Path</h4>
+              <p className="text-[10px] opacity-80 mt-0.5">If project team provides specifications within 5 business days</p>
+            </div>
+            <div className="p-4 space-y-3 bg-white">
+              {[
+                ['Cost', '$175,000', 'MSA rate from preferred vendor'],
+                ['Lead Time', '8 weeks', 'Arrives 3 weeks before structural milestone'],
+                ['Source', 'Internal owned fleet', 'Unit available in adjacent region'],
+                ['Risk', 'Low', 'Confirmed specifications enable precise matching'],
+              ].map(([label, value, note], i) => (
+                <div key={i} className="flex justify-between items-start text-xs border-b border-slate-100 pb-2 last:border-0 last:pb-0">
+                  <span className="text-slate-500 font-semibold w-20 shrink-0">{label}</span>
+                  <div className="text-right"><div className="font-mono font-bold text-slate-800">{value}</div><div className="text-[10px] text-slate-400">{note}</div></div>
+                </div>
+              ))}
+              <div className="bg-emerald-50 border border-emerald-200 rounded p-2.5 text-center">
+                <span className="text-xs font-bold text-emerald-700">Saves $47,000 vs. constrained path</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Constrained Path */}
+          <div className="border-2 border-rose-300 rounded-xl overflow-hidden">
+            <div className="bg-rose-500 text-white p-3">
+              <h4 className="font-bold text-sm flex items-center gap-2"><AlertTriangle className="w-4 h-4"/> Constrained Path</h4>
+              <p className="text-[10px] opacity-80 mt-0.5">If clarity window closes without specifications</p>
+            </div>
+            <div className="p-4 space-y-3 bg-white">
+              {[
+                ['Cost', '$222,000', 'Spot market rate + expedite premium'],
+                ['Lead Time', '4 weeks', 'Higher risk of mismatch requiring remobilization'],
+                ['Source', 'Spot market', 'Best available from 3rd party vendor'],
+                ['Risk', 'High', 'Unconfirmed specs may require swap + additional mobilization'],
+              ].map(([label, value, note], i) => (
+                <div key={i} className="flex justify-between items-start text-xs border-b border-slate-100 pb-2 last:border-0 last:pb-0">
+                  <span className="text-slate-500 font-semibold w-20 shrink-0">{label}</span>
+                  <div className="text-right"><div className="font-mono font-bold text-slate-800">{value}</div><div className="text-[10px] text-slate-400">{note}</div></div>
+                </div>
+              ))}
+              <div className="bg-rose-50 border border-rose-200 rounded p-2.5 text-center">
+                <span className="text-xs font-bold text-rose-700">+$47,000 premium cost absorbed by O2S</span>
+              </div>
+              {isOps && (
+                <div className="border-t border-slate-200 pt-3 mt-1">
+                  <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">O2S Operations Prep Actions</div>
+                  <div className="space-y-2">
+                    <button className="w-full bg-indigo-600 text-white text-xs font-bold py-2 rounded hover:bg-indigo-700 transition-colors">Pre-position sourcing with baseline specs</button>
+                    <button className="w-full bg-white border border-slate-300 text-slate-700 text-xs font-bold py-2 rounded hover:bg-slate-50 transition-colors">Alert regional fleet manager of potential demand</button>
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+        {/* Historical Evidence */}
+        <div className="bg-white border border-slate-200 rounded-md p-4 shadow-sm">
+          <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3 flex items-center gap-2"><Database className="w-4 h-4 text-indigo-500"/> Historical Evidence</h4>
+          <p className="text-sm text-slate-700 mb-2">Across 23 similar tower crane procurements in the last 18 months:</p>
+          <div className="grid grid-cols-3 gap-4 mb-3">
+            <div className="bg-emerald-50 border border-emerald-200 rounded p-3 text-center">
+              <div className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">Happy Path Avg</div>
+              <div className="text-lg font-bold font-mono text-emerald-700">$168K</div>
+            </div>
+            <div className="bg-rose-50 border border-rose-200 rounded p-3 text-center">
+              <div className="text-[10px] font-bold text-rose-600 uppercase tracking-wider">Constrained Path Avg</div>
+              <div className="text-lg font-bold font-mono text-rose-700">$231K</div>
+            </div>
+            <div className="bg-slate-50 border border-slate-200 rounded p-3 text-center">
+              <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Avg Premium</div>
+              <div className="text-lg font-bold font-mono text-slate-800">37%</div>
+            </div>
+          </div>
+          <div className="flex items-center justify-between">
+            <p className="text-[11px] italic text-slate-400">This evidence is sourced from the Zone 9 flywheel.</p>
+            <Badge variant="green">Sample size: 23 — High Confidence</Badge>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const MockLearningFlywheel = () => {
   const varianceData = [
     { item: 'Switchgear 480V', leadAssumed: '12 wks', leadActual: '16 wks', leadVar: '+4 wks', leadColor: 'text-rose-600', costAssumed: '$42K', costActual: '$51K', costVar: '+21%', costColor: 'text-rose-600', cause: 'Supply chain delay' },
@@ -1091,6 +1230,7 @@ const CARD_REGISTRY = {
   quotes: { title: 'Quick Quotes', description: 'Enable RSIs to generate fast, directional equipment estimates using standardized O2S inputs.', icon: Calculator, colorClass: 'border-indigo-100', highlight: 'bg-indigo-100 text-indigo-600' },
   prepop: { title: 'V0 Baseline Review', description: 'Pre-populate project-level equipment requests using demand forecasts, schedules, and historical patterns.', icon: Layers, colorClass: 'border-emerald-100', highlight: 'bg-emerald-100 text-emerald-600' },
   adhoc: { title: 'Ad-Hoc Request Intake', description: 'Give project teams a structured way to submit ad-hoc equipment requests outside the pre-populated plan.', icon: PenTool, colorClass: 'border-emerald-100', highlight: 'bg-emerald-100 text-emerald-600' },
+  costofdelay: { title: 'Cost of Delay Visibility', description: 'See the financial impact of providing or withholding clarity on each equipment need.', icon: Eye, colorClass: 'border-emerald-200 ring-2 ring-emerald-50', highlight: 'bg-emerald-500 text-white' },
   forecast: { title: 'Asset Demand Forecast', description: 'Generate a probability-weighted demand forecast by asset class spanning early pipeline through execution readiness.', icon: BarChart, colorClass: 'border-indigo-200 ring-2 ring-indigo-50', highlight: 'bg-indigo-500 text-white' },
   'prepop-ops': { title: 'Pre-Population & Constraint Alerts', description: 'Pre-populate project-level equipment requests using demand forecasts, schedules, and historical patterns.', icon: Layers, colorClass: 'border-emerald-100', highlight: 'bg-emerald-100 text-emerald-600', resolveId: 'prepop' },
   optimize: { title: 'Owned vs Re-Rent Optimizer', description: 'Use enterprise-wide owned fleet visibility to recommend whether each request should be fulfilled with owned equipment or re-rent.', icon: Search, colorClass: 'border-amber-200 ring-2 ring-amber-50', highlight: 'bg-amber-500 text-white' },
@@ -1110,13 +1250,13 @@ const CARD_REGISTRY = {
 const PERSONA_EQUIPMENT_GRID = {
   'project-teams': {
     'z1-3': { cards: ['quotes'], placeholders: [] },
-    'z4-5': { cards: ['prepop', 'adhoc'], placeholders: [] },
+    'z4-5': { cards: ['prepop', 'adhoc', 'costofdelay'], placeholders: [] },
     'z6-7': { cards: ['preflight'], placeholders: [] },
     'z8-9': { cards: ['execution'], placeholders: [] },
   },
   'o2s-ops': {
     'z1-3': { cards: ['forecast'], placeholders: [] },
-    'z4-5': { cards: ['prepop-ops'], placeholders: [] },
+    'z4-5': { cards: ['prepop-ops', 'costofdelay'], placeholders: [] },
     'z6-7': { cards: ['optimize', 'source', 'formalrequest'], placeholders: [] },
     'z8-9': { cards: ['execution', 'vendorscorecard', 'flywheel'], placeholders: [] },
   },
@@ -1223,6 +1363,7 @@ const App = () => {
       case 'margin': return <MockMarginPlan />;
       case 'forecast': return <MockAssetDemandForecasting />;
       case 'prepop': case 'prepop-ops': return <MockPrePopulation />;
+      case 'costofdelay': return <MockCostOfDelay persona={activePersona} />;
       case 'adhoc': return <MockAdHocIntake />;
       case 'optimize': return <MockOptimizer />;
       case 'source': return <MockStrategicSourcing />;
