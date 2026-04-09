@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { 
-  Calculator, Target, BarChart, Layers, PenTool, RotateCcw, Activity, 
-  Search, Box, DollarSign, Monitor, ArrowRight, ArrowDown, X, 
-  Filter, Download, Play, AlertTriangle, CheckCircle2, Clock, 
-  Settings, Database, ChevronRight, Zap, RefreshCw, ShoppingCart, ShieldAlert
+import {
+  Calculator, Target, BarChart, Layers, PenTool, RotateCcw, Activity,
+  Search, Box, DollarSign, Monitor, ArrowRight, ArrowDown, X,
+  Filter, Download, Play, AlertTriangle, CheckCircle2, Clock,
+  Settings, Database, ChevronRight, Zap, RefreshCw, ShoppingCart, ShieldAlert,
+  HardHat, BarChart3, Lock, ChevronDown, TrendingUp
 } from 'lucide-react';
 
 const Badge = ({ children, variant = 'gray' }) => {
@@ -599,10 +600,85 @@ const Card = ({ id, title, description, icon: Icon, colorClass, highlight, conne
   </div>
 );
 
+const PlaceholderCard = ({ label }) => (
+  <div className="p-5 rounded-xl border-2 border-dashed border-slate-300 bg-slate-50/50 flex flex-col items-center justify-center text-center min-h-[120px] gap-2">
+    <Lock className="w-5 h-5 text-slate-300" />
+    <p className="text-sm font-medium text-slate-400 leading-snug">{label}</p>
+  </div>
+);
+
+const PERSONAS = [
+  { id: 'project-teams', label: 'Project Teams', icon: HardHat },
+  { id: 'o2s-ops', label: 'O2S Operations', icon: Settings },
+  { id: 'leadership', label: 'Leadership', icon: BarChart3 },
+  { id: 'finance', label: 'Finance & FP&A', icon: DollarSign },
+];
+
+const PILLARS = [
+  { id: 'equipment', label: 'Equipment', enabled: true },
+  { id: 'logistics', label: 'Logistics', enabled: false },
+  { id: 'prefabrication', label: 'Prefabrication', enabled: false },
+  { id: 'procurement', label: 'Procurement', enabled: false },
+  { id: 'professional-services', label: 'Professional Services', enabled: false },
+];
+
+const ZONE_GROUPS = [
+  { id: 'z1-3', zones: 'Zones 1–3', label: 'Forecast & Shape', color: 'indigo' },
+  { id: 'z4-5', zones: 'Zones 4–5', label: 'Baseline & Intent', color: 'emerald' },
+  { id: 'z6-7', zones: 'Zones 6–7', label: 'Validate & Request', color: 'amber' },
+  { id: 'z8-9', zones: 'Zones 8–9', label: 'Execute & Learn', color: 'rose' },
+];
+
+const CARD_REGISTRY = {
+  quotes: { title: 'Quick Quotes', description: 'Enable RSIs to generate fast, directional equipment estimates using standardized O2S inputs.', icon: Calculator, colorClass: 'border-indigo-100', highlight: 'bg-indigo-100 text-indigo-600' },
+  prepop: { title: 'V0 Baseline Review', description: 'Pre-populate project-level equipment requests using demand forecasts, schedules, and historical patterns.', icon: Layers, colorClass: 'border-emerald-100', highlight: 'bg-emerald-100 text-emerald-600' },
+  adhoc: { title: 'Ad-Hoc Request Intake', description: 'Give project teams a structured way to submit ad-hoc equipment requests outside the pre-populated plan.', icon: PenTool, colorClass: 'border-emerald-100', highlight: 'bg-emerald-100 text-emerald-600' },
+  forecast: { title: 'Asset Demand Forecast', description: 'Generate a probability-weighted demand forecast by asset class spanning early pipeline through execution readiness.', icon: BarChart, colorClass: 'border-indigo-200 ring-2 ring-indigo-50', highlight: 'bg-indigo-500 text-white' },
+  'prepop-ops': { title: 'Pre-Population & Constraint Alerts', description: 'Pre-populate project-level equipment requests using demand forecasts, schedules, and historical patterns.', icon: Layers, colorClass: 'border-emerald-100', highlight: 'bg-emerald-100 text-emerald-600', resolveId: 'prepop' },
+  optimize: { title: 'Owned vs Re-Rent Optimizer', description: 'Use enterprise-wide owned fleet visibility to recommend whether each request should be fulfilled with owned equipment or re-rent.', icon: Search, colorClass: 'border-amber-200 ring-2 ring-amber-50', highlight: 'bg-amber-500 text-white' },
+  source: { title: 'Strategic Sourcing', description: 'Enable O2S to source from the right vendors at the right time using demand signals and supplier performance.', icon: Box, colorClass: 'border-amber-100', highlight: 'bg-amber-100 text-amber-600' },
+  lifecycle: { title: 'Asset Lifecycle Engine', description: 'Create a unified asset lifecycle view and support better keep / overhaul / redeploy / replace decisions.', icon: RotateCcw, colorClass: 'border-slate-300', highlight: 'bg-slate-200 text-slate-700' },
+  capex: { title: 'CapEx Plan', description: 'Translate forward demand and available fleet supply into a prioritized, timing-specific CAPEX plan.', icon: Activity, colorClass: 'border-slate-300', highlight: 'bg-slate-200 text-slate-700' },
+  margin: { title: 'Margin Plan', description: 'Define project-level O2S margin pre-go/no-go by pillar and product line, anchored to AOP targets.', icon: Target, colorClass: 'border-indigo-100', highlight: 'bg-indigo-100 text-indigo-600' },
+  fpa: { title: 'FP&A Sync', description: 'Risk-adjusted, time-phased revenue and margin forecasts synced to FP&A tools like Anaplan.', icon: DollarSign, colorClass: 'border-emerald-200 ring-2 ring-emerald-50', highlight: 'bg-emerald-500 text-white' },
+  anomaly: { title: 'Billing Anomaly Detection', description: 'Detect and flag billing anomalies using project-level patterns before invoice posting.', icon: DollarSign, colorClass: 'border-rose-200 ring-2 ring-rose-50', highlight: 'bg-rose-500 text-white' },
+};
+
+const PERSONA_EQUIPMENT_GRID = {
+  'project-teams': {
+    'z1-3': { cards: ['quotes'], placeholders: [] },
+    'z4-5': { cards: ['prepop', 'adhoc'], placeholders: [] },
+    'z6-7': { cards: [], placeholders: ['Preflight Validation — Coming in Prompt 3'] },
+    'z8-9': { cards: [], placeholders: ['Execution Self-Service — Coming in Prompt 4'] },
+  },
+  'o2s-ops': {
+    'z1-3': { cards: ['forecast'], placeholders: [] },
+    'z4-5': { cards: ['prepop-ops'], placeholders: [] },
+    'z6-7': { cards: ['optimize', 'source'], placeholders: [] },
+    'z8-9': { cards: [], placeholders: ['Utilization Monitoring — Coming in Prompt 4'] },
+  },
+  'leadership': {
+    'z1-3': { cards: [], placeholders: ['Portfolio Watchlists — Coming in Prompt 9'] },
+    'z4-5': { cards: [], placeholders: ['Project Maturity Summary — Coming in Prompt 10'] },
+    'z6-7': { cards: ['lifecycle'], placeholders: [] },
+    'z8-9': { cards: ['capex'], placeholders: [] },
+  },
+  'finance': {
+    'z1-3': { cards: ['margin', 'fpa'], placeholders: [] },
+    'z4-5': { cards: [], placeholders: ['Cost Basis Roll-Up — Coming in Prompt 8'] },
+    'z6-7': { cards: [], placeholders: ['Request Cost Validation — Coming in Prompt 8'] },
+    'z8-9': { cards: ['anomaly'], placeholders: [] },
+  },
+};
+
 const App = () => {
   const [selectedNode, setSelectedNode] = useState(null);
   const [isTourActive, setIsTourActive] = useState(false);
   const [tourStep, setTourStep] = useState(0);
+  const [activePersona, setActivePersona] = useState('project-teams');
+  const [activePillar, setActivePillar] = useState('equipment');
+  const [pillarDropdownOpen, setPillarDropdownOpen] = useState(false);
+
   const tourData = [
     { id: 0, title: "Step 1: The Pipeline Handshake", targetNodes: ['fpa', 'margin'], transcript: "Welcome to the O2S Console tour. For years, the biggest gap in our operations was the disconnect between our CRM pipeline and FP&A systems. Opportunity data sat in one silo, and financial planning in another. By implementing the O2S Project Margin Plan in Zones 1 through 3, we force a handshake. We establish a pre-go/no-go baseline anchored to our annual operating targets, which directly feeds a risk-adjusted, time-phased payload back to Anaplan." },
     { id: 1, title: "Step 2: Early Demand Shaping", targetNodes: ['forecast', 'quotes'], transcript: "But a financial target isn't an operational plan. We need to know what physical assets are actually required. That's where early demand shaping comes in. We take those early pipeline signals and generate a probability-weighted Asset-Level Demand Forecast spanning Zones 1 through 7. This early visibility is what allows our estimators to generate Quick Quotes for project teams with high confidence, long before the final blueprints are drawn." },
@@ -610,6 +686,7 @@ const App = () => {
     { id: 3, title: "Step 4: Fulfillment & Sourcing", targetNodes: ['optimize', 'source'], transcript: "Now we hit the execution threshold in Zones 6 and 7: Preflight Validation. We have a validated intent, but how do we fulfill it profitably? The Owned vs. Re-rent Optimizer evaluates our enterprise-wide fleet visibility. It makes a ruthless, margin-optimized recommendation. And when internal capacity falls short, the system automatically triggers Strategic Sourcing workflows, pushing the demand signal directly to our procurement teams." },
     { id: 4, title: "Step 5: Execution & The Flywheel", targetNodes: ['anomaly', 'lifecycle', 'capex'], transcript: "Finally, the equipment hits the dirt. In Zones 8 and 9, the data flywheel completes its circuit. As invoices roll in, Billing Anomaly Detection models flag discrepancies before they impact the bottom line. More importantly, every actualized cost and duration is fed back into the Asset Lifecycle decision engine. This closed-loop system continually refines our CAPEX planning and makes the next V0 baseline even more accurate." }
   ];
+
   const renderWorkflowContent = (id) => {
     switch(id) {
       case 'lifecycle': return <MockAssetLifecycle />;
@@ -617,7 +694,7 @@ const App = () => {
       case 'quotes': return <MockQuickQuotes />;
       case 'margin': return <MockMarginPlan />;
       case 'forecast': return <MockAssetDemandForecasting />;
-      case 'prepop': return <MockPrePopulation />;
+      case 'prepop': case 'prepop-ops': return <MockPrePopulation />;
       case 'adhoc': return <MockAdHocIntake />;
       case 'optimize': return <MockOptimizer />;
       case 'source': return <MockStrategicSourcing />;
@@ -626,70 +703,169 @@ const App = () => {
       default: return <div className="p-10 flex justify-center items-center h-full text-slate-400">Workflow simulation not mapped for this node.</div>;
     }
   };
+
   const isHighlighted = (nodeId) => isTourActive && tourData[tourStep].targetNodes.includes(nodeId);
 
+  const activePersonaObj = PERSONAS.find(p => p.id === activePersona);
+  const activePillarObj = PILLARS.find(p => p.id === activePillar);
+  const isEquipment = activePillar === 'equipment';
+  const grid = isEquipment ? PERSONA_EQUIPMENT_GRID[activePersona] : null;
+
+  const zoneColorMap = { indigo: 'border-t-indigo-500 bg-indigo-50', emerald: 'border-t-emerald-500 bg-emerald-50', amber: 'border-t-amber-500 bg-amber-50', rose: 'border-t-rose-500 bg-rose-50' };
+  const zoneTextMap = { indigo: 'text-indigo-600', emerald: 'text-emerald-600', amber: 'text-amber-600', rose: 'text-rose-600' };
+
   return (
-    <div className="min-h-screen bg-slate-100 p-4 md:p-8 font-sans text-slate-800 overflow-x-auto relative">
-      <div className={`transition-all duration-500 ${selectedNode ? 'blur-sm scale-95 opacity-50' : 'blur-0 scale-100 opacity-100'} min-w-[1000px] max-w-7xl mx-auto space-y-6`}>
-        <div className="mb-8 flex justify-between items-end">
-          <div>
-            <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Demand Funnel Concept</h1>
-            <p className="text-sm font-medium text-slate-500 mt-1">Click any node to explore the interactive workflow simulation.</p>
-          </div>
-          <button onClick={() => { setIsTourActive(true); setTourStep(0); setSelectedNode(null); }} className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-bold shadow-sm transition-colors"><Play className="w-4 h-4" /> Play 3.18 Podcast Walkthrough</button>
-        </div>
+    <div className="min-h-screen bg-slate-100 font-sans text-slate-800 relative flex flex-col">
+      {/* Top Navigation Bar */}
+      <div className="bg-slate-900 border-b border-slate-700 sticky top-0 z-40 shadow-lg">
+        <div className="max-w-7xl mx-auto px-4 md:px-8">
+          <div className="flex items-center justify-between h-14">
+            {/* Persona Tabs */}
+            <div className="flex items-center gap-1">
+              {PERSONAS.map(persona => {
+                const Icon = persona.icon;
+                const isActive = activePersona === persona.id;
+                return (
+                  <button
+                    key={persona.id}
+                    onClick={() => setActivePersona(persona.id)}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+                      isActive
+                        ? 'bg-indigo-600 text-white shadow-md'
+                        : 'text-slate-400 hover:text-white hover:bg-slate-800'
+                    }`}
+                  >
+                    <Icon className="w-4 h-4" />
+                    {persona.label}
+                  </button>
+                );
+              })}
+            </div>
 
-        <div className="grid grid-cols-[220px_repeat(4,_minmax(250px,_1fr))] border border-slate-300 rounded-xl overflow-hidden bg-slate-50 shadow-md">
-          <div className="bg-slate-800 border-b border-r border-slate-700 p-4 flex flex-col justify-center"><h2 className="text-sm font-bold text-white uppercase tracking-widest">Responsibility</h2></div>
-          <div className="bg-indigo-50 border-b border-r border-slate-300 p-3 border-t-4 border-t-indigo-500"><div className="text-[10px] font-bold uppercase tracking-widest text-indigo-500 mb-1 text-center">Zones 1-3</div><div className="text-sm font-bold leading-tight text-indigo-900 text-center">Demand Forecasting<br/>& Opportunity Shaping</div></div>
-          <div className="bg-emerald-50 border-b border-r border-slate-300 p-3 border-t-4 border-t-emerald-500"><div className="text-[10px] font-bold uppercase tracking-widest text-emerald-500 mb-1 text-center">Zones 4-5</div><div className="text-sm font-bold leading-tight text-emerald-900 text-center">Baseline Generation<br/>& Intent Management</div></div>
-          <div className="bg-amber-50 border-b border-r border-slate-300 p-3 border-t-4 border-t-amber-500"><div className="text-[10px] font-bold uppercase tracking-widest text-amber-500 mb-1 text-center">Zones 6-7</div><div className="text-sm font-bold leading-tight text-amber-900 text-center">Preflight Validation<br/>& Formal Request</div></div>
-          <div className="bg-rose-50 border-b border-slate-300 p-3 border-t-4 border-t-rose-500"><div className="text-[10px] font-bold uppercase tracking-widest text-rose-500 mb-1 text-center">Zones 8-9</div><div className="text-sm font-bold leading-tight text-rose-900 text-center">Execution Tracking<br/>& Feedback Loop</div></div>
-
-          <div className="bg-white border-b border-r border-slate-200 p-4 flex flex-col justify-center shadow-[inset_-4px_0_0_rgba(0,0,0,0.02)]"><h3 className="font-bold text-slate-800">Portfolio Strategy</h3><p className="text-[10px] text-slate-500 mt-1">Executive leadership & CAPEX planning</p></div>
-          <div className="col-span-4 p-4 border-b border-slate-200 flex gap-6 bg-slate-100/50">
-            <div className="flex-1"><Card id="lifecycle" title="Asset lifecycle & replacement decision engine" description="Create a unified asset lifecycle view and support better keep / overhaul / redeploy / replace decisions - including forward-looking replacement waves." icon={RotateCcw} colorClass="border-slate-300" highlight="bg-slate-200 text-slate-700" connectionLabel="Feeds Gap Assessment" zone="Portfolio Strategy" onClick={setSelectedNode} isTourActive={isTourActive} isHighlighted={isHighlighted('lifecycle')}/></div>
-            <div className="flex-1"><Card id="capex" title="Demand-supply gap assessment & CAPEX plan" description="Translate forward demand and available fleet supply into a prioritized, timing-specific CAPEX plan." icon={Activity} colorClass="border-slate-300" highlight="bg-slate-200 text-slate-700" connectionLabel="Informs Strategic Sourcing" zone="Portfolio Strategy" onClick={setSelectedNode} isTourActive={isTourActive} isHighlighted={isHighlighted('capex')}/></div>
-          </div>
-
-          <div className="bg-white border-b border-r border-slate-200 p-4 flex flex-col justify-center shadow-[inset_-4px_0_0_rgba(0,0,0,0.02)]"><h3 className="font-bold text-slate-800">Project Teams</h3><p className="text-[10px] text-slate-500 mt-1">Estimators, Planners, PMs</p></div>
-          <div className="p-4 border-b border-r border-slate-200 bg-white"><Card id="quotes" title="Quick quotes" description="Enable RSIs to generate fast, directional equipment estimates using standardized 02S inputs." icon={Calculator} colorClass="border-indigo-100" highlight="bg-indigo-100 text-indigo-600" zone="Zones 1-3" onClick={setSelectedNode} isTourActive={isTourActive} isHighlighted={isHighlighted('quotes')}/></div>
-          <div className="p-4 border-b border-r border-slate-200 bg-white"><Card id="adhoc" title="Ad-hoc request intake for project teams" description="Give project teams a structured way to submit ad-hoc equipment requests outside the pre-populated plan." icon={PenTool} colorClass="border-emerald-100" highlight="bg-emerald-100 text-emerald-600" connectionLabel="Proceed to Optimization" zone="Zones 4-5" onClick={setSelectedNode} isTourActive={isTourActive} isHighlighted={isHighlighted('adhoc')}/></div>
-          <div className="p-4 border-b border-r border-slate-200 bg-slate-50/50"></div>
-          <div className="p-4 border-b border-slate-200 bg-slate-50/50"></div>
-
-          <div className="bg-white border-b border-r border-slate-200 p-4 flex flex-col justify-center row-span-2 shadow-[inset_-4px_0_0_rgba(0,0,0,0.02)]"><h3 className="font-bold text-slate-800">02S Operations</h3><p className="text-[10px] text-slate-500 mt-1">Equipment coordinators & sourcing</p></div>
-          <div className="col-span-3 p-4 border-b border-r border-slate-200 bg-indigo-50/30"><Card id="forecast" title="Asset-level demand forecasting (Risk-Adjusted)" description="Generate a probability-weighted demand forecast by asset class spanning early pipeline through execution readiness. Risk adjusted to project confidence with active zone filters." icon={BarChart} colorClass="border-indigo-200 ring-2 ring-indigo-50" highlight="bg-indigo-500 text-white" zone="Zones 1-7" onClick={setSelectedNode} isTourActive={isTourActive} isHighlighted={isHighlighted('forecast')}/></div>
-          <div className="p-4 border-b border-slate-200 bg-slate-50/50 row-span-2"></div>
-
-          <div className="p-4 border-b border-r border-slate-200 bg-slate-50/50"></div>
-          <div className="p-4 border-b border-r border-slate-200 bg-white"><Card id="prepop" title="Pre-population of project request intakes" description="Pre-populate project-level equipment requests using demand forecasts, schedules, and historical patterns." icon={Layers} colorClass="border-emerald-100" highlight="bg-emerald-100 text-emerald-600" zone="Zones 4-5" onClick={setSelectedNode} isTourActive={isTourActive} isHighlighted={isHighlighted('prepop')}/></div>
-          <div className="p-4 border-b border-r border-slate-200 bg-white flex flex-col gap-4">
-            <Card id="optimize" title="Owned vs. re-rent fulfillment optimizer" description="Use enterprise-wide owned fleet visibility to recommend whether each request should be fulfilled with owned equipment or re-rent." icon={Search} colorClass="border-amber-200 ring-2 ring-amber-50" highlight="bg-amber-500 text-white" zone="Zones 6-7" onClick={setSelectedNode} isTourActive={isTourActive} isHighlighted={isHighlighted('optimize')}/>
-            <div className="flex justify-center -my-2 text-amber-300"><ArrowDown className="w-5 h-5"/></div>
-            <Card id="source" title="Strategic sourcing & procurement" description="Enable 02S to source from the right vendors at the right time using demand signals and supplier performance." icon={Box} colorClass="border-amber-100" highlight="bg-amber-100 text-amber-600" connectionLabel="Triggers Fulfillment" zone="Zones 6-7" onClick={setSelectedNode} isTourActive={isTourActive} isHighlighted={isHighlighted('source')}/>
-          </div>
-
-          <div className="bg-white border-r border-slate-200 p-4 flex flex-col justify-center shadow-[inset_-4px_0_0_rgba(0,0,0,0.02)]"><h3 className="font-bold text-slate-800">Finance & FP&A</h3><p className="text-[10px] text-slate-500 mt-1">Controllers & Analysts</p></div>
-          <div className="p-4 border-r border-slate-200 bg-white"><Card id="margin" title="02S project margin plan" description="Define project-level 02S margin pre-go/no-go by pillar and product line, anchored to AOP targets." icon={Target} colorClass="border-indigo-100" highlight="bg-indigo-100 text-indigo-600" connectionLabel="Feeds Demand Forecasts" zone="Zones 1-3" onClick={setSelectedNode} isTourActive={isTourActive} isHighlighted={isHighlighted('margin')}/></div>
-          <div className="col-span-2 p-4 border-r border-slate-200 bg-slate-50/50"></div>
-          <div className="p-4 bg-white flex flex-col gap-4"><Card id="anomaly" title="Billing anomaly detection" description="Detect and flag billing anomalies using project-level patterns before invoice posting." icon={DollarSign} colorClass="border-rose-200 ring-2 ring-rose-50" highlight="bg-rose-500 text-white" connectionLabel="Feeds Historical Actuals" zone="Zones 8-9" onClick={setSelectedNode} isTourActive={isTourActive} isHighlighted={isHighlighted('anomaly')}/></div>
-        </div>
-
-        <div className="mt-8 border-t-2 border-slate-200 pt-6">
-          <div className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-2 mb-3">FP&A Integration (System of Record Handshake)</div>
-          <Card id="fpa" title="Financial Forecast & FP&A Sync (Risk-Adjusted Handshake)" description="Ingests Opportunity Pipeline Revenue from CRM, applies 02S zone-based confidence multipliers to calculate risk-adjusted revenue, compares against O2S execution cost plans, and outputs time-phased margin forecasts to FP&A tools like Anaplan." icon={DollarSign} colorClass="border-emerald-200 ring-2 ring-emerald-50 bg-white" highlight="bg-emerald-500 text-white" zone="Cross-Funnel Output" onClick={setSelectedNode} isTourActive={isTourActive} isHighlighted={isHighlighted('fpa')}/>
-        </div>
-
-        <div className="mt-8 border-t-4 border-t-sky-500 bg-sky-900 text-white p-5 rounded-b-2xl shadow-lg flex items-center gap-4">
-          <div className="bg-sky-800 p-3 rounded-xl shrink-0"><Monitor className="w-6 h-6 text-sky-300" /></div>
-          <div>
-            <h3 className="font-bold text-lg text-sky-100 tracking-tight">Custom Frontend / Platform Level</h3>
-            <p className="text-sm text-sky-200 mt-1 leading-relaxed">Provide one shared interface for project teams, 02S Equipment, Finance & Controls, and RSI teams across 02S workflows. Replaces fragmented point solutions to create a unified data flywheel.</p>
+            {/* Pillar Selector */}
+            <div className="relative">
+              <button
+                onClick={() => setPillarDropdownOpen(!pillarDropdownOpen)}
+                className="flex items-center gap-2 bg-slate-800 border border-slate-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-slate-700 transition-colors"
+              >
+                <Box className="w-4 h-4 text-indigo-400" />
+                {activePillarObj.label}
+                <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${pillarDropdownOpen ? 'rotate-180' : ''}`} />
+              </button>
+              {pillarDropdownOpen && (
+                <>
+                  <div className="fixed inset-0 z-40" onClick={() => setPillarDropdownOpen(false)} />
+                  <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-lg shadow-xl border border-slate-200 py-1 z-50">
+                    {PILLARS.map(pillar => (
+                      <button
+                        key={pillar.id}
+                        onClick={() => { if (pillar.enabled) { setActivePillar(pillar.id); setPillarDropdownOpen(false); } }}
+                        className={`w-full text-left px-4 py-2.5 text-sm flex items-center justify-between ${
+                          pillar.enabled
+                            ? pillar.id === activePillar
+                              ? 'bg-indigo-50 text-indigo-700 font-semibold'
+                              : 'text-slate-700 hover:bg-slate-50'
+                            : 'text-slate-400 cursor-not-allowed'
+                        }`}
+                      >
+                        <span>{pillar.label}</span>
+                        {!pillar.enabled && (
+                          <span className="text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-400 px-2 py-0.5 rounded-full border border-slate-200">Coming Soon</span>
+                        )}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
           </div>
         </div>
       </div>
 
+      {/* Main Content */}
+      <div className="flex-grow p-4 md:p-8 overflow-x-auto">
+        <div className={`transition-all duration-500 ${selectedNode ? 'blur-sm scale-95 opacity-50' : 'blur-0 scale-100 opacity-100'} min-w-[1000px] max-w-7xl mx-auto space-y-6`}>
+          {/* Page Title */}
+          <div className="mb-6 flex justify-between items-end">
+            <div>
+              <h1 className="text-3xl font-bold text-slate-900 tracking-tight">
+                {activePersonaObj.label} — {activePillarObj.label}
+              </h1>
+              <p className="text-sm font-medium text-slate-500 mt-1">Click any workflow card to explore its interactive simulation.</p>
+            </div>
+            <button onClick={() => { setIsTourActive(true); setTourStep(0); setSelectedNode(null); }} className="flex items-center gap-2 bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg font-bold shadow-sm transition-colors shrink-0">
+              <Play className="w-4 h-4" /> Play 3.18 Podcast Walkthrough
+            </button>
+          </div>
+
+          {isEquipment ? (
+            /* Zone-Grouped Grid */
+            <div className="grid grid-cols-4 gap-5">
+              {/* Zone Column Headers */}
+              {ZONE_GROUPS.map(zg => (
+                <div key={zg.id} className={`rounded-t-xl border-t-4 ${zoneColorMap[zg.color]} p-4 text-center`}>
+                  <div className={`text-[11px] font-bold uppercase tracking-widest ${zoneTextMap[zg.color]} mb-1`}>{zg.zones}</div>
+                  <div className="text-sm font-bold text-slate-800 leading-tight">{zg.label}</div>
+                </div>
+              ))}
+
+              {/* Card Cells */}
+              {ZONE_GROUPS.map(zg => {
+                const cell = grid[zg.id];
+                return (
+                  <div key={zg.id + '-cards'} className="flex flex-col gap-4">
+                    {cell.cards.map(cardKey => {
+                      const meta = CARD_REGISTRY[cardKey];
+                      const workflowId = meta.resolveId || cardKey;
+                      return (
+                        <Card
+                          key={cardKey}
+                          id={workflowId}
+                          title={meta.title}
+                          description={meta.description}
+                          icon={meta.icon}
+                          colorClass={meta.colorClass}
+                          highlight={meta.highlight}
+                          zone={zg.zones}
+                          onClick={setSelectedNode}
+                          isTourActive={isTourActive}
+                          isHighlighted={isHighlighted(workflowId)}
+                        />
+                      );
+                    })}
+                    {cell.placeholders.map((label, i) => (
+                      <PlaceholderCard key={i} label={label} />
+                    ))}
+                    {cell.cards.length === 0 && cell.placeholders.length === 0 && (
+                      <div className="min-h-[120px]" />
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            /* Non-Equipment Pillar Message */
+            <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-16 text-center">
+              <Lock className="w-10 h-10 text-slate-300 mx-auto mb-4" />
+              <h2 className="text-xl font-bold text-slate-700 mb-2">{activePillarObj.label} workflows are under development.</h2>
+              <p className="text-sm text-slate-500 max-w-xl mx-auto leading-relaxed">
+                The zone model, trigger engine, and persona-based views you see for Equipment will extend to this pillar.
+              </p>
+            </div>
+          )}
+
+          {/* Bottom Bar */}
+          <div className="mt-8 border-t-4 border-t-sky-500 bg-sky-900 text-white p-5 rounded-b-2xl shadow-lg flex items-center gap-4">
+            <div className="bg-sky-800 p-3 rounded-xl shrink-0"><Monitor className="w-6 h-6 text-sky-300" /></div>
+            <div>
+              <h3 className="font-bold text-lg text-sky-100 tracking-tight">Custom Frontend / Platform Level</h3>
+              <p className="text-sm text-sky-200 mt-1 leading-relaxed">Provide one shared interface for project teams, O2S Equipment, Finance & Controls, and RSI teams across O2S workflows. Replaces fragmented point solutions to create a unified data flywheel.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Tour Overlay */}
       {isTourActive && (
         <div className="fixed bottom-8 right-8 w-96 bg-white rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-slate-200 z-[100] flex flex-col overflow-hidden">
           <div className="bg-slate-900 p-4 flex justify-between items-start text-white">
@@ -708,6 +884,7 @@ const App = () => {
         </div>
       )}
 
+      {/* Card Expand Modal */}
       {selectedNode && (
         <div className="fixed inset-0 z-50 flex justify-center items-center bg-slate-900/60 p-6">
           <div className="w-full max-w-6xl h-full max-h-[85vh] bg-slate-200 rounded-lg shadow-2xl flex flex-col overflow-hidden border border-slate-700">
