@@ -1802,7 +1802,7 @@ const PERSONA_EQUIPMENT_GRID = {
     'z8-9': { cards: ['execution'], placeholders: [] },
   },
   'rsi-fsi': {
-    'z1-3': { cards: ['quotes', 'fitscore', 'forecast'], placeholders: [] },
+    'z1-3': { cards: ['quotes', 'fitscore', 'forecast', 'margin'], placeholders: [] },
     'z4-5': { cards: ['prepop', 'adhoc', 'costofdelay', 'clarityscoring', 'projectmaturity'], placeholders: [] },
     'z6-7': { cards: ['preflight', 'formalrequest', 'regression'], placeholders: [] },
     'z8-9': { cards: ['execution', 'vendorscorecard', 'flywheel'], placeholders: [] },
@@ -1820,7 +1820,7 @@ const PERSONA_EQUIPMENT_GRID = {
     'z8-9': { cards: ['capex', 'flywheel'], placeholders: [] },
   },
   'finance': {
-    'z1-3': { cards: ['margin', 'fpa'], placeholders: [] },
+    'z1-3': { cards: ['fpa'], placeholders: [] },
     'z4-5': { cards: ['clarityscoring'], placeholders: [] },
     'z6-7': { cards: [], placeholders: ['Request Cost Validation — Coming in Prompt 8'] },
     'z8-9': { cards: ['anomaly', 'flywheel'], placeholders: [] },
