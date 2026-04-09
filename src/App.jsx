@@ -164,7 +164,7 @@ const MockQuickQuotes = () => {
         <div><label className="block text-xs font-semibold text-slate-500 mb-1">Duration (Months)</label><input type="number" defaultValue="18" className="w-full text-sm border border-slate-200 rounded p-2 bg-slate-50 outline-none focus:border-indigo-500"/></div>
         <div><label className="block text-xs font-semibold text-slate-500 mb-1">Square Footage</label><input type="number" defaultValue="250000" className="w-full text-sm border border-slate-200 rounded p-2 bg-slate-50 outline-none focus:border-indigo-500"/></div>
         <div><label className="block text-xs font-semibold text-slate-500 mb-1">Location / Market</label><select className="w-full text-sm border border-slate-200 rounded p-2 bg-slate-50 outline-none focus:border-indigo-500"><option>Dallas, TX</option><option>Austin, TX</option><option>Phoenix, AZ</option></select></div>
-        <button onClick={() => { setLoading(true); setTimeout(() => { setLoading(false); setResult(true); }, 1500); }} className="mt-4 bg-slate-900 text-white font-semibold text-sm py-2 rounded shadow flex justify-center items-center gap-2 hover:bg-slate-800">
+        <button onClick={() => { setLoading(true); setTimeout(() => { setLoading(false); setResult(true); }, 1500); }} className="btn-interactive mt-4 bg-slate-900 text-white font-semibold text-sm py-2 rounded shadow flex justify-center items-center gap-2 hover:bg-slate-800">
           {loading ? <RefreshCw className="w-4 h-4 animate-spin"/> : <Zap className="w-4 h-4"/>} Generate Directional Quote
         </button>
       </div>
@@ -244,7 +244,7 @@ const MockAssetDemandForecasting = () => {
     <div className="flex flex-col h-full bg-slate-50">
       <Toolbar leftArea={<><div className="w-2 h-2 rounded-full bg-indigo-500"></div><span className="font-semibold text-slate-800">Portfolio Aggregation: Cat Class Demand vs Supply</span><GateBadge macro="Opportunity Created" micro="Opportunity Qualified"/></>} rightArea={
         <div className="flex bg-slate-200 p-0.5 rounded-md">
-          {['All', 'Z1-Z3', 'Z4-Z7'].map(f => <button key={f} onClick={() => setFilter(f)} className={`px-3 py-1 text-[10px] font-bold uppercase tracking-wider rounded-sm transition-all ${filter === f ? 'bg-white text-indigo-700 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}>{f === 'All' ? 'All (Z1-Z7)' : f === 'Z1-Z3' ? 'Early Forecasts (Z1-Z3)' : 'Intent & Planning (Z4-Z7)'}</button>)}
+          {['All', 'Z1-Z3', 'Z4-Z7'].map(f => <button key={f} onClick={() => setFilter(f)} className={`btn-interactive px-3 py-1 text-[10px] font-bold uppercase tracking-wider rounded-sm transition-all ${filter === f ? 'bg-white text-indigo-700 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}>{f === 'All' ? 'All (Z1-Z7)' : f === 'Z1-Z3' ? 'Early Forecasts (Z1-Z3)' : 'Intent & Planning (Z4-Z7)'}</button>)}
         </div>
       }/>
       <div className="p-6 flex flex-col flex-grow overflow-hidden gap-4">
@@ -2247,37 +2247,37 @@ const App = () => {
                         <span>Initiate Cross-Regional Transfer</span>
                         <span className="text-[9px] font-normal opacity-70 mt-0.5">Transfer cost $18K vs rental savings $67K</span>
                       </button>
-                      <button className="w-full bg-white border border-slate-300 text-slate-700 text-xs font-bold py-2 rounded hover:bg-slate-50 transition-colors">Extend Current Deployment with Justification</button>
-                      <button className="w-full bg-white border border-slate-300 text-slate-700 text-xs font-bold py-2 rounded hover:bg-slate-50 transition-colors">Begin Off-Rent Process</button>
+                      <button className="w-full bg-white border border-slate-300 text-slate-700 text-xs font-bold py-2 rounded hover:bg-slate-50 transition-colors">Extend Off-Rent & Negotiate Reduced Rate</button>
+                    </div>
+                    <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mt-3 mb-2">Constrained Path</div>
+                    <div className="bg-amber-50 border border-amber-200 rounded p-2.5 text-xs text-amber-800">
+                      <span className="font-bold">If no action within 48 hours:</span> Asset continues accruing $2,800/day with no productive utilization. Auto-escalation to Ops Director.
                     </div>
                   </div>
                 </div>
               )}
 
-              {/* Trigger 3: Informational — Preflight Passed */}
+              {/* Trigger 3: Informational — Flywheel Update */}
               {(triggerFilter === 'all' || triggerFilter === 'info') && (
                 <div className="border border-slate-200 rounded-lg shadow-sm overflow-hidden">
-                  <div className="border-l-4 border-l-slate-300 p-4">
+                  <div className="border-l-4 border-l-slate-400 p-4">
                     <div className="flex items-start justify-between mb-2">
-                      <h4 className="text-sm font-bold text-slate-800">Preflight Passed: REQ-2024-0847</h4>
-                      <Badge variant="gray">Info</Badge>
+                      <h4 className="text-sm font-bold text-slate-800">Flywheel Update: Lead-Time Model Recalibrated</h4>
+                      <Badge variant="gray">Informational</Badge>
                     </div>
                     <div className="flex items-center gap-2 mb-3">
-                      <span className="text-[10px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded">Zone 6 → Zone 7</span>
-                      <span className="text-[10px] text-slate-400">1 hour ago</span>
+                      <span className="text-[10px] font-bold text-purple-600 bg-purple-50 px-2 py-0.5 rounded">Zone 9</span>
+                      <span className="text-[10px] text-slate-400">System-generated | 1 day ago</span>
                     </div>
-                    <p className="text-xs text-slate-600 mb-3">22 line items validated. Ready for formal submission.</p>
-                    <button className="text-xs font-bold text-indigo-600 hover:text-indigo-800 transition-colors flex items-center gap-1">View Request Pack <ArrowRight className="w-3 h-3"/></button>
+                    <div className="text-xs text-slate-600 mb-3">
+                      Zone 9 flywheel processed 142 closeout records from Q2. Lead-time estimates for Earthmoving category updated: average reduced from 14 to 11 days based on actuals.
+                    </div>
+                    <div className="bg-slate-50 border border-slate-200 rounded p-2.5 text-xs text-slate-600">
+                      <span className="font-bold text-slate-700">Impact:</span> Future V0 baselines for Earthmoving will use updated lead-time defaults. No action required — governance-reviewed writeback.
+                    </div>
                   </div>
                 </div>
               )}
-            </div>
-
-            {/* Footer */}
-            <div className="p-4 border-t border-slate-200 bg-slate-50 shrink-0">
-              <p className="text-[11px] text-slate-400 italic leading-relaxed text-center">
-                Triggers serve two audiences simultaneously. O2S Operations sees action options. Project Teams see clarity demands with downstream cost consequences.
-              </p>
             </div>
           </div>
         </>
@@ -2285,19 +2285,22 @@ const App = () => {
 
       {/* Tour Overlay */}
       {isTourActive && (
-        <div className="fixed bottom-8 right-8 w-96 bg-white rounded-xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] border border-slate-200 z-[100] flex flex-col overflow-hidden">
-          <div className="bg-slate-900 p-4 flex justify-between items-start text-white">
-            <div>
-              <div className="text-[10px] font-bold uppercase tracking-widest text-indigo-400 mb-1 flex items-center gap-2"><Play className="w-3 h-3"/> Podcast Tour - Step {tourStep + 1} of {tourData.length}</div>
-              <h3 className="font-bold text-sm leading-tight">{tourData[tourStep].title}</h3>
+        <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-white rounded-2xl shadow-2xl border border-slate-200 p-6 w-[600px]">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-2">
+              <div className="bg-indigo-600 text-white text-[10px] font-bold px-2.5 py-1 rounded-full">Step {tourStep + 1} / {tourData.length}</div>
+              <h3 className="font-bold text-slate-800">{tourData[tourStep].title}</h3>
             </div>
-            <button onClick={() => setIsTourActive(false)} className="p-1 hover:bg-slate-800 rounded transition-colors"><X className="w-4 h-4 text-slate-400 hover:text-white"/></button>
+            <button onClick={() => { setIsTourActive(false); setTourStep(0); }} className="text-slate-400 hover:text-slate-600 transition-colors"><X className="w-5 h-5" /></button>
           </div>
-          <div className="p-5 text-sm text-slate-700 leading-relaxed max-h-[40vh] overflow-y-auto border-b border-slate-100">{tourData[tourStep].transcript}</div>
-          <div className="bg-slate-50 p-4 flex justify-between items-center">
-            <button disabled={tourStep === 0} onClick={() => setTourStep(s => s - 1)} className="text-xs font-bold text-slate-500 hover:text-slate-800 disabled:opacity-30 transition-colors">Previous</button>
-            <div className="flex gap-1.5">{tourData.map((_, i) => <div key={i} className={`w-2 h-2 rounded-full transition-colors ${i === tourStep ? 'bg-indigo-500' : 'bg-slate-300'}`}/>)}</div>
-            <button onClick={() => { if (tourStep === tourData.length - 1) setIsTourActive(false); else setTourStep(s => s + 1); }} className="text-xs font-bold bg-indigo-600 text-white px-4 py-1.5 rounded hover:bg-indigo-700 shadow-sm transition-colors">{tourStep === tourData.length - 1 ? 'Finish Tour' : 'Next'}</button>
+          <p className="text-sm text-slate-600 leading-relaxed mb-4">{tourData[tourStep].transcript}</p>
+          <div className="flex justify-between items-center">
+            <button onClick={() => setTourStep(Math.max(0, tourStep - 1))} disabled={tourStep === 0} className="text-xs font-semibold text-slate-500 hover:text-slate-700 disabled:opacity-30 disabled:cursor-not-allowed">← Previous</button>
+            {tourStep < tourData.length - 1 ? (
+              <button onClick={() => setTourStep(tourStep + 1)} className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-indigo-700 transition-colors">Next Step →</button>
+            ) : (
+              <button onClick={() => { setIsTourActive(false); setTourStep(0); }} className="bg-emerald-600 text-white px-4 py-2 rounded-lg text-xs font-bold hover:bg-emerald-700 transition-colors">Finish Tour ✓</button>
+            )}
           </div>
         </div>
       )}
