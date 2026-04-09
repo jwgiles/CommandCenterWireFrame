@@ -1002,6 +1002,113 @@ const MockProjectMaturity = () => {
   );
 };
 
+const MockRegressionEvent = () => {
+  const affected = [
+    { item: 'Tower Crane 60T', prior: 7, now: 6, reason: 'Structural milestone shifted +3 weeks' },
+    { item: 'Boom Lift 80ft (×2)', prior: 7, now: 6, reason: 'Dependent on crane erection date' },
+    { item: 'Generator 200kW', prior: 7, now: 6, reason: 'Temp power schedule linked to crane mobilization' },
+  ];
+  return (
+    <div className="flex flex-col h-full bg-slate-50">
+      <div className="bg-rose-600 border-b border-rose-700 px-6 py-2.5 flex justify-between items-center shrink-0 text-sm">
+        <div className="flex items-center gap-3 text-white">
+          <AlertTriangle className="w-4 h-4" />
+          <span className="font-bold">Zone Regression Detected</span>
+          <span className="bg-rose-500 text-white text-[10px] font-bold px-2 py-0.5 rounded">Zone 7 → Zone 6</span>
+        </div>
+        <span className="text-rose-200 text-xs font-mono">Nov 12, 2026, 2:14 PM CST</span>
+      </div>
+      <div className="p-6 overflow-auto flex flex-col gap-5">
+        {/* Event Summary */}
+        <div className="bg-rose-50 border border-rose-200 rounded-lg p-4">
+          <p className="text-sm text-rose-900 font-semibold mb-2">Request REQ-2024-0847 has regressed from Zone 7 to Zone 6.</p>
+          <div className="space-y-1.5 text-xs text-rose-800">
+            <p><span className="font-semibold">Triggering condition:</span> Schedule change in P6 invalidated preflight date feasibility for 4 line items.</p>
+            <p><span className="font-semibold">Detected:</span> Automatically via P6 schedule data sync — no manual reporting required.</p>
+          </div>
+        </div>
+
+        {/* Impact Propagation */}
+        <div>
+          <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3 flex items-center gap-2"><Activity className="w-4 h-4 text-rose-500"/> Impact Propagation</h3>
+          <p className="text-xs text-slate-600 mb-3">Affected Line Items: <strong>4 of 22</strong></p>
+          <div className="overflow-x-auto border border-slate-200 rounded-md bg-white">
+            <table className="w-full text-left text-xs">
+              <thead className="bg-slate-50 border-b border-slate-200 text-[10px] uppercase tracking-wider text-slate-500">
+                <tr>
+                  <th className="px-3 py-2 font-semibold">Line Item</th>
+                  <th className="px-3 py-2 font-semibold text-center">Prior Zone</th>
+                  <th className="px-3 py-2 font-semibold text-center">New Zone</th>
+                  <th className="px-3 py-2 font-semibold">Reason</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {affected.map((row, i) => (
+                  <tr key={i} className="hover:bg-slate-50 transition-colors">
+                    <td className="px-3 py-2.5 text-slate-800 font-medium">{row.item}</td>
+                    <td className="px-3 py-2.5 text-center"><span className="font-mono font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded">{row.prior}</span></td>
+                    <td className="px-3 py-2.5 text-center"><span className="font-mono font-bold text-rose-600 bg-rose-50 px-2 py-0.5 rounded">{row.now}</span></td>
+                    <td className="px-3 py-2.5 text-slate-600">{row.reason}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="text-[11px] text-slate-400 mt-2 italic">Remaining 18 line items unaffected — zone state preserved.</p>
+        </div>
+
+        {/* SLA Impact */}
+        <div className="bg-amber-50 border border-amber-200 rounded-md p-4">
+          <h4 className="text-xs font-bold text-amber-800 uppercase tracking-wider mb-2 flex items-center gap-2"><Clock className="w-4 h-4"/> SLA Impact</h4>
+          <div className="space-y-1.5 text-xs text-amber-900">
+            <p>Downstream SLA clocks <strong>PAUSED</strong> for affected items.</p>
+            <p>Original SLA deadline: <span className="font-mono">Nov 18</span> → Clock stopped at <span className="font-mono font-bold">3d 14h remaining</span></p>
+            <p>SLA will resume upon re-preflight pass.</p>
+          </div>
+        </div>
+
+        {/* Regression-Specific Actions */}
+        <div className="bg-white border border-slate-200 rounded-md p-4 shadow-sm">
+          <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3">Regression-Specific Actions</h4>
+          <div className="space-y-2">
+            <button className="w-full bg-rose-600 text-white text-xs font-bold py-2.5 rounded hover:bg-rose-700 transition-colors">Notify Request Owner — Re-Validation Required</button>
+            <button className="w-full bg-white border border-slate-300 text-slate-700 text-xs font-bold py-2.5 rounded hover:bg-slate-50 transition-colors">View Updated P6 Schedule Data</button>
+            <button className="w-full bg-white border border-slate-300 text-slate-700 text-xs font-bold py-2.5 rounded hover:bg-slate-50 transition-colors">Escalate to Operations Director</button>
+          </div>
+          <div className="mt-3 flex items-center gap-2">
+            <button className="text-xs font-bold text-indigo-600 hover:text-indigo-800 transition-colors flex items-center gap-1">View Preserved Zone 7 Artifacts <ArrowRight className="w-3 h-3"/></button>
+            <span className="text-[10px] text-slate-400 italic">— Original request pack preserved with 'superseded' status for audit trail.</span>
+          </div>
+        </div>
+
+        {/* Regression Analytics */}
+        <div className="bg-white border border-slate-200 rounded-md p-4 shadow-sm">
+          <h4 className="text-xs font-bold text-slate-700 uppercase tracking-wider mb-3 flex items-center gap-2"><Database className="w-4 h-4 text-indigo-500"/> Regression Analytics</h4>
+          <div className="space-y-1.5 text-xs text-slate-600">
+            <p>This is the <strong>3rd regression event</strong> for Data Center TX.</p>
+            <p>Enterprise regression frequency (trailing 90 days): <strong>12 events</strong></p>
+          </div>
+          <div className="grid grid-cols-3 gap-3 mt-3">
+            <div className="bg-slate-50 border border-slate-200 rounded p-2.5 text-center">
+              <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Schedule Volatility</div>
+              <div className="text-lg font-bold font-mono text-slate-800">58%</div>
+            </div>
+            <div className="bg-slate-50 border border-slate-200 rounded p-2.5 text-center">
+              <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Design Instability</div>
+              <div className="text-lg font-bold font-mono text-slate-800">25%</div>
+            </div>
+            <div className="bg-slate-50 border border-slate-200 rounded p-2.5 text-center">
+              <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Client Changes</div>
+              <div className="text-lg font-bold font-mono text-slate-800">17%</div>
+            </div>
+          </div>
+          <p className="text-[11px] italic text-slate-400 mt-3">This data feeds Zone 9 flywheel for systemic intervention analysis.</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const CircularProgress = ({ value, size = 56, color = 'text-amber-500' }) => {
   const r = (size - 8) / 2;
   const circ = 2 * Math.PI * r;
@@ -1555,6 +1662,7 @@ const CARD_REGISTRY = {
   forecast: { title: 'Asset Demand Forecast', description: 'Generate a probability-weighted demand forecast by asset class spanning early pipeline through execution readiness.', icon: BarChart, colorClass: 'border-indigo-200 ring-2 ring-indigo-50', highlight: 'bg-indigo-500 text-white' },
   fitscore: { title: 'Fit Score & Opportunity Correlation', description: 'Evaluate FP&A committed forecast against equipment capabilities. Surface recommended engagement strategies before designs lock.', icon: Crosshair, colorClass: 'border-indigo-200', highlight: 'bg-indigo-100 text-indigo-600' },
   projectmaturity: { title: 'Project Maturity & Zone Distribution', description: 'See where every package sits in the zone lifecycle. Identify trailing edges and blocked items.', icon: ClipboardList, colorClass: 'border-emerald-200', highlight: 'bg-emerald-100 text-emerald-600' },
+  regression: { title: 'Regression Events', description: 'When gate conditions become false, the system re-evaluates zone state and fires regression-specific triggers.', icon: AlertTriangle, colorClass: 'border-rose-200', highlight: 'bg-rose-100 text-rose-600' },
   'prepop-ops': { title: 'Pre-Population & Constraint Alerts', description: 'Pre-populate project-level equipment requests using demand forecasts, schedules, and historical patterns.', icon: Layers, colorClass: 'border-emerald-100', highlight: 'bg-emerald-100 text-emerald-600', resolveId: 'prepop' },
   optimize: { title: 'Owned vs Re-Rent Optimizer', description: 'Use enterprise-wide owned fleet visibility to recommend whether each request should be fulfilled with owned equipment or re-rent.', icon: Search, colorClass: 'border-amber-200 ring-2 ring-amber-50', highlight: 'bg-amber-500 text-white' },
   source: { title: 'Strategic Sourcing', description: 'Enable O2S to source from the right vendors at the right time using demand signals and supplier performance.', icon: Box, colorClass: 'border-amber-100', highlight: 'bg-amber-100 text-amber-600' },
@@ -1580,13 +1688,13 @@ const PERSONA_EQUIPMENT_GRID = {
   'o2s-ops': {
     'z1-3': { cards: ['forecast', 'fitscore'], placeholders: [] },
     'z4-5': { cards: ['prepop-ops', 'costofdelay', 'clarityscoring', 'projectmaturity'], placeholders: [] },
-    'z6-7': { cards: ['optimize', 'source', 'formalrequest'], placeholders: [] },
+    'z6-7': { cards: ['optimize', 'source', 'formalrequest', 'regression'], placeholders: [] },
     'z8-9': { cards: ['execution', 'vendorscorecard', 'flywheel'], placeholders: [] },
   },
   'leadership': {
     'z1-3': { cards: ['fitscore'], placeholders: [] },
     'z4-5': { cards: ['projectmaturity'], placeholders: [] },
-    'z6-7': { cards: ['lifecycle'], placeholders: [] },
+    'z6-7': { cards: ['lifecycle', 'regression'], placeholders: [] },
     'z8-9': { cards: ['capex', 'flywheel'], placeholders: [] },
   },
   'finance': {
@@ -1687,6 +1795,7 @@ const App = () => {
       case 'forecast': return <MockAssetDemandForecasting />;
       case 'fitscore': return <MockFitScore />;
       case 'projectmaturity': return <MockProjectMaturity />;
+      case 'regression': return <MockRegressionEvent />;
       case 'prepop': case 'prepop-ops': return <MockPrePopulation />;
       case 'costofdelay': return <MockCostOfDelay persona={activePersona} />;
       case 'clarityscoring': return <MockClarityScoring />;
