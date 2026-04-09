@@ -168,7 +168,7 @@ const MockQuickQuotes = () => {
               <div className="text-3xl font-mono font-bold text-slate-800">$1,245,000 <span className="text-sm text-slate-400 font-sans font-normal ml-2">{'\u00B1'} 12% CI</span></div>
             </div>
             <DenseTable headers={['Category', 'Phase', 'Est. Qty', 'Cost Allocation']} rows={[['Earthmoving', 'Site Prep', '4-6 units', '$180,000'],['Cranes & Hoists', 'Structure', '2 units', '$520,000'],['Aerial Lifts', 'MEP / Finish', '12-15 units', '$310,000'],['Generators & Temp Power', 'All Phases', '3 units', '$235,000']]}/>
-            <div className="mt-4 flex justify-end"><button className="bg-indigo-50 text-indigo-600 font-semibold text-xs px-4 py-2 rounded border border-indigo-200 hover:bg-indigo-100">Export to CRM Opportunity</button></div>
+            <div className="mt-4 flex justify-end"><button className="bg-indigo-50 text-indigo-600 font-semibold text-xs px-4 py-2 rounded border border-indigo-200 hover:bg-indigo-100">Sync to FP&A Record</button></div>
           </div>
         )}
       </div>
@@ -844,12 +844,12 @@ const MockFitScore = () => {
         rightArea={<button className="flex items-center gap-2 bg-indigo-600 text-white px-3 py-1.5 rounded text-xs font-semibold hover:bg-indigo-700"><RefreshCw className="w-3 h-3"/> Refresh Fit Scores</button>}
       />
       <div className="px-6 py-2 bg-white border-b border-slate-200 shrink-0">
-        <p className="text-xs text-slate-500 italic">Opportunities originate in CRM but are evaluated here against the FP&A committed forecast — the enterprise's one version of truth.</p>
+        <p className="text-xs text-slate-500 italic">Opportunities originate in FP&A but are evaluated here against the FP&A committed forecast — the enterprise's one version of truth.</p>
       </div>
       <div className="p-6 overflow-auto flex flex-col gap-5">
         <div className="grid grid-cols-4 gap-4">
           <KPI label="FP&A Forecast Entries" value="41" />
-          <KPI label="Correlated to CRM Opportunities" value="28" />
+          <KPI label="Correlated to FP&A Forecast Entries" value="28" />
           <KPI label="High Fit (Equipment)" value="6 opportunities" />
           <KPI label="Est. O2S Revenue at Stake" value="$18.4M" />
         </div>
@@ -1543,10 +1543,10 @@ const MockFinancialModel = () => {
   ];
   return (
     <div className="flex flex-col h-full bg-slate-50">
-      <Toolbar leftArea={<><Database className="w-4 h-4 text-emerald-600"/><span className="font-semibold text-slate-800">Financial Handshake Simulator (O2S ↔ FP&A)</span></>} rightArea={<button className="flex items-center gap-2 bg-emerald-600 text-white px-3 py-1.5 rounded text-xs font-semibold hover:bg-emerald-700"><RefreshCw className="w-3 h-3"/> Sync to Anaplan</button>}/>
+      <Toolbar leftArea={<><Database className="w-4 h-4 text-emerald-600"/><span className="font-semibold text-slate-800">Financial Handshake Simulator (O2S ↔ FP&A)</span></>} rightArea={<button className="flex items-center gap-2 bg-emerald-600 text-white px-3 py-1.5 rounded text-xs font-semibold hover:bg-emerald-700"><RefreshCw className="w-3 h-3"/> Sync to FP&A</button>}/>
       <div className="p-6 flex flex-col flex-grow overflow-hidden gap-4">
         <div className="grid grid-cols-4 gap-4 shrink-0">
-          <KPI label="Total Pipeline (Gross)" value="$32.00M" subtext="Unadjusted CRM Rev" />
+          <KPI label="Total Pipeline (Gross)" value="$32.00M" subtext="FP&A Gross Revenue" />
           <KPI label="Risk-Adjusted Revenue" value="$17.34M" trend="-45.8%" subtext="Zone-weighted yield" />
           <KPI label="O2S Planned Cost Basis" value="$12.50M" subtext="From V0 & Intent Plans" />
           <KPI label="Blended Adj. Margin" value="27.9%" trend="+1.2%" subtext="vs AOP Target" />
@@ -1560,7 +1560,7 @@ const MockFinancialModel = () => {
               <thead className="bg-slate-50 border-b border-slate-200 text-slate-500">
                 <tr>
                   <th className="px-3 py-2 font-semibold">Opportunity ID</th><th className="px-3 py-2 font-semibold">Project Name</th><th className="px-3 py-2 font-semibold">Zone & Stage</th>
-                  <th className="px-3 py-2 font-semibold text-right">CRM Gross Revenue</th><th className="px-3 py-2 font-semibold text-center border-l border-r border-slate-200">Zone Confidence Multiplier</th>
+                  <th className="px-3 py-2 font-semibold text-right">FP&A Gross Revenue</th><th className="px-3 py-2 font-semibold text-center border-l border-r border-slate-200">Zone Confidence Multiplier</th>
                   <th className="px-3 py-2 font-semibold text-right text-emerald-700">Risk-Adjusted Revenue</th><th className="px-3 py-2 font-semibold text-right text-rose-700">O2S Planned Cost</th><th className="px-3 py-2 font-semibold text-right text-indigo-700">Adj. Margin $</th>
                 </tr>
               </thead>
@@ -1587,7 +1587,7 @@ const MockFinancialModel = () => {
         </div>
         <div className="bg-white border border-slate-200 rounded-md shadow-sm flex flex-col flex-grow overflow-hidden">
           <div className="p-3 border-b border-slate-200 bg-slate-50 flex justify-between items-center shrink-0">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-2"><Activity className="w-4 h-4 text-emerald-500"/> Anaplan Sync Payload (Time-Phased Output)</h3>
+            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-2"><Activity className="w-4 h-4 text-emerald-500"/> FP&A Sync Payload (Time-Phased Output)</h3>
           </div>
           <div className="overflow-auto flex-grow">
             <table className="w-full text-left text-[10px] whitespace-nowrap">
@@ -1789,8 +1789,8 @@ const App = () => {
 
   const tourData = [
     { id: 0, title: "Step 1: The Fragmentation Problem", targetNodes: [], transcript: "Welcome to the O2S Command Center. Today, equipment operations run on disconnected spreadsheets, tribal knowledge, and point solutions that can't talk to each other. A project team in Texas requests a crane through email. Operations checks availability in one system, pricing in another, and vendor options in a third. Finance reconciles invoices weeks later with no link back to the original forecast. The result: margin leakage, duplicated rentals, and zero organizational learning. This platform exists to replace that fragmentation with a single, observable demand funnel." },
-    { id: 1, title: "Step 2: The Zone Model — An Ungameable Spine", targetNodes: [], highlightSpine: true, transcript: "Everything in the Command Center is organized around nine zones — a lifecycle spine that tracks equipment demand from earliest forecast through execution and learning. Critically, zone state is observed, not declared. A project doesn't manually move itself from Zone 4 to Zone 5; the system infers progression from system-of-record data — CRM stage changes, specification submissions, PO issuance. This makes the model ungameable: you can't claim progress you haven't actually made. The spine you see above is the shared map that every persona — project teams, operations, leadership, and finance — navigates from." },
-    { id: 2, title: "Step 3: Early Demand Shaping (Zones 1–3)", targetNodes: ['fitscore', 'quotes', 'forecast', 'margin', 'fpa'], transcript: "The funnel begins with pipeline intelligence. The Fit Score correlates CRM opportunities against historical equipment patterns to surface which deals are likely to generate real demand. Asset-Level Demand Forecasting translates those signals into probability-weighted equipment needs spanning Zones 1 through 7. Meanwhile, the Project Margin Plan and Financial Model force a handshake between operational forecasts and FP&A targets — establishing a risk-adjusted baseline before a single asset is committed. Quick Quotes give project teams early pricing confidence, long before blueprints are finalized." },
+    { id: 1, title: "Step 2: The Zone Model — An Ungameable Spine", targetNodes: [], highlightSpine: true, transcript: "Everything in the Command Center is organized around nine zones — a lifecycle spine that tracks equipment demand from earliest forecast through execution and learning. Critically, zone state is observed, not declared. A project doesn't manually move itself from Zone 4 to Zone 5; the system infers progression from system-of-record data — FP&A commitment status changes, specification submissions, PO issuance. This makes the model ungameable: you can't claim progress you haven't actually made. The spine you see above is the shared map that every persona — project teams, operations, leadership, and finance — navigates from." },
+    { id: 2, title: "Step 3: Early Demand Shaping (Zones 1–3)", targetNodes: ['fitscore', 'quotes', 'forecast', 'margin', 'fpa'], transcript: "The funnel begins with pipeline intelligence. The Fit Score correlates FP&A forecast entries against historical equipment patterns to surface which deals are likely to generate real demand. Asset-Level Demand Forecasting translates those signals into probability-weighted equipment needs spanning Zones 1 through 7. Meanwhile, the Project Margin Plan and Financial Model force a handshake between operational forecasts and FP&A targets — establishing a risk-adjusted baseline before a single asset is committed. Quick Quotes give project teams early pricing confidence, long before blueprints are finalized." },
     { id: 3, title: "Step 4: Baseline, Intent & Clarity (Zones 4–5)", targetNodes: ['prepop', 'adhoc', 'clarityscoring', 'costofdelay', 'projectmaturity'], transcript: "As opportunities mature, abstract forecasts must become concrete operational intents. The system pre-populates request intakes using AI and the V0 baseline — project teams don't start from scratch. Ad-Hoc Intake captures the inevitable ground-level changes. Clarity Scoring quantifies how 'decision-ready' each request is across multiple dimensions. Cost of Delay calculates the real financial impact of missing information, creating urgency without requiring nagging. Project Maturity tracks multi-zone coexistence — because a project isn't simply 'in Zone 5'; different line items may span Zones 3 through 7 simultaneously." },
     { id: 4, title: "Step 5: Validation, Request & Triggers (Zones 6–7)", targetNodes: ['preflight', 'formalrequest', 'optimize', 'source', 'regression'], transcript: "Before anything crosses the execution threshold, Preflight Validation runs every line item through business rules — budget checks, specification completeness, lead-time feasibility. Items that pass move to Formal Request for submission and handoff. The Owned vs. Re-rent Optimizer evaluates enterprise-wide fleet capacity and makes margin-optimized sourcing decisions. Strategic Sourcing pushes demand directly to procurement. And when conditions change — a project delays, specs get revised — the Regression Event engine detects the backward movement and propagates impact across dependent zones, pausing SLAs and recalculating downstream effects." },
     { id: 5, title: "Step 6: Execution & Exceptions (Zone 8)", targetNodes: ['execution', 'vendorscorecard'], transcript: "Equipment hits the dirt. The Execution Dashboard tracks utilization, mobilization status, and exception rates in real time. Every vendor interaction feeds the Vendor Scorecard — on-time delivery, damage rates, pricing accuracy — creating an institutional memory that makes future sourcing decisions smarter. Triggers fire automatically when anomalies appear: underutilized assets get flagged for redeployment, vendor SLA breaches escalate to the right persona, and cost overruns surface before they compound." },
@@ -2056,7 +2056,7 @@ const App = () => {
           {/* Orchestration Footer */}
           <div className="bg-slate-50 border border-slate-200 rounded-lg px-6 py-4 text-center">
             <p className="text-xs text-slate-500 leading-relaxed max-w-3xl mx-auto">
-              <span className="font-semibold text-slate-600">The O2S Command Center is an orchestration layer</span> — it does not replace ERP, CRM, or telematics systems. It connects them into a single demand funnel where every persona sees the same zone-based truth, triggers fire from observed data, and organizational learning compounds automatically.
+              <span className="font-semibold text-slate-600">The O2S Command Center is an orchestration layer</span> — it does not replace FP&A, ERP, scheduling, and dispatch systems. It connects them into a single demand funnel where every persona sees the same zone-based truth, triggers fire from observed data, and organizational learning compounds automatically.
             </p>
           </div>
 
