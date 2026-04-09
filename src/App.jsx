@@ -5,7 +5,8 @@ import {
   Filter, Download, Play, AlertTriangle, CheckCircle2, Clock,
   Settings, Database, ChevronRight, Zap, RefreshCw, ShoppingCart, ShieldAlert,
   HardHat, BarChart3, Lock, ChevronDown, TrendingUp,
-  FileCheck, Send, Truck, Star, Repeat, GitBranch, Bell, Eye, Gauge, Crosshair, ClipboardList
+  FileCheck, Send, Truck, Star, Repeat, GitBranch, Bell, Eye, Gauge, Crosshair, ClipboardList,
+  Users
 } from 'lucide-react';
 
 const Badge = ({ children, variant = 'gray' }) => {
@@ -1678,6 +1679,7 @@ const PlaceholderCard = ({ label }) => (
 
 const PERSONAS = [
   { id: 'project-teams', label: 'Project Teams', icon: HardHat },
+  { id: 'rsi-fsi', label: 'RSI & FSI', icon: Users },
   { id: 'o2s-ops', label: 'O2S Operations', icon: Settings },
   { id: 'leadership', label: 'Leadership', icon: BarChart3 },
   { id: 'finance', label: 'Finance & FP&A', icon: DollarSign },
@@ -1725,10 +1727,16 @@ const CARD_REGISTRY = {
 
 const PERSONA_EQUIPMENT_GRID = {
   'project-teams': {
-    'z1-3': { cards: ['quotes'], placeholders: [] },
+    'z1-3': { cards: [], placeholders: ['Quick Quotes — Moved to RSI & FSI'] },
     'z4-5': { cards: ['prepop', 'adhoc', 'costofdelay', 'clarityscoring', 'projectmaturity'], placeholders: [] },
     'z6-7': { cards: ['preflight'], placeholders: [] },
     'z8-9': { cards: ['execution'], placeholders: [] },
+  },
+  'rsi-fsi': {
+    'z1-3': { cards: ['quotes', 'fitscore', 'forecast'], placeholders: [] },
+    'z4-5': { cards: ['prepop', 'adhoc', 'costofdelay', 'clarityscoring', 'projectmaturity'], placeholders: [] },
+    'z6-7': { cards: ['preflight', 'formalrequest', 'regression'], placeholders: [] },
+    'z8-9': { cards: ['execution', 'vendorscorecard', 'flywheel'], placeholders: [] },
   },
   'o2s-ops': {
     'z1-3': { cards: ['forecast', 'fitscore'], placeholders: [] },
@@ -1830,6 +1838,14 @@ const App = () => {
       { id: 2, title: "Review Your Baseline & Refine Intent", targetNodes: ['prepop', 'adhoc', 'costofdelay', 'clarityscoring', 'projectmaturity'], highlightSpine: false, transcript: "When your project is awarded, the system auto-generates a V0 equipment baseline — a time-phased draft of what you'll likely need, pulled from AI models, historical patterns, and your schedule. You don't start from scratch. Review the baseline, confirm or adjust quantities and timing, and submit ad-hoc requests for anything the model missed. Clarity Scoring shows you how 'decision-ready' each line item is across quantity, specification, and schedule dimensions. Cost of Delay puts a dollar figure on every week you haven't finalized specs — not to pressure you, but to give you ammunition when pushing your own clients and designers for answers. Project Maturity shows which line items are in which zones simultaneously, because your project isn't a single dot on a timeline." },
       { id: 3, title: "Validate Before It Leaves Your Hands", targetNodes: ['preflight'], highlightSpine: false, transcript: "Before anything crosses the execution threshold, Preflight Validation automatically checks every line item against business rules: Are lead times realistic given supply chain constraints? Do the specifications match your structural documents? Are there budget conflicts? Items that pass get packaged into a conflict-free request pack and handed off to O2S Operations. Items that fail get flagged with specific resolution steps so you can fix them before they become expensive downstream problems. This is your quality gate — it catches the crane-rated-for-40-tons-but-your-panels-weigh-60-tons mistakes before they hit the field." },
       { id: 4, title: "Track What's Happening on Your Site", targetNodes: ['execution'], highlightSpine: false, transcript: "Once equipment hits the dirt, the Execution Dashboard gives you real-time visibility into mobilization status, utilization rates, and exception flags across your active deployments. You'll see when a generator has been sitting idle for two weeks or when a delivery SLA has been breached — without waiting for a Friday status email. This is your window into the operational reality of your project's equipment, giving you the information you need to make decisions about extensions, returns, and change orders before costs compound." },
+    ],
+
+    'rsi-fsi': [
+      { id: 0, title: "The Integration Layer", targetNodes: [], highlightSpine: true, transcript: "Welcome to the RSI & FSI command center. As Solutions Integration, you are the connective tissue between Project Teams and O2S Operations. RSIs engage during pursuit and pre-construction — shaping which O2S services apply, generating early estimates, and building engagement strategies. FSIs take over at award and stay through execution — facilitating baseline reviews, chasing clarity, managing handoffs, and closing the feedback loop. The Command Center gives you the tools to do this integration work inside the system rather than through phone calls and emails." },
+      { id: 1, title: "Shape Engagement During Pursuit", targetNodes: ['quotes', 'fitscore', 'forecast'], highlightSpine: false, transcript: "In Zones 1–3, RSIs are the primary operators. Quick Quotes lets you generate directional equipment estimates using standardized O2S inputs to support go/no-go decisions. The Fit Score surfaces which FP&A committed forecast entries align with O2S capabilities — you use this to determine which projects warrant proactive outreach before designs lock. Asset Demand Forecast gives you portfolio-level demand visibility so you can prioritize regional engagement by project type and timing." },
+      { id: 2, title: "Facilitate Baselines & Drive Clarity", targetNodes: ['prepop', 'adhoc', 'costofdelay', 'clarityscoring', 'projectmaturity'], highlightSpine: false, transcript: "At award, the FSI steps in. You facilitate the V0 Baseline Review with the project team — walking through the AI-generated equipment plan, confirming or adjusting each line item. Ad-Hoc Request Intake lets you enter requests on behalf of project teams who call or email. Clarity Scoring is your primary daily tool — monitoring how decision-ready each item is and targeting action to close gaps. Cost of Delay gives you the financial ammunition to push project teams for timely specifications. Project Maturity shows where every package sits so you can triage your day." },
+      { id: 3, title: "Quality-Gate the Handoff", targetNodes: ['preflight', 'formalrequest', 'regression'], highlightSpine: false, transcript: "Before anything crosses into Zone 7, you're the quality assurance layer. Preflight Validation results flow through you — you work with the project team to resolve failures before resubmission. You facilitate the Formal Request & Handoff, ensuring the validated request pack is complete and properly routed to the right operations queue. When Regression Events fire — a schedule shift invalidates a preflight, a design reopens — you're the first person both sides call. Your view gives you immediate visibility into what regressed, why, and the downstream impact." },
+      { id: 4, title: "Manage Exceptions & Close the Loop", targetNodes: ['execution', 'vendorscorecard', 'flywheel'], highlightSpine: false, transcript: "Through execution, you monitor exceptions across your assigned projects and coordinate resolution between the project team and operations. The Vendor Scorecard captures hard data automatically, but you contribute the qualitative on-the-ground review — how vendors actually performed from the project's perspective. The Learning Flywheel captures variance data, and you provide the narrative context behind the numbers — why a lead time was longer, why the constrained path was taken. Your insight makes the flywheel actionable, not just numerical." },
     ],
 
     'o2s-ops': [
