@@ -1543,7 +1543,7 @@ const MockFinancialModel = () => {
   ];
   return (
     <div className="flex flex-col h-full bg-slate-50">
-      <Toolbar leftArea={<><Database className="w-4 h-4 text-emerald-600"/><span className="font-semibold text-slate-800">Financial Handshake Simulator (O2S ↔ FP&A)</span></>} rightArea={<button className="flex items-center gap-2 bg-emerald-600 text-white px-3 py-1.5 rounded text-xs font-semibold hover:bg-emerald-700"><RefreshCw className="w-3 h-3"/> Sync to FP&A</button>}/>
+      <Toolbar leftArea={<><Database className="w-4 h-4 text-emerald-600"/><span className="font-semibold text-slate-800">Financial Handshake Simulator (O2S ↔ FP&A)</span></>} rightArea={<><div className="flex items-center gap-1.5 bg-amber-50 border border-amber-200 text-amber-700 text-[10px] font-semibold px-2 py-0.5 rounded"><span>FP&A Source:</span><span className="font-bold">Smartsheet</span><span className="text-amber-400">→</span><span className="text-amber-500">Anaplan (future)</span></div><button className="flex items-center gap-2 bg-emerald-600 text-white px-3 py-1.5 rounded text-xs font-semibold hover:bg-emerald-700"><RefreshCw className="w-3 h-3"/> Sync to FP&A</button></>}/>
       <div className="p-6 flex flex-col flex-grow overflow-hidden gap-4">
         <div className="grid grid-cols-4 gap-4 shrink-0">
           <KPI label="Total Pipeline (Gross)" value="$32.00M" subtext="FP&A Gross Revenue" />
