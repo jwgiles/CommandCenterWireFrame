@@ -2097,11 +2097,45 @@ const App = () => {
           </div>
 
           {/* Bottom Bar */}
-          <div className="mt-8 border-t-4 border-t-sky-500 bg-sky-900 text-white p-5 rounded-b-2xl shadow-lg flex items-center gap-4">
-            <div className="bg-sky-800 p-3 rounded-xl shrink-0"><Monitor className="w-6 h-6 text-sky-300" /></div>
-            <div>
-              <h3 className="font-bold text-lg text-sky-100 tracking-tight">Custom Frontend / Platform Level</h3>
-              <p className="text-sm text-sky-200 mt-1 leading-relaxed">Provide one shared interface for project teams, O2S Equipment, Finance & Controls, and RSI teams across O2S workflows. Replaces fragmented point solutions to create a unified data flywheel.</p>
+          <div className="mt-8 border-t-4 border-t-sky-500 bg-sky-900 text-white p-5 rounded-b-2xl shadow-lg">
+            <div className="flex items-start gap-6">
+              <div className="bg-sky-800 p-3 rounded-xl shrink-0"><Monitor className="w-6 h-6 text-sky-300" /></div>
+              <div className="flex-1">
+                <h3 className="font-bold text-lg text-sky-100 tracking-tight">O2S Command Center — Orchestration Layer</h3>
+                <p className="text-sm text-sky-200 mt-1 leading-relaxed">Sits above FP&A, ERP, scheduling, and dispatch systems. Does not replace them. Doing the work creates the data.</p>
+              </div>
+            </div>
+            <div className="mt-4 pt-4 border-t border-sky-700/50 grid grid-cols-5 gap-2 text-center">
+              <div className="bg-sky-800/60 rounded-lg p-2.5">
+                <div className="text-[10px] font-bold text-indigo-300 uppercase tracking-widest mb-1">Zones 1–3</div>
+                <div className="text-[10px] text-sky-300 font-semibold">FP&A</div>
+                <div className="text-[9px] text-sky-400 mt-0.5">Smartsheet → Anaplan</div>
+                <div className="text-[9px] text-sky-500 italic mt-1">READ forecast data</div>
+              </div>
+              <div className="bg-sky-800/60 rounded-lg p-2.5">
+                <div className="text-[10px] font-bold text-emerald-300 uppercase tracking-widest mb-1">Zones 4–6</div>
+                <div className="text-[10px] text-sky-300 font-semibold">ERP + P6</div>
+                <div className="text-[9px] text-sky-400 mt-0.5">Award, Schedule, Finance</div>
+                <div className="text-[9px] text-sky-500 italic mt-1">READ project data</div>
+              </div>
+              <div className="bg-sky-800/60 rounded-lg p-2.5">
+                <div className="text-[10px] font-bold text-amber-300 uppercase tracking-widest mb-1">Zone 7</div>
+                <div className="text-[10px] text-sky-300 font-semibold">ERP / Dispatch</div>
+                <div className="text-[9px] text-sky-400 mt-0.5">Request Handoff</div>
+                <div className="text-[9px] text-sky-500 italic mt-1">WRITE requests + orders</div>
+              </div>
+              <div className="bg-sky-800/60 rounded-lg p-2.5">
+                <div className="text-[10px] font-bold text-rose-300 uppercase tracking-widest mb-1">Zone 8</div>
+                <div className="text-[10px] text-sky-300 font-semibold">Dispatch / Logistics</div>
+                <div className="text-[9px] text-sky-400 mt-0.5">Execution Systems</div>
+                <div className="text-[9px] text-sky-500 italic mt-1">READ status + actuals</div>
+              </div>
+              <div className="bg-sky-800/60 rounded-lg p-2.5">
+                <div className="text-[10px] font-bold text-purple-300 uppercase tracking-widest mb-1">Zone 9</div>
+                <div className="text-[10px] text-sky-300 font-semibold">Flywheel</div>
+                <div className="text-[9px] text-sky-400 mt-0.5">Templates + Scoring</div>
+                <div className="text-[9px] text-sky-500 italic mt-1">WRITE recommendations</div>
+              </div>
             </div>
           </div>
         </div>
