@@ -5,7 +5,7 @@ import {
   Filter, Download, Play, AlertTriangle, CheckCircle2, Clock,
   Settings, Database, ChevronRight, Zap, RefreshCw, ShoppingCart, ShieldAlert,
   HardHat, BarChart3, Lock, ChevronDown, TrendingUp,
-  FileCheck, Send, Truck, Star, Repeat
+  FileCheck, Send, Truck, Star, Repeat, GitBranch
 } from 'lucide-react';
 
 const Badge = ({ children, variant = 'gray' }) => {
@@ -819,6 +819,139 @@ const MockVendorScorecard = () => {
   );
 };
 
+const MockLearningFlywheel = () => {
+  const varianceData = [
+    { item: 'Switchgear 480V', leadAssumed: '12 wks', leadActual: '16 wks', leadVar: '+4 wks', leadColor: 'text-rose-600', costAssumed: '$42K', costActual: '$51K', costVar: '+21%', costColor: 'text-rose-600', cause: 'Supply chain delay' },
+    { item: 'Tower Crane 60T', leadAssumed: '8 wks', leadActual: '7 wks', leadVar: '-1 wk', leadColor: 'text-emerald-600', costAssumed: '$180K', costActual: '$175K', costVar: '-3%', costColor: 'text-emerald-600', cause: 'Early sourcing' },
+    { item: 'Boom Lift 80ft', leadAssumed: '2 wks', leadActual: '2 wks', leadVar: '0', leadColor: 'text-slate-400', costAssumed: '$4.8K', costActual: '$6.2K', costVar: '+29%', costColor: 'text-rose-600', cause: 'Spot market premium' },
+  ];
+  const writebacks = [
+    { change: 'Switchgear 480V default lead time: 12 weeks → 15 weeks', evidence: 'Based on 8 project actuals, median lead time is 15.2 weeks (σ = 1.4 weeks)', confidence: 'High confidence — 8 samples', confVariant: 'green' },
+    { change: 'Boom Lift 80ft re-rent rate: $4,800/mo → $5,600/mo', evidence: 'Based on 6 project actuals, median spot rate is $5,540/mo (σ = $420)', confidence: 'High confidence — 6 samples', confVariant: 'green' },
+    { change: 'Generator 200kW mobilization buffer: 1 week → 2 weeks', evidence: 'Based on 2 project actuals, both showed 2-week mobilization', confidence: 'Low confidence — 2 samples', confVariant: 'yellow' },
+  ];
+  const FlywheelArrow = () => <ArrowRight className="w-5 h-5 text-slate-400 shrink-0" />;
+  return (
+    <div className="flex flex-col h-full bg-slate-50">
+      <Toolbar
+        leftArea={<><GitBranch className="w-4 h-4 text-rose-500"/><span className="font-bold text-slate-800">Zone 9: Learning Flywheel</span><span className="text-slate-400">|</span><span className="text-slate-600">Feedback cycle: Q3 FY26</span></>}
+        rightArea={<button className="flex items-center gap-2 bg-slate-800 text-white px-3 py-1.5 rounded text-xs font-semibold hover:bg-slate-700"><Download className="w-3 h-3"/> Export Flywheel Report</button>}
+      />
+      <div className="p-6 overflow-auto flex flex-col gap-6">
+        {/* Flywheel Diagram */}
+        <div className="bg-white border border-slate-200 rounded-lg p-5 shadow-sm">
+          <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-4 text-center">Closed-Loop Feedback Cycle</h4>
+          <div className="flex items-center justify-center gap-2 flex-wrap">
+            <div className="bg-emerald-100 border border-emerald-300 rounded-lg px-4 py-3 text-center shrink-0">
+              <div className="text-[10px] font-bold text-emerald-500 uppercase tracking-wider">Zone 4</div>
+              <div className="text-xs font-bold text-emerald-800 mt-0.5">Assumptions</div>
+            </div>
+            <FlywheelArrow />
+            <div className="bg-rose-100 border border-rose-300 rounded-lg px-4 py-3 text-center shrink-0">
+              <div className="text-[10px] font-bold text-rose-500 uppercase tracking-wider">Zone 8</div>
+              <div className="text-xs font-bold text-rose-800 mt-0.5">Actuals</div>
+            </div>
+            <FlywheelArrow />
+            <div className="bg-indigo-100 border border-indigo-300 rounded-lg px-4 py-3 text-center shrink-0">
+              <div className="text-[10px] font-bold text-indigo-500 uppercase tracking-wider">Analysis</div>
+              <div className="text-xs font-bold text-indigo-800 mt-0.5">Variance</div>
+            </div>
+            <FlywheelArrow />
+            <div className="bg-amber-100 border border-amber-300 rounded-lg px-4 py-3 text-center shrink-0">
+              <div className="text-[10px] font-bold text-amber-500 uppercase tracking-wider">Writeback</div>
+              <div className="text-xs font-bold text-amber-800 mt-0.5">Templates</div>
+            </div>
+            <FlywheelArrow />
+            <div className="bg-emerald-500 text-white rounded-lg px-4 py-3 text-center shrink-0 shadow-md ring-2 ring-emerald-200">
+              <div className="text-[10px] font-bold uppercase tracking-wider opacity-80">Zone 4</div>
+              <div className="text-xs font-bold mt-0.5">Next Project</div>
+            </div>
+          </div>
+          <div className="flex justify-center mt-3">
+            <div className="flex items-center gap-1.5 text-[10px] font-semibold text-slate-400 italic">
+              <RotateCcw className="w-3 h-3" /> Every project completion sharpens the next project's starting point
+            </div>
+          </div>
+        </div>
+
+        {/* Variance Analysis */}
+        <div>
+          <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3 flex items-center gap-2"><Activity className="w-4 h-4 text-indigo-500"/> Variance Analysis</h3>
+          <div className="overflow-x-auto border border-slate-200 rounded-md bg-white">
+            <table className="w-full text-left text-[10px]">
+              <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 uppercase tracking-wider">
+                <tr>
+                  <th className="px-3 py-2 font-semibold">Item Category</th>
+                  <th className="px-3 py-2 font-semibold text-right">Z4 Lead Time</th>
+                  <th className="px-3 py-2 font-semibold text-right">Z8 Lead Time</th>
+                  <th className="px-3 py-2 font-semibold text-right">Variance</th>
+                  <th className="px-3 py-2 font-semibold text-right">Z4 Cost</th>
+                  <th className="px-3 py-2 font-semibold text-right">Z8 Cost</th>
+                  <th className="px-3 py-2 font-semibold text-right">Cost Var</th>
+                  <th className="px-3 py-2 font-semibold">Cause Code</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 text-xs">
+                {varianceData.map((row, i) => (
+                  <tr key={i} className="hover:bg-slate-50 transition-colors">
+                    <td className="px-3 py-2.5 text-slate-800 font-medium">{row.item}</td>
+                    <td className="px-3 py-2.5 text-slate-500 font-mono text-right">{row.leadAssumed}</td>
+                    <td className="px-3 py-2.5 text-slate-700 font-mono text-right font-semibold">{row.leadActual}</td>
+                    <td className={`px-3 py-2.5 font-mono text-right font-bold ${row.leadColor}`}>{row.leadVar}</td>
+                    <td className="px-3 py-2.5 text-slate-500 font-mono text-right">{row.costAssumed}</td>
+                    <td className="px-3 py-2.5 text-slate-700 font-mono text-right font-semibold">{row.costActual}</td>
+                    <td className={`px-3 py-2.5 font-mono text-right font-bold ${row.costColor}`}>{row.costVar}</td>
+                    <td className="px-3 py-2.5 text-slate-600">{row.cause}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Template Writeback Recommendations */}
+        <div>
+          <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3 flex items-center gap-2"><Zap className="w-4 h-4 text-amber-500"/> Template Writeback Recommendations</h3>
+          <div className="space-y-3">
+            {writebacks.map((wb, i) => (
+              <div key={i} className="bg-white border border-slate-200 rounded-md p-4 shadow-sm">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex-grow">
+                    <p className="text-sm font-semibold text-slate-800">{wb.change}</p>
+                    <p className="text-xs text-slate-500 mt-1">{wb.evidence}</p>
+                    <div className="mt-2"><Badge variant={wb.confVariant}>{wb.confidence}</Badge></div>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button className="bg-emerald-600 text-white text-[10px] font-bold px-3 py-1.5 rounded hover:bg-emerald-700 transition-colors">Approve Writeback</button>
+                    <button className="bg-white border border-slate-300 text-slate-600 text-[10px] font-bold px-3 py-1.5 rounded hover:bg-slate-50 transition-colors">Reject with Rationale</button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+          <p className="text-[11px] italic text-slate-400 mt-3">Writebacks produce recommendations for template owner review — not automatic overwrites.</p>
+        </div>
+
+        {/* Happy Path vs Constrained Path */}
+        <div>
+          <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3">Happy Path vs. Constrained Path Outcomes</h3>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="bg-emerald-50 border border-emerald-200 rounded-lg p-4">
+              <div className="text-[10px] font-bold text-emerald-600 uppercase tracking-widest mb-2 flex items-center gap-1.5"><CheckCircle2 className="w-3.5 h-3.5"/> Happy Path</div>
+              <p className="text-sm text-emerald-900 leading-relaxed"><strong>14 items</strong> sourced with early clarity. Avg cost savings: <strong>18%</strong>. Avg lead time buffer: <strong>+3.2 weeks</strong>.</p>
+            </div>
+            <div className="bg-rose-50 border border-rose-200 rounded-lg p-4">
+              <div className="text-[10px] font-bold text-rose-600 uppercase tracking-widest mb-2 flex items-center gap-1.5"><AlertTriangle className="w-3.5 h-3.5"/> Constrained Path</div>
+              <p className="text-sm text-rose-900 leading-relaxed"><strong>8 items</strong> sourced under constraint. Avg cost premium: <strong>34%</strong>. <strong>3 schedule delays</strong> attributed to late clarity.</p>
+            </div>
+          </div>
+          <p className="text-[11px] italic text-slate-400 mt-3 text-center">Every completed project builds the evidence that makes the clarity signal harder to ignore.</p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const MockFinancialModel = () => {
   const data = [
     { id: 'OPP-901', name: 'Project Alpha (HQ Build)', zone: 'Zone 2', stage: 'Early Pursuit', gross: 12500000, conf: 0.30, cost: 2600000 },
@@ -970,6 +1103,7 @@ const CARD_REGISTRY = {
   fpa: { title: 'FP&A Sync', description: 'Risk-adjusted, time-phased revenue and margin forecasts synced to FP&A tools like Anaplan.', icon: DollarSign, colorClass: 'border-emerald-200 ring-2 ring-emerald-50', highlight: 'bg-emerald-500 text-white' },
   execution: { title: 'Execution Dashboard', description: 'Track active deployments, monitor utilization, flag exceptions, and take self-serve actions on in-process equipment orders.', icon: Truck, colorClass: 'border-rose-200', highlight: 'bg-rose-100 text-rose-600' },
   vendorscorecard: { title: 'Vendor Performance Scorecard', description: 'Auto-compiled vendor scorecards from execution actuals covering delivery, billing accuracy, and safety.', icon: Star, colorClass: 'border-rose-100', highlight: 'bg-rose-100 text-rose-600' },
+  flywheel: { title: 'Learning Flywheel', description: 'Capture actuals vs assumptions, analyze variance, and write back calibrated defaults to upstream templates.', icon: GitBranch, colorClass: 'border-rose-200 ring-2 ring-rose-50', highlight: 'bg-rose-500 text-white' },
   anomaly: { title: 'Billing Anomaly Detection', description: 'Detect and flag billing anomalies using project-level patterns before invoice posting.', icon: DollarSign, colorClass: 'border-rose-200 ring-2 ring-rose-50', highlight: 'bg-rose-500 text-white' },
 };
 
@@ -984,19 +1118,19 @@ const PERSONA_EQUIPMENT_GRID = {
     'z1-3': { cards: ['forecast'], placeholders: [] },
     'z4-5': { cards: ['prepop-ops'], placeholders: [] },
     'z6-7': { cards: ['optimize', 'source', 'formalrequest'], placeholders: [] },
-    'z8-9': { cards: ['execution', 'vendorscorecard'], placeholders: [] },
+    'z8-9': { cards: ['execution', 'vendorscorecard', 'flywheel'], placeholders: [] },
   },
   'leadership': {
     'z1-3': { cards: [], placeholders: ['Portfolio Watchlists — Coming in Prompt 9'] },
     'z4-5': { cards: [], placeholders: ['Project Maturity Summary — Coming in Prompt 10'] },
     'z6-7': { cards: ['lifecycle'], placeholders: [] },
-    'z8-9': { cards: ['capex'], placeholders: [] },
+    'z8-9': { cards: ['capex', 'flywheel'], placeholders: [] },
   },
   'finance': {
     'z1-3': { cards: ['margin', 'fpa'], placeholders: [] },
     'z4-5': { cards: [], placeholders: ['Cost Basis Roll-Up — Coming in Prompt 8'] },
     'z6-7': { cards: [], placeholders: ['Request Cost Validation — Coming in Prompt 8'] },
-    'z8-9': { cards: ['anomaly'], placeholders: [] },
+    'z8-9': { cards: ['anomaly', 'flywheel'], placeholders: [] },
   },
 };
 
@@ -1094,6 +1228,7 @@ const App = () => {
       case 'formalrequest': return <MockFormalRequest />;
       case 'execution': return <MockExecutionDashboard />;
       case 'vendorscorecard': return <MockVendorScorecard />;
+      case 'flywheel': return <MockLearningFlywheel />;
       case 'anomaly': return <MockBillingAnomaly />;
       case 'fpa': return <MockFinancialModel />;
       default: return <div className="p-10 flex justify-center items-center h-full text-slate-400">Workflow simulation not mapped for this node.</div>;
