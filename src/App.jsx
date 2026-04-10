@@ -223,71 +223,71 @@ const MockMarginPlan = () => {
     pillars: [
       {
         name: 'Equipment',
-        packageValue: 11900000, captureRate: 0.8676, revenue: 10325000, cost: 5993750, profit: 4331250,
+        tamOpportunity: 11900000, captureRate: 0.8676, revenue: 10325000, cost: 5993750, profit: 4331250,
         profitPct: 0.4195,
         minProfit: 4331250, probableProfit: 4331250, maxProfit: 4331250,
         lines: [
-          { name: 'Fleet Vehicles', pkgValue: 350000, capture: 1.0, rev: 350000, cost: 175000, profit: 175000, pct: 0.50, prob: 1.0, comment: 'Incl. job trucks' },
-          { name: 'Owned-Equipment — GC / GR', pkgValue: 350000, capture: 1.0, rev: 350000, cost: 175000, profit: 175000, pct: 0.50, prob: 1.0, comment: 'Safety respect, VDC equipment' },
-          { name: 'Owned-Equipment — Civil', pkgValue: 1750000, capture: 1.0, rev: 1750000, cost: 875000, profit: 875000, pct: 0.50, prob: 1.0 },
-          { name: 'Owned-Equipment — Concrete', pkgValue: 2625000, capture: 1.0, rev: 2625000, cost: 1312500, profit: 1312500, pct: 0.50, prob: 1.0 },
-          { name: 'Owned-Equipment — Electrical', pkgValue: 175000, capture: 0, rev: 0, cost: 0, profit: 0, pct: 0.50, prob: 0 },
-          { name: 'Vendor-sourced Re-rents', pkgValue: 1750000, capture: 1.0, rev: 1750000, cost: 1225000, profit: 525000, pct: 0.30, prob: 1.0 },
-          { name: 'Trade Partner Rental (CCERP / O2RP)', pkgValue: 3500000, capture: 0.75, rev: 2625000, cost: 1968750, profit: 656250, pct: 0.25, prob: 1.0 },
-          { name: 'IT / Computers / Cell Phones', pkgValue: 875000, capture: 1.0, rev: 875000, cost: 262500, profit: 612500, pct: 0.70, prob: 1.0 },
-          { name: 'Temporary Power', pkgValue: 525000, capture: 0, rev: 0, cost: 0, profit: 0, pct: 0.50, prob: 1.0 },
+          { name: 'Fleet Vehicles', tamOpp: 350000, capture: 1.0, rev: 350000, cost: 175000, profit: 175000, pct: 0.50, prob: 1.0, comment: 'Incl. job trucks' },
+          { name: 'Owned-Equipment — GC / GR', tamOpp: 350000, capture: 1.0, rev: 350000, cost: 175000, profit: 175000, pct: 0.50, prob: 1.0, comment: 'Safety respect, VDC equipment' },
+          { name: 'Owned-Equipment — Civil', tamOpp: 1750000, capture: 1.0, rev: 1750000, cost: 875000, profit: 875000, pct: 0.50, prob: 1.0 },
+          { name: 'Owned-Equipment — Concrete', tamOpp: 2625000, capture: 1.0, rev: 2625000, cost: 1312500, profit: 1312500, pct: 0.50, prob: 1.0 },
+          { name: 'Owned-Equipment — Electrical', tamOpp: 175000, capture: 0, rev: 0, cost: 0, profit: 0, pct: 0.50, prob: 0 },
+          { name: 'Vendor-sourced Re-rents', tamOpp: 1750000, capture: 1.0, rev: 1750000, cost: 1225000, profit: 525000, pct: 0.30, prob: 1.0 },
+          { name: 'Trade Partner Rental (CCERP / O2RP)', tamOpp: 3500000, capture: 0.75, rev: 2625000, cost: 1968750, profit: 656250, pct: 0.25, prob: 1.0 },
+          { name: 'IT / Computers / Cell Phones', tamOpp: 875000, capture: 1.0, rev: 875000, cost: 262500, profit: 612500, pct: 0.70, prob: 1.0 },
+          { name: 'Temporary Power', tamOpp: 525000, capture: 0, rev: 0, cost: 0, profit: 0, pct: 0.50, prob: 1.0 },
         ]
       },
       {
         name: 'Procurement',
-        packageValue: 21000000, captureRate: 0.3125, revenue: 6562500, cost: 5731250, profit: 831250,
+        tamOpportunity: 21000000, captureRate: 0.3125, revenue: 6562500, cost: 5731250, profit: 831250,
         profitPct: 0.1267,
         minProfit: 525000, probableProfit: 623437.5, maxProfit: 656250,
         lines: [
-          { name: 'EQUIP (EV Chargers)', pkgValue: 17500000, capture: 0.20, rev: 3500000, cost: 2975000, profit: 525000, pct: 0.15, prob: 1.0, comment: 'EV Chargers' },
-          { name: 'Commodity Purchase', pkgValue: 1750000, capture: 0.75, rev: 1312500, cost: 1181250, profit: 131250, pct: 0.10, prob: 0.75, comment: 'Lumber, geofoam' },
-          { name: 'MEP Equipment (CFCI)', pkgValue: 1750000, capture: 1.0, rev: 1750000, cost: 1575000, profit: 175000, pct: 0.10, prob: 0.50 },
+          { name: 'EQUIP (EV Chargers)', tamOpp: 17500000, capture: 0.20, rev: 3500000, cost: 2975000, profit: 525000, pct: 0.15, prob: 1.0, comment: 'EV Chargers' },
+          { name: 'Commodity Purchase', tamOpp: 1750000, capture: 0.75, rev: 1312500, cost: 1181250, profit: 131250, pct: 0.10, prob: 0.75, comment: 'Lumber, geofoam' },
+          { name: 'MEP Equipment (CFCI)', tamOpp: 1750000, capture: 1.0, rev: 1750000, cost: 1575000, profit: 175000, pct: 0.10, prob: 0.50 },
         ]
       },
       {
         name: 'Prefabrication',
-        packageValue: 13000000, captureRate: 0.7308, revenue: 9500000, cost: 7812500, profit: 1687500,
+        tamOpportunity: 13000000, captureRate: 0.7308, revenue: 9500000, cost: 7812500, profit: 1687500,
         profitPct: 0.1776,
         minProfit: 1162500, probableProfit: 1556250, maxProfit: 1687500,
         lines: [
-          { name: 'Concrete Formwork', pkgValue: 5250000, capture: 1.0, rev: 5250000, cost: 4200000, profit: 1050000, pct: 0.20, prob: 1.0 },
-          { name: 'Steel Fabrication', pkgValue: 7000000, capture: 0.50, rev: 3500000, cost: 2975000, profit: 525000, pct: 0.15, prob: 0.75, comment: 'Bollards' },
-          { name: 'Electrical', pkgValue: 750000, capture: 1.0, rev: 750000, cost: 637500, profit: 112500, pct: 0.15, prob: 1.0, comment: 'Approx. (2) miles of 12kV ductbank' },
+          { name: 'Concrete Formwork', tamOpp: 5250000, capture: 1.0, rev: 5250000, cost: 4200000, profit: 1050000, pct: 0.20, prob: 1.0 },
+          { name: 'Steel Fabrication', tamOpp: 7000000, capture: 0.50, rev: 3500000, cost: 2975000, profit: 525000, pct: 0.15, prob: 0.75, comment: 'Bollards' },
+          { name: 'Electrical', tamOpp: 750000, capture: 1.0, rev: 750000, cost: 637500, profit: 112500, pct: 0.15, prob: 1.0, comment: 'Approx. (2) miles of 12kV ductbank' },
         ]
       },
       {
         name: 'Professional Services',
-        packageValue: 1750000, captureRate: 0.50, revenue: 875000, cost: 743750, profit: 131250,
+        tamOpportunity: 1750000, captureRate: 0.50, revenue: 875000, cost: 743750, profit: 131250,
         profitPct: 0.15,
         minProfit: 131250, probableProfit: 131250, maxProfit: 131250,
         lines: [
-          { name: 'Mapping', pkgValue: 875000, capture: 1.0, rev: 875000, cost: 743750, profit: 131250, pct: 0.15, prob: 1.0 },
-          { name: 'Controls', pkgValue: 875000, capture: 0, rev: 0, cost: 0, profit: 0, pct: 0.20, prob: 1.0 },
+          { name: 'Mapping', tamOpp: 875000, capture: 1.0, rev: 875000, cost: 743750, profit: 131250, pct: 0.15, prob: 1.0 },
+          { name: 'Controls', tamOpp: 875000, capture: 0, rev: 0, cost: 0, profit: 0, pct: 0.20, prob: 1.0 },
         ]
       },
       {
         name: 'Logistics',
-        packageValue: 2625000, captureRate: 0.75, revenue: 1968750, cost: 1673437.5, profit: 295312.5,
+        tamOpportunity: 2625000, captureRate: 0.75, revenue: 1968750, cost: 1673437.5, profit: 295312.5,
         profitPct: 0.15,
         minProfit: 295312.5, probableProfit: 295312.5, maxProfit: 295312.5,
         lines: [
-          { name: 'GC / GR Site Services', pkgValue: 875000, capture: 0.75, rev: 656250, cost: 557812.5, profit: 98437.5, pct: 0.15, prob: 1.0 },
-          { name: 'Trucking / Freight', pkgValue: 875000, capture: 0.75, rev: 656250, cost: 557812.5, profit: 98437.5, pct: 0.15, prob: 1.0 },
-          { name: 'Fuel Depot', pkgValue: 1750000, capture: 0.75, rev: 1312500, cost: 1115625, profit: 196875, pct: 0.15, prob: 1.0 },
+          { name: 'GC / GR Site Services', tamOpp: 875000, capture: 0.75, rev: 656250, cost: 557812.5, profit: 98437.5, pct: 0.15, prob: 1.0 },
+          { name: 'Trucking / Freight', tamOpp: 875000, capture: 0.75, rev: 656250, cost: 557812.5, profit: 98437.5, pct: 0.15, prob: 1.0 },
+          { name: 'Fuel Depot', tamOpp: 1750000, capture: 0.75, rev: 1312500, cost: 1115625, profit: 196875, pct: 0.15, prob: 1.0 },
         ]
       },
       {
         name: 'Other',
-        packageValue: 525000, captureRate: 1.0, revenue: 525000, cost: 0, profit: 525000,
+        tamOpportunity: 525000, captureRate: 1.0, revenue: 525000, cost: 0, profit: 525000,
         profitPct: 1.0,
         minProfit: 525000, probableProfit: 525000, maxProfit: 525000,
         lines: [
-          { name: 'Archive', pkgValue: 525000, capture: 1.0, rev: 525000, cost: 0, profit: 525000, pct: 1.0, prob: 1.0 },
+          { name: 'Archive', tamOpp: 525000, capture: 1.0, rev: 525000, cost: 0, profit: 525000, pct: 1.0, prob: 1.0 },
         ]
       },
     ]
@@ -477,7 +477,7 @@ const MockMarginPlan = () => {
               <table className="w-full text-left text-xs whitespace-nowrap">
                 <thead className="bg-slate-50 border-b border-slate-200">
                   <tr>
-                    {['Pillar / Product Line', 'Pkg Value', '% Capture', 'O2S Revenue', 'O2S Cost', 'Profit ($)', 'Margin %', 'Probability'].map((h, i) => (
+                    {['Pillar / Product Line', 'TAM Opportunity', '% Capture', 'O2S Revenue', 'O2S Cost', 'Profit ($)', 'Margin %', 'Probability'].map((h, i) => (
                         <th key={i} className={`px-3 py-2 text-[10px] uppercase tracking-wider text-slate-500 font-semibold ${i > 0 ? 'text-right' : ''}`}>{h}</th>
                       ))}
                     </tr>
@@ -493,7 +493,7 @@ const MockMarginPlan = () => {
                             <ChevronRight className={`w-4 h-4 text-slate-400 transition-transform ${expanded[pillar.name] ? 'rotate-90' : ''}`} />
                             {pillar.name}
                           </td>
-                          <td className="px-3 py-2 text-right font-mono">{fmt(pillar.packageValue)}</td>
+                          <td className="px-3 py-2 text-right font-mono">{fmt(pillar.tamOpportunity)}</td>
                           <td className="px-3 py-2 text-right font-mono">{pct(pillar.captureRate)}</td>
                           <td className="px-3 py-2 text-right font-mono">{fmt(pillar.revenue)}</td>
                           <td className="px-3 py-2 text-right font-mono">{fmt(pillar.cost)}</td>
@@ -507,7 +507,7 @@ const MockMarginPlan = () => {
                               {line.name}
                               {line.comment && <span className="text-[9px] text-slate-400 italic ml-1">{line.comment}</span>}
                             </td>
-                            <td className="px-3 py-2 text-right font-mono">{fmt(line.pkgValue)}</td>
+                            <td className="px-3 py-2 text-right font-mono">{fmt(line.tamOpp)}</td>
                             <td className="px-3 py-2 text-right font-mono">{line.capture === 0 ? <span className="text-slate-300">—</span> : pct(line.capture)}</td>
                             <td className="px-3 py-2 text-right font-mono">{line.capture === 0 ? <span className="text-slate-300">—</span> : fmt(line.rev)}</td>
                             <td className="px-3 py-2 text-right font-mono">{line.capture === 0 ? <span className="text-slate-300">—</span> : fmt(line.cost)}</td>
@@ -520,7 +520,7 @@ const MockMarginPlan = () => {
                     ))}
                     <tr className="border-t-2 border-slate-300 bg-slate-100 font-bold">
                       <td className="px-3 py-2 text-slate-800">Totals</td>
-                      <td className="px-3 py-2 text-right font-mono">{fmt(pillars.reduce((s, p) => s + p.packageValue, 0))}</td>
+                      <td className="px-3 py-2 text-right font-mono">{fmt(pillars.reduce((s, p) => s + p.tamOpportunity, 0))}</td>
                       <td className="px-3 py-2 text-right font-mono">{pct(totals.captureRate)}</td>
                       <td className="px-3 py-2 text-right font-mono">{fmt(totals.o2sRevenue)}</td>
                       <td className="px-3 py-2 text-right font-mono">{fmt(totals.o2sCost)}</td>
