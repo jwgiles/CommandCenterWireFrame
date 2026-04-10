@@ -1936,27 +1936,28 @@ const MockLearningFlywheel = () => {
 
 const MockFinancialModel = () => {
   const data = [
-    { id: 'OPP-901', name: 'Project Alpha (HQ Build)', zone: 'Zone 2', stage: 'Early Pursuit', gross: 12500000, conf: 0.30, cost: 2600000 },
+    { id: '250030', name: 'Disney Eastern PS', zone: 'Zone 3', stage: 'Active Pursuit', gross: 29756250, conf: 0.80, cost: 22293750 },
     { id: 'OPP-822', name: 'Data Center TX', zone: 'Zone 6', stage: 'Preflight', gross: 8200000, conf: 0.90, cost: 5400000 },
     { id: 'OPP-441', name: 'Healthcare Facility C', zone: 'Zone 5', stage: 'Intent Refinement', gross: 4500000, conf: 0.70, cost: 2300000 },
     { id: 'OPP-210', name: 'Logistics Hub NV', zone: 'Zone 3', stage: 'Margin Plan', gross: 6800000, conf: 0.45, cost: 2200000 },
   ];
   const timePhased = [
-    { month: 'Oct 2026', gross: 7200000, adj: 2340000, cost: 1500000 },
-    { month: 'Nov 2026', gross: 8500000, adj: 3000000, cost: 2200000 },
-    { month: 'Dec 2026', gross: 9100000, adj: 3500000, cost: 2600000 },
-    { month: 'Jan 2027', gross: 4000000, adj: 4000000, cost: 2900000 },
-    { month: 'Feb 2027', gross: 3200000, adj: 4500000, cost: 3300000 },
+    { month: 'Q3 2026', gross: 4825366, adj: 1519795, cost: 1138300 },
+    { month: 'Q4 2026', gross: 8028196, adj: 3202830, cost: 2399000 },
+    { month: 'Q1 2027', gross: 11441580, adj: 4569244, cost: 3422200 },
+    { month: 'Q2 2027', gross: 13634808, adj: 5446335, cost: 4079000 },
+    { month: 'Q3 2027', gross: 14168508, adj: 5661403, cost: 4239400 },
+    { month: 'Q4 2027', gross: 12604362, adj: 5041745, cost: 3775000 },
   ];
   return (
     <div className="flex flex-col h-full bg-slate-50">
       <Toolbar leftArea={<><Database className="w-4 h-4 text-emerald-600"/><span className="font-semibold text-slate-800">Financial Handshake Simulator (O2S ↔ FP&A)</span></>} rightArea={<><div className="flex items-center gap-1.5 bg-amber-50 border border-amber-200 text-amber-700 text-[10px] font-semibold px-2 py-0.5 rounded"><span>FP&A Source:</span><span className="font-bold">Smartsheet</span><span className="text-amber-400">→</span><span className="text-amber-500">Anaplan (future)</span></div><button className="flex items-center gap-2 bg-emerald-600 text-white px-3 py-1.5 rounded text-xs font-semibold hover:bg-emerald-700"><RefreshCw className="w-3 h-3"/> Sync to FP&A</button></>}/>
       <div className="p-6 flex flex-col flex-grow overflow-hidden gap-4">
         <div className="grid grid-cols-4 gap-4 shrink-0">
-          <KPI label="Total Pipeline (Gross)" value="$32.00M" subtext="FP&A Gross Revenue" />
-          <KPI label="Risk-Adjusted Revenue" value="$17.34M" trend="-45.8%" subtext="Zone-weighted yield" />
-          <KPI label="O2S Planned Cost Basis" value="$12.50M" subtext="From V0 & Intent Plans" />
-          <KPI label="Blended Adj. Margin" value="27.9%" trend="+1.2%" subtext="vs AOP Target" />
+          <KPI label="Total Pipeline (Gross)" value="$49.26M" subtext="FP&A Gross Revenue (4 projects)" />
+          <KPI label="Risk-Adjusted Revenue" value="$34.97M" trend="-29.0%" subtext="Zone-weighted yield" />
+          <KPI label="O2S Planned Cost Basis" value="$32.19M" subtext="From Margin Plans & Intent" />
+          <KPI label="Blended Adj. Margin" value="7.9%" trend="-2.1%" subtext="vs AOP Target (10%)" />
         </div>
         <div className="bg-white border border-slate-200 rounded-md shadow-sm flex flex-col shrink-0">
           <div className="p-3 border-b border-slate-200 bg-slate-50 flex justify-between items-center shrink-0">
@@ -1976,7 +1977,7 @@ const MockFinancialModel = () => {
                   const adjRev = row.gross * row.conf;
                   const margin = adjRev - row.cost;
                   return (
-                    <tr key={i} className="hover:bg-slate-50 transition-colors">
+                    <tr key={i} className={`hover:bg-slate-50 transition-colors ${row.id === '250030' ? 'bg-indigo-50/50 border-l-2 border-indigo-400' : ''}`}>
                       <td className="px-3 py-2 font-mono text-slate-500">{row.id}</td>
                       <td className="px-3 py-2 font-semibold text-slate-800">{row.name}</td>
                       <td className="px-3 py-2"><div className="flex items-center gap-2"><Badge variant={row.conf > 0.8 ? 'green' : row.conf > 0.5 ? 'yellow' : 'gray'}>{row.zone}</Badge><span className="text-slate-500">{row.stage}</span></div></td>
@@ -1999,7 +2000,7 @@ const MockFinancialModel = () => {
           <div className="overflow-auto flex-grow">
             <table className="w-full text-left text-[10px] whitespace-nowrap">
               <thead className="bg-slate-50 border-b border-slate-200 text-slate-500 sticky top-0">
-                <tr><th className="px-3 py-2 font-semibold">Fiscal Period</th><th className="px-3 py-2 font-semibold text-right">Adjusted Revenue Output</th><th className="px-3 py-2 font-semibold text-right">Planned Cost Output</th><th className="px-3 py-2 font-semibold text-right">Net Margin Output</th><th className="px-3 py-2 font-semibold text-right">Margin %</th><th className="px-3 py-2 font-semibold text-center">Sync Status</th></tr>
+                <tr><th className="px-3 py-2 font-semibold">Quarter</th><th className="px-3 py-2 font-semibold text-right">Adjusted Revenue Output</th><th className="px-3 py-2 font-semibold text-right">Planned Cost Output</th><th className="px-3 py-2 font-semibold text-right">Net Margin Output</th><th className="px-3 py-2 font-semibold text-right">Margin %</th><th className="px-3 py-2 font-semibold text-center">Sync Status</th></tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {timePhased.map((row, i) => {
