@@ -294,6 +294,15 @@ const MockMarginPlan = () => {
     ]
   };
 
+  const captureAnalysis = [
+    { pillar: 'Equipment', capacity: 'Available', deal: 'Strong', risk: 'Low', narrative: 'Full fleet deployment supported by SOPAC yard. Civil capacity confirmed via HCSS.' },
+    { pillar: 'Procurement', capacity: 'Available', deal: 'Moderate', risk: 'Medium', narrative: 'EV Charger spec bid pending owner design finalization. MEP equipment CFCI at 50% probability — design interface risk.' },
+    { pillar: 'Prefabrication', capacity: 'Constrained', deal: 'Strong', risk: 'Medium', narrative: 'Steel fab limited to $30M/yr plant capacity. Concrete formwork fully committed. Electrical ductbank scope confirmed.' },
+    { pillar: 'Professional Services', capacity: 'Available', deal: 'Weak', risk: 'Low', narrative: 'Mapping confirmed. Controls scope not yet defined — 0% capture until owner RFP.' },
+    { pillar: 'Logistics', capacity: 'Available', deal: 'Strong', risk: 'Low', narrative: 'Site services and freight straightforward. Fuel depot vendor pricing locked.' },
+    { pillar: 'Other', capacity: 'N/A', deal: 'N/A', risk: 'None', narrative: 'Archive — pass-through at 100% margin.' },
+  ];
+
   const utilizationData = [
     { pillar: 'Equipment', lines: [
       { name: 'Fleet Vehicles', poc: 'Jocelyn Palafox', status: 'Not Started', start: '2026-06-01', finish: '2028-05-31', durationMo: 24, remainingMo: 24, pctComplete: 0 },
@@ -366,9 +375,9 @@ const MockMarginPlan = () => {
         rightArea={
           <div className="flex items-center gap-3">
             <div className="flex bg-slate-200 p-0.5 rounded-md">
-              {['margin', 'utilization'].map(v => (
+              {['margin', 'capture', 'utilization'].map(v => (
                 <button key={v} onClick={() => setView(v)} className={`px-3 py-1 text-[10px] font-bold uppercase tracking-wider rounded-sm transition-all ${view === v ? 'bg-white text-indigo-700 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}>
-                  {v === 'margin' ? 'Margin' : 'Utilization'}
+                  {v === 'margin' ? 'Margin' : v === 'capture' ? 'Capture Analysis' : 'Utilization'}
                 </button>
               ))}
             </div>
@@ -412,6 +421,13 @@ const MockMarginPlan = () => {
               <KPI label="O2S Revenue" value="$29.8M" />
               <KPI label="O2S Net Operating Profit" value="$7.46M" subtext="25.1% NOP (incl. G&A)" />
             </>
+          ) : view === 'capture' ? (
+            <>
+              <KPI label="TAM Opportunity" value="$50.8M" />
+              <KPI label="Current Capture" value="58.6%" />
+              <KPI label="Enterprise Goal" value="45.0%" subtext="5-Year Target" />
+              <KPI label="Gap to Goal" value="+13.6pp" subtext="Above target on this project" />
+            </>
           ) : (
             <>
               <KPI label="Total Product Lines" value={String(utilStats.totalLines)} />
@@ -421,7 +437,39 @@ const MockMarginPlan = () => {
             </>
           )}
         </div>
-        {view === 'margin' ? (
+        {view === 'capture' && (
+          <div className="bg-white border border-slate-200 rounded-md shadow-sm">
+            <table className="w-full text-left text-xs">
+              <thead className="bg-slate-50 border-b border-slate-200">
+                <tr>
+                  {['Pillar', 'TAM Opportunity', 'Capture Rate', 'Capacity', 'Deal Quality', 'Risk Flag', 'Narrative'].map((h, i) => (
+                    <th key={i} className={`px-3 py-2 text-[10px] uppercase tracking-wider text-slate-500 font-semibold ${i === 1 || i === 2 || i === 3 || i === 4 || i === 5 ? 'text-right' : ''}`}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {captureAnalysis.map((row) => {
+                  const pillarData = pillars.find(p => p.name === row.pillar);
+                  const capacityColor = row.capacity === 'Available' ? 'text-emerald-600' : row.capacity === 'Constrained' ? 'text-amber-600' : 'text-slate-400';
+                  const dealColor = row.deal === 'Strong' ? 'text-emerald-600' : row.deal === 'Moderate' ? 'text-amber-600' : row.deal === 'Weak' ? 'text-rose-500' : 'text-slate-400';
+                  const riskVariant = row.risk === 'Low' ? 'green' : row.risk === 'Medium' ? 'yellow' : row.risk === 'High' ? 'red' : 'gray';
+                  return (
+                    <tr key={row.pillar} className="hover:bg-slate-50 transition-colors">
+                      <td className="px-3 py-2 font-semibold text-slate-800">{row.pillar}</td>
+                      <td className="px-3 py-2 text-right font-mono">{pillarData ? fmt(pillarData.tamOpportunity) : '—'}</td>
+                      <td className="px-3 py-2 text-right font-mono">{pillarData ? pct(pillarData.captureRate) : '—'}</td>
+                      <td className={`px-3 py-2 text-right font-semibold ${capacityColor}`}>{row.capacity}</td>
+                      <td className={`px-3 py-2 text-right font-semibold ${dealColor}`}>{row.deal}</td>
+                      <td className="px-3 py-2 text-right"><Badge variant={riskVariant}>{row.risk}</Badge></td>
+                      <td className="px-3 py-2 text-slate-600 whitespace-normal max-w-xs">{row.narrative}</td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+        {view === 'margin' && (
           <>
             <div className="bg-indigo-50 border border-indigo-100 rounded-md px-4 py-2 flex items-center justify-between">
               <span className="text-[10px] uppercase tracking-wider font-semibold text-indigo-400">Fee Structure</span>
@@ -538,7 +586,8 @@ const MockMarginPlan = () => {
                 </table>
             </div>
           </>
-        ) : (
+        )}
+        {view === 'utilization' && (
           <div className="bg-white border border-slate-200 rounded-md shadow-sm">
               <table className="w-full text-left text-xs whitespace-nowrap">
                 <thead className="bg-slate-50 border-b border-slate-200">
