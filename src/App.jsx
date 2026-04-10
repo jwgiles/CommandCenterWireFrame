@@ -473,11 +473,11 @@ const MockMarginPlan = () => {
                 })()}
               </div>
             </div>
-            <div className="bg-white border border-slate-200 rounded-md shadow-sm overflow-x-auto">
-                <table className="w-full text-left text-xs whitespace-nowrap">
-                  <thead className="bg-slate-50 sticky top-0 z-10 border-b border-slate-200">
-                    <tr>
-                      {['Pillar / Product Line', 'Pkg Value', '% Capture', 'O2S Revenue', 'O2S Cost', 'Profit ($)', 'Margin %', 'Probability'].map((h, i) => (
+            <div className="bg-white border border-slate-200 rounded-md shadow-sm">
+              <table className="w-full text-left text-xs whitespace-nowrap">
+                <thead className="bg-slate-50 border-b border-slate-200">
+                  <tr>
+                    {['Pillar / Product Line', 'Pkg Value', '% Capture', 'O2S Revenue', 'O2S Cost', 'Profit ($)', 'Margin %', 'Probability'].map((h, i) => (
                         <th key={i} className={`px-3 py-2 text-[10px] uppercase tracking-wider text-slate-500 font-semibold ${i > 0 ? 'text-right' : ''}`}>{h}</th>
                       ))}
                     </tr>
@@ -533,9 +533,9 @@ const MockMarginPlan = () => {
             </div>
           </>
         ) : (
-          <div className="bg-white border border-slate-200 rounded-md shadow-sm overflow-x-auto">
+          <div className="bg-white border border-slate-200 rounded-md shadow-sm">
               <table className="w-full text-left text-xs whitespace-nowrap">
-                <thead className="bg-slate-50 sticky top-0 z-10 border-b border-slate-200">
+                <thead className="bg-slate-50 border-b border-slate-200">
                   <tr>
                     {['Product Line', 'Point of Contact', 'Status', 'Start', 'Finish', 'Duration', '% Complete'].map((h, i) => (
                       <th key={i} className="px-3 py-2 text-[10px] uppercase tracking-wider text-slate-500 font-semibold">{h}</th>
