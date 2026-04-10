@@ -489,7 +489,10 @@ const MockMarginPlan = () => {
         {view === 'margin' && (
           <>
             <div className="bg-indigo-50 border border-indigo-100 rounded-md px-4 py-2 flex items-center justify-between">
-              <span className="text-[10px] uppercase tracking-wider font-semibold text-indigo-400">Fee Structure</span>
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] uppercase tracking-wider font-semibold text-indigo-400">Fee Structure</span>
+                <span className="text-[8px] px-1.5 py-0.5 bg-amber-100 text-amber-700 rounded font-semibold uppercase tracking-wider">O2S Only</span>
+              </div>
               <div className="flex items-center gap-3">
                 <span className="text-xs text-indigo-600 font-mono">Base Fee: 3.0%</span>
                 <div className="w-px h-4 bg-indigo-200" />
