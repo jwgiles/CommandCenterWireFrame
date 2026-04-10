@@ -385,6 +385,16 @@ const MockMarginPlan = () => {
         }
         rightArea={
           <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1.5 mr-2">
+              <span className="text-[9px] uppercase tracking-wider text-slate-400 font-semibold">View as:</span>
+              <div className="flex bg-slate-100 p-0.5 rounded">
+                {['rsi', 'leadership', 'project'].map(p => (
+                  <button key={p} onClick={() => setPersona(p)} className={`px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider rounded transition-all ${persona === p ? 'bg-white text-indigo-700 shadow-sm' : 'text-slate-400 hover:text-slate-600'}`}>
+                    {p === 'rsi' ? 'RSI' : p === 'leadership' ? 'Leadership' : 'Project'}
+                  </button>
+                ))}
+              </div>
+            </div>
             <div className="flex bg-slate-200 p-0.5 rounded-md">
               {['margin', 'utilization'].map(v => (
                 <button key={v} onClick={() => setView(v)} className={`px-3 py-1 text-[10px] font-bold uppercase tracking-wider rounded-sm transition-all ${view === v ? 'bg-white text-indigo-700 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}>
@@ -443,19 +453,18 @@ const MockMarginPlan = () => {
         </div>
         {view === 'margin' && (
           <>
-            <div className="bg-indigo-50 border border-indigo-100 rounded-md px-4 py-2 flex items-center justify-between">
-              <div className="flex items-center gap-2">
+            {(persona === 'rsi' || persona === 'leadership') && (
+              <div className="bg-indigo-50 border border-indigo-100 rounded-md px-4 py-2 flex items-center justify-between">
                 <span className="text-[10px] uppercase tracking-wider font-semibold text-indigo-400">Fee Structure</span>
-                <span className="text-[8px] px-1.5 py-0.5 bg-amber-100 text-amber-700 rounded font-semibold uppercase tracking-wider">02S Only</span>
+                <div className="flex items-center gap-3">
+                  <span className="text-xs text-indigo-600 font-mono">Base Fee: 3.0%</span>
+                  <div className="w-px h-4 bg-indigo-200" />
+                  <span className="text-xs text-indigo-600 font-mono">Self Perform: 3.0%</span>
+                  <div className="w-px h-4 bg-indigo-200" />
+                  <span className="text-xs font-bold text-indigo-700 font-mono">Total Fee Potential: $10.5M</span>
+                </div>
               </div>
-              <div className="flex items-center gap-3">
-                <span className="text-xs text-indigo-600 font-mono">Base Fee: 3.0%</span>
-                <div className="w-px h-4 bg-indigo-200" />
-                <span className="text-xs text-indigo-600 font-mono">Self Perform: 3.0%</span>
-                <div className="w-px h-4 bg-indigo-200" />
-                <span className="text-xs font-bold text-indigo-700 font-mono">Total Fee Potential: $10.5M</span>
-              </div>
-            </div>
+            )}
             <div>
               <h3 className="text-sm font-bold text-slate-800 mb-3">Pillar Probability Summary</h3>
               <div className="bg-white border border-slate-200 rounded-md shadow-sm p-4">
