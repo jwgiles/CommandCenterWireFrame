@@ -473,8 +473,7 @@ const MockMarginPlan = () => {
                 })()}
               </div>
             </div>
-            <div className="bg-white border border-slate-200 rounded-md shadow-sm flex flex-col flex-grow overflow-hidden">
-              <div className="flex-grow overflow-auto">
+            <div className="bg-white border border-slate-200 rounded-md shadow-sm overflow-x-auto">
                 <table className="w-full text-left text-xs whitespace-nowrap">
                   <thead className="bg-slate-50 sticky top-0 z-10 border-b border-slate-200">
                     <tr>
@@ -531,12 +530,10 @@ const MockMarginPlan = () => {
                     </tr>
                   </tbody>
                 </table>
-              </div>
             </div>
           </>
         ) : (
-          <div className="bg-white border border-slate-200 rounded-md shadow-sm flex flex-col flex-grow overflow-hidden">
-            <div className="flex-grow overflow-auto">
+          <div className="bg-white border border-slate-200 rounded-md shadow-sm overflow-x-auto">
               <table className="w-full text-left text-xs whitespace-nowrap">
                 <thead className="bg-slate-50 sticky top-0 z-10 border-b border-slate-200">
                   <tr>
@@ -581,7 +578,6 @@ const MockMarginPlan = () => {
                   ))}
                 </tbody>
               </table>
-            </div>
           </div>
         )}
       </div>
