@@ -29,6 +29,7 @@ const KPI = ({ label, value, trend, subtext }) => (
     <div className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold mb-1">{label}</div>
     <div className="text-xl font-bold text-slate-800 font-mono">{value}</div>
     {trend && <div className={`text-xs mt-1 font-medium ${trend.startsWith('+') ? 'text-emerald-600' : 'text-rose-600'}`}>{trend} {subtext}</div>}
+    {!trend && subtext && <div className="text-xs mt-1 font-medium text-slate-500">{subtext}</div>}
   </div>
 );
 
@@ -409,7 +410,7 @@ const MockMarginPlan = () => {
               <KPI label="TAM Opportunity" value="$50.8M" />
               <KPI label="Capture Rate" value="58.6%" />
               <KPI label="O2S Revenue" value="$29.8M" />
-              <KPI label="O2S Profit" value="$7.46M" trend="+25.1%" subtext="Operating Profit %" />
+              <KPI label="O2S Net Operating Profit" value="$7.46M" subtext="25.1% NOP (incl. G&A)" />
             </>
           ) : (
             <>
