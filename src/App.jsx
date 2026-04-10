@@ -191,8 +191,10 @@ const MockQuickQuotes = () => {
 
 const MockMarginPlan = () => {
   const [expanded, setExpanded] = useState({});
+  const [view, setView] = useState('margin');
   const fmt = (v) => v === 0 ? '—' : `$${(v / 1e6).toFixed(2)}M`;
   const pct = (v) => v === 0 ? '—' : `${(v * 100).toFixed(1)}%`;
+  const fmtDate = (d) => { const dt = new Date(d + 'T00:00:00'); return dt.toLocaleDateString('en-US', { month: 'short', year: 'numeric' }); };
 
   const marginData = {
     project: {
@@ -291,6 +293,62 @@ const MockMarginPlan = () => {
     ]
   };
 
+  const utilizationData = [
+    { pillar: 'Equipment', lines: [
+      { name: 'Fleet Vehicles', poc: 'Jocelyn Palafox', status: 'Not Started', start: '2026-06-01', finish: '2028-05-31', durationMo: 24, remainingMo: 24, pctComplete: 0 },
+      { name: 'Owned-Equipment — GC / GR', poc: null, status: 'Not Started', start: '2026-06-01', finish: '2028-05-31', durationMo: 24, remainingMo: 24, pctComplete: 0,
+        subItems: [
+          { name: 'Water Truck', poc: 'Ismael Delgado', tamCapture: 150000 },
+          { name: 'UTV', poc: 'Ismael Delgado', tamCapture: 250000 },
+        ]
+      },
+      { name: 'Owned-Equipment — Civil', poc: 'Nick Nolin', status: 'Not Started', start: '2026-06-01', finish: '2028-05-31', durationMo: 24, remainingMo: 24, pctComplete: 0, tamCapture: 1750000 },
+      { name: 'Owned-Equipment — Concrete', poc: 'Steve Lane', status: 'Started', start: '2026-06-01', finish: '2028-05-31', durationMo: 24, remainingMo: 24, pctComplete: 0,
+        subItems: [
+          { name: 'Deck & Beam Rental', poc: 'Steve Lane', tamCapture: 1000000 },
+          { name: 'Vertical Formwork', poc: 'Steve Lane', tamCapture: 750000 },
+          { name: 'Place & Finish', poc: 'Mario Delgado', tamCapture: 250000 },
+        ]
+      },
+      { name: 'Vendor-sourced Re-rents', poc: 'Nichole Gutierrez', status: 'Not Started', start: '2026-06-01', finish: '2028-05-31', durationMo: 24, remainingMo: 24, pctComplete: 0 },
+      { name: 'Trade Partner Rental (CCERP / O2RP)', poc: 'Johanna Gamboa', status: 'Not Started', start: '2026-06-01', finish: '2028-05-31', durationMo: 24, remainingMo: 24, pctComplete: 0 },
+      { name: 'IT / Computers / Cell Phones', poc: 'Jocelyn Palafox', status: 'Not Started', start: '2026-06-01', finish: '2028-05-31', durationMo: 24, remainingMo: 24, pctComplete: 0 },
+      { name: 'Temporary Power', poc: 'Fayad Faruk', status: 'Not Started', start: '2026-06-01', finish: '2028-05-31', durationMo: 24, remainingMo: 24, pctComplete: 0 },
+    ]},
+    { pillar: 'Logistics', lines: [
+      { name: 'GC / GR Site Services', poc: 'Fayad Faruk', status: 'Not Started', start: '2026-05-31', finish: '2028-05-31', durationMo: 24, remainingMo: 24, pctComplete: 0 },
+      { name: 'Trucking / Freight', poc: 'Fayad Faruk', status: 'Not Started', start: '2026-06-01', finish: '2028-05-31', durationMo: 24, remainingMo: 24, pctComplete: 0 },
+      { name: 'Fuel Depot', poc: 'Johanna Gamboa', status: 'Not Started', start: '2026-06-01', finish: '2028-05-31', durationMo: 24, remainingMo: 24, pctComplete: 0 },
+    ]},
+    { pillar: 'Procurement', lines: [
+      { name: 'EV Chargers', poc: 'TBD', status: 'Not Started', start: '2026-06-01', finish: '2028-05-31', durationMo: 24, remainingMo: 24, pctComplete: 0 },
+      { name: 'Lumber', poc: 'Alex Nieves', status: 'Not Started', start: '2026-06-02', finish: '2028-05-31', durationMo: 24, remainingMo: 24, pctComplete: 0 },
+      { name: 'High Density Foam', poc: 'Alex Nieves', status: 'Not Started', start: '2026-06-03', finish: '2028-05-31', durationMo: 24, remainingMo: 24, pctComplete: 0 },
+      { name: 'MEP Equipment (CFCI)', poc: null, status: 'Not Started', start: '2026-06-01', finish: '2028-05-31', durationMo: 24, remainingMo: 24, pctComplete: 0 },
+      { name: 'Small Tools', poc: 'Carlos Jimenez', status: 'Not Started', start: '2026-06-02', finish: '2028-05-31', durationMo: 24, remainingMo: 24, pctComplete: 0 },
+    ]},
+    { pillar: 'Prefabrication', lines: [
+      { name: 'Concrete Formwork — Detailing', poc: 'Jeff Rambo', status: 'Not Started', start: '2026-06-02', finish: '2028-05-31', durationMo: 24, remainingMo: 24, pctComplete: 0 },
+      { name: 'Concrete Formwork — Deck & Beam Buildup', poc: 'Steve Lane', status: 'Not Started', start: '2026-06-02', finish: '2028-05-31', durationMo: 24, remainingMo: 24, pctComplete: 0 },
+      { name: 'Concrete Formwork — Capitols', poc: 'Steve Lane', status: 'Not Started', start: '2026-06-03', finish: '2028-05-31', durationMo: 24, remainingMo: 24, pctComplete: 0 },
+      { name: 'Concrete Formwork — Spandrel', poc: 'Steve Lane', status: 'Not Started', start: '2026-06-04', finish: '2028-05-31', durationMo: 24, remainingMo: 24, pctComplete: 0 },
+      { name: 'Steel Fabrication — Bollards', poc: 'Dave Clarkson', status: 'Not Started', start: '2026-06-02', finish: '2028-05-31', durationMo: 24, remainingMo: 24, pctComplete: 0 },
+      { name: 'Electrical — 12kV Ductbank', poc: 'TBD', status: 'Not Started', start: '2026-06-03', finish: '2028-05-31', durationMo: 24, remainingMo: 24, pctComplete: 0 },
+    ]},
+    { pillar: 'Professional Services', lines: [
+      { name: 'Mapping', poc: 'Sarah Jin', status: 'Not Started', start: '2026-06-01', finish: '2028-05-31', durationMo: 24, remainingMo: 24, pctComplete: 0 },
+      { name: 'Controls', poc: null, status: 'Not Started', start: '2026-06-01', finish: '2028-05-31', durationMo: 24, remainingMo: 24, pctComplete: 0 },
+    ]},
+  ];
+
+  const allUtilLines = utilizationData.flatMap(g => g.lines);
+  const utilStats = {
+    totalLines: allUtilLines.length,
+    assignedPocs: allUtilLines.filter(l => l.poc && l.poc !== 'TBD').length,
+    inProgress: allUtilLines.filter(l => l.status === 'Started').length,
+    avgComplete: allUtilLines.length > 0 ? Math.round(allUtilLines.reduce((s, l) => s + l.pctComplete, 0) / allUtilLines.length) : 0,
+  };
+
   const { project, totals, pillars } = marginData;
   const togglePillar = (name) => setExpanded(prev => ({ ...prev, [name]: !prev[name] }));
 
@@ -304,7 +362,18 @@ const MockMarginPlan = () => {
             <GateBadge macro="Active Pursuit" micro="Pursuit Shaped" />
           </>
         }
-        rightArea={<span className="text-xs font-mono text-slate-500">Ver. 12/10/25</span>}
+        rightArea={
+          <div className="flex items-center gap-3">
+            <div className="flex bg-slate-200 p-0.5 rounded-md">
+              {['margin', 'utilization'].map(v => (
+                <button key={v} onClick={() => setView(v)} className={`px-3 py-1 text-[10px] font-bold uppercase tracking-wider rounded-sm transition-all ${view === v ? 'bg-white text-indigo-700 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}>
+                  {v === 'margin' ? 'Margin' : 'Utilization'}
+                </button>
+              ))}
+            </div>
+            <span className="text-xs font-mono text-slate-500">Ver. 12/10/25</span>
+          </div>
+        }
       />
       <div className="bg-white border-b border-slate-200 px-6 py-2 flex items-center gap-4 shrink-0">
         {[
@@ -335,122 +404,186 @@ const MockMarginPlan = () => {
       </div>
       <div className="p-6 overflow-auto flex-grow flex flex-col gap-4">
         <div className="grid grid-cols-4 gap-4">
-          <KPI label="TAM Opportunity" value="$50.8M" />
-          <KPI label="Capture Rate" value="58.6%" />
-          <KPI label="O2S Revenue" value="$29.8M" />
-          <KPI label="O2S Profit" value="$7.46M" trend="+25.1%" subtext="Operating Profit %" />
+          {view === 'margin' ? (
+            <>
+              <KPI label="TAM Opportunity" value="$50.8M" />
+              <KPI label="Capture Rate" value="58.6%" />
+              <KPI label="O2S Revenue" value="$29.8M" />
+              <KPI label="O2S Profit" value="$7.46M" trend="+25.1%" subtext="Operating Profit %" />
+            </>
+          ) : (
+            <>
+              <KPI label="Total Product Lines" value={String(utilStats.totalLines)} />
+              <KPI label="Assigned POCs" value={String(utilStats.assignedPocs)} />
+              <KPI label="In Progress" value={String(utilStats.inProgress)} />
+              <KPI label="Avg % Complete" value={`${utilStats.avgComplete}%`} />
+            </>
+          )}
         </div>
-        <div className="bg-indigo-50 border border-indigo-100 rounded-md px-4 py-2 flex items-center justify-between">
-          <span className="text-[10px] uppercase tracking-wider font-semibold text-indigo-400">Fee Structure</span>
-          <div className="flex items-center gap-3">
-            <span className="text-xs text-indigo-600 font-mono">Base Fee: 3.0%</span>
-            <div className="w-px h-4 bg-indigo-200" />
-            <span className="text-xs text-indigo-600 font-mono">Self Perform: 3.0%</span>
-            <div className="w-px h-4 bg-indigo-200" />
-            <span className="text-xs font-bold text-indigo-700 font-mono">Total Fee Potential: $10.5M</span>
-          </div>
-        </div>
-        <div>
-          <h3 className="text-sm font-bold text-slate-800 mb-3">Profit Risk Envelope</h3>
-          <div className="bg-white border border-slate-200 rounded-md shadow-sm p-4">
-            {(() => {
-              const globalMax = Math.max(...pillars.map(p => p.maxProfit));
-              const totalMin = pillars.reduce((s, p) => s + p.minProfit, 0);
-              const totalProb = pillars.reduce((s, p) => s + p.probableProfit, 0);
-              const totalMax = pillars.reduce((s, p) => s + p.maxProfit, 0);
-              return (
-                <>
-                  {pillars.map((p) => {
-                    const minPct = (p.minProfit / globalMax) * 100;
-                    const maxPct = (p.maxProfit / globalMax) * 100;
-                    const probPct = (p.probableProfit / globalMax) * 100;
-                    return (
-                      <div key={p.name} className="flex items-center gap-3 py-1.5 border-b border-slate-50 last:border-0">
-                        <span className="text-xs font-semibold text-slate-700 w-36 shrink-0">{p.name}</span>
-                        <div className="flex-grow h-5 bg-slate-100 rounded-full relative">
-                          <div className="absolute bg-indigo-100 rounded-full h-full" style={{ left: `${minPct}%`, width: `${maxPct - minPct}%` }} />
-                          <div className="w-2 h-2 rounded-full bg-indigo-600 absolute top-1/2 -translate-y-1/2" style={{ left: `${probPct}%` }} />
-                        </div>
-                        <div className="flex gap-4 text-[10px] font-mono shrink-0 w-64">
-                          <span className="text-slate-400">Min: {fmt(p.minProfit)}</span>
-                          <span className="text-indigo-600 font-semibold">Probable: {fmt(p.probableProfit)}</span>
-                          <span className="text-slate-800">Max: {fmt(p.maxProfit)}</span>
-                        </div>
+        {view === 'margin' ? (
+          <>
+            <div className="bg-indigo-50 border border-indigo-100 rounded-md px-4 py-2 flex items-center justify-between">
+              <span className="text-[10px] uppercase tracking-wider font-semibold text-indigo-400">Fee Structure</span>
+              <div className="flex items-center gap-3">
+                <span className="text-xs text-indigo-600 font-mono">Base Fee: 3.0%</span>
+                <div className="w-px h-4 bg-indigo-200" />
+                <span className="text-xs text-indigo-600 font-mono">Self Perform: 3.0%</span>
+                <div className="w-px h-4 bg-indigo-200" />
+                <span className="text-xs font-bold text-indigo-700 font-mono">Total Fee Potential: $10.5M</span>
+              </div>
+            </div>
+            <div>
+              <h3 className="text-sm font-bold text-slate-800 mb-3">Profit Risk Envelope</h3>
+              <div className="bg-white border border-slate-200 rounded-md shadow-sm p-4">
+                {(() => {
+                  const globalMax = Math.max(...pillars.map(p => p.maxProfit));
+                  const totalMin = pillars.reduce((s, p) => s + p.minProfit, 0);
+                  const totalProb = pillars.reduce((s, p) => s + p.probableProfit, 0);
+                  const totalMax = pillars.reduce((s, p) => s + p.maxProfit, 0);
+                  return (
+                    <>
+                      {pillars.map((p) => {
+                        const minPct = (p.minProfit / globalMax) * 100;
+                        const maxPct = (p.maxProfit / globalMax) * 100;
+                        const probPct = (p.probableProfit / globalMax) * 100;
+                        return (
+                          <div key={p.name} className="flex items-center gap-3 py-1.5 border-b border-slate-50 last:border-0">
+                            <span className="text-xs font-semibold text-slate-700 w-36 shrink-0">{p.name}</span>
+                            <div className="flex-grow h-5 bg-slate-100 rounded-full relative">
+                              <div className="absolute bg-indigo-100 rounded-full h-full" style={{ left: `${minPct}%`, width: `${maxPct - minPct}%` }} />
+                              <div className="w-2 h-2 rounded-full bg-indigo-600 absolute top-1/2 -translate-y-1/2" style={{ left: `${probPct}%` }} />
+                            </div>
+                            <div className="flex gap-4 text-[10px] font-mono shrink-0 w-64">
+                              <span className="text-slate-400">Min: {fmt(p.minProfit)}</span>
+                              <span className="text-indigo-600 font-semibold">Probable: {fmt(p.probableProfit)}</span>
+                              <span className="text-slate-800">Max: {fmt(p.maxProfit)}</span>
+                            </div>
+                          </div>
+                        );
+                      })}
+                      <div className="text-xs font-semibold text-slate-700 pt-2 border-t border-slate-200 mt-1">
+                        Total Envelope: {fmt(totalMin)} — {fmt(totalProb)} — {fmt(totalMax)}
                       </div>
-                    );
-                  })}
-                  <div className="text-xs font-semibold text-slate-700 pt-2 border-t border-slate-200 mt-1">
-                    Total Envelope: {fmt(totalMin)} — {fmt(totalProb)} — {fmt(totalMax)}
-                  </div>
-                  <div className="text-[9px] text-slate-400 flex items-center gap-4 mt-2">
-                    <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-indigo-600 inline-block" /> Probable</span>
-                    <span className="flex items-center gap-1"><span className="w-3 h-1.5 rounded-full bg-indigo-100 inline-block" /> Min–Max Range</span>
-                  </div>
-                </>
-              );
-            })()}
-          </div>
-        </div>
-        <div className="bg-white border border-slate-200 rounded-md shadow-sm flex flex-col flex-grow overflow-hidden">
-          <div className="flex-grow overflow-auto">
-            <table className="w-full text-left text-xs whitespace-nowrap">
-              <thead className="bg-slate-50 sticky top-0 z-10 border-b border-slate-200">
-                <tr>
-                  {['Pillar / Product Line', 'Pkg Value', '% Capture', 'O2S Revenue', 'O2S Cost', 'Profit ($)', 'Margin %', 'Probability'].map((h, i) => (
-                    <th key={i} className={`px-3 py-2 text-[10px] uppercase tracking-wider text-slate-500 font-semibold ${i > 0 ? 'text-right' : ''}`}>{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {pillars.map((pillar) => (
-                  <React.Fragment key={pillar.name}>
-                    <tr
-                      className="cursor-pointer hover:bg-slate-100 bg-slate-50/50 transition-colors"
-                      onClick={() => togglePillar(pillar.name)}
-                    >
-                      <td className="px-3 py-2 font-bold text-slate-800 flex items-center gap-1">
-                        <ChevronRight className={`w-4 h-4 text-slate-400 transition-transform ${expanded[pillar.name] ? 'rotate-90' : ''}`} />
-                        {pillar.name}
-                      </td>
-                      <td className="px-3 py-2 text-right font-mono">{fmt(pillar.packageValue)}</td>
-                      <td className="px-3 py-2 text-right font-mono">{pct(pillar.captureRate)}</td>
-                      <td className="px-3 py-2 text-right font-mono">{fmt(pillar.revenue)}</td>
-                      <td className="px-3 py-2 text-right font-mono">{fmt(pillar.cost)}</td>
-                      <td className="px-3 py-2 text-right font-mono text-emerald-600">{fmt(pillar.profit)}</td>
-                      <td className="px-3 py-2 text-right font-mono">{pct(pillar.profitPct)}</td>
+                      <div className="text-[9px] text-slate-400 flex items-center gap-4 mt-2">
+                        <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-indigo-600 inline-block" /> Probable</span>
+                        <span className="flex items-center gap-1"><span className="w-3 h-1.5 rounded-full bg-indigo-100 inline-block" /> Min–Max Range</span>
+                      </div>
+                    </>
+                  );
+                })()}
+              </div>
+            </div>
+            <div className="bg-white border border-slate-200 rounded-md shadow-sm flex flex-col flex-grow overflow-hidden">
+              <div className="flex-grow overflow-auto">
+                <table className="w-full text-left text-xs whitespace-nowrap">
+                  <thead className="bg-slate-50 sticky top-0 z-10 border-b border-slate-200">
+                    <tr>
+                      {['Pillar / Product Line', 'Pkg Value', '% Capture', 'O2S Revenue', 'O2S Cost', 'Profit ($)', 'Margin %', 'Probability'].map((h, i) => (
+                        <th key={i} className={`px-3 py-2 text-[10px] uppercase tracking-wider text-slate-500 font-semibold ${i > 0 ? 'text-right' : ''}`}>{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-slate-100">
+                    {pillars.map((pillar) => (
+                      <React.Fragment key={pillar.name}>
+                        <tr
+                          className="cursor-pointer hover:bg-slate-100 bg-slate-50/50 transition-colors"
+                          onClick={() => togglePillar(pillar.name)}
+                        >
+                          <td className="px-3 py-2 font-bold text-slate-800 flex items-center gap-1">
+                            <ChevronRight className={`w-4 h-4 text-slate-400 transition-transform ${expanded[pillar.name] ? 'rotate-90' : ''}`} />
+                            {pillar.name}
+                          </td>
+                          <td className="px-3 py-2 text-right font-mono">{fmt(pillar.packageValue)}</td>
+                          <td className="px-3 py-2 text-right font-mono">{pct(pillar.captureRate)}</td>
+                          <td className="px-3 py-2 text-right font-mono">{fmt(pillar.revenue)}</td>
+                          <td className="px-3 py-2 text-right font-mono">{fmt(pillar.cost)}</td>
+                          <td className="px-3 py-2 text-right font-mono text-emerald-600">{fmt(pillar.profit)}</td>
+                          <td className="px-3 py-2 text-right font-mono">{pct(pillar.profitPct)}</td>
+                          <td className="px-3 py-2 text-right font-mono">—</td>
+                        </tr>
+                        {expanded[pillar.name] && pillar.lines.map((line, li) => (
+                          <tr key={li} className="hover:bg-slate-50 transition-colors">
+                            <td className="px-3 py-2 pl-10 text-slate-600">
+                              {line.name}
+                              {line.comment && <span className="text-[9px] text-slate-400 italic ml-1">{line.comment}</span>}
+                            </td>
+                            <td className="px-3 py-2 text-right font-mono">{fmt(line.pkgValue)}</td>
+                            <td className="px-3 py-2 text-right font-mono">{line.capture === 0 ? <span className="text-slate-300">—</span> : pct(line.capture)}</td>
+                            <td className="px-3 py-2 text-right font-mono">{line.capture === 0 ? <span className="text-slate-300">—</span> : fmt(line.rev)}</td>
+                            <td className="px-3 py-2 text-right font-mono">{line.capture === 0 ? <span className="text-slate-300">—</span> : fmt(line.cost)}</td>
+                            <td className="px-3 py-2 text-right font-mono text-emerald-600">{line.capture === 0 ? <span className="text-slate-300">—</span> : fmt(line.profit)}</td>
+                            <td className="px-3 py-2 text-right font-mono">{line.capture === 0 ? <span className="text-slate-300">—</span> : pct(line.pct)}</td>
+                            <td className="px-3 py-2 text-right font-mono">{pct(line.prob)}</td>
+                          </tr>
+                        ))}
+                      </React.Fragment>
+                    ))}
+                    <tr className="border-t-2 border-slate-300 bg-slate-100 font-bold">
+                      <td className="px-3 py-2 text-slate-800">Totals</td>
+                      <td className="px-3 py-2 text-right font-mono">{fmt(pillars.reduce((s, p) => s + p.packageValue, 0))}</td>
+                      <td className="px-3 py-2 text-right font-mono">{pct(totals.captureRate)}</td>
+                      <td className="px-3 py-2 text-right font-mono">{fmt(totals.o2sRevenue)}</td>
+                      <td className="px-3 py-2 text-right font-mono">{fmt(totals.o2sCost)}</td>
+                      <td className="px-3 py-2 text-right font-mono text-emerald-600">{fmt(totals.o2sProfit)}</td>
+                      <td className="px-3 py-2 text-right font-mono">{pct(totals.profitPct)}</td>
                       <td className="px-3 py-2 text-right font-mono">—</td>
                     </tr>
-                    {expanded[pillar.name] && pillar.lines.map((line, li) => (
-                      <tr key={li} className="hover:bg-slate-50 transition-colors">
-                        <td className="px-3 py-2 pl-10 text-slate-600">
-                          {line.name}
-                          {line.comment && <span className="text-[9px] text-slate-400 italic ml-1">{line.comment}</span>}
-                        </td>
-                        <td className="px-3 py-2 text-right font-mono">{fmt(line.pkgValue)}</td>
-                        <td className="px-3 py-2 text-right font-mono">{line.capture === 0 ? <span className="text-slate-300">—</span> : pct(line.capture)}</td>
-                        <td className="px-3 py-2 text-right font-mono">{line.capture === 0 ? <span className="text-slate-300">—</span> : fmt(line.rev)}</td>
-                        <td className="px-3 py-2 text-right font-mono">{line.capture === 0 ? <span className="text-slate-300">—</span> : fmt(line.cost)}</td>
-                        <td className="px-3 py-2 text-right font-mono text-emerald-600">{line.capture === 0 ? <span className="text-slate-300">—</span> : fmt(line.profit)}</td>
-                        <td className="px-3 py-2 text-right font-mono">{line.capture === 0 ? <span className="text-slate-300">—</span> : pct(line.pct)}</td>
-                        <td className="px-3 py-2 text-right font-mono">{pct(line.prob)}</td>
-                      </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </>
+        ) : (
+          <div className="bg-white border border-slate-200 rounded-md shadow-sm flex flex-col flex-grow overflow-hidden">
+            <div className="flex-grow overflow-auto">
+              <table className="w-full text-left text-xs whitespace-nowrap">
+                <thead className="bg-slate-50 sticky top-0 z-10 border-b border-slate-200">
+                  <tr>
+                    {['Product Line', 'Point of Contact', 'Status', 'Start', 'Finish', 'Duration', '% Complete'].map((h, i) => (
+                      <th key={i} className="px-3 py-2 text-[10px] uppercase tracking-wider text-slate-500 font-semibold">{h}</th>
                     ))}
-                  </React.Fragment>
-                ))}
-                <tr className="border-t-2 border-slate-300 bg-slate-100 font-bold">
-                  <td className="px-3 py-2 text-slate-800">Totals</td>
-                  <td className="px-3 py-2 text-right font-mono">{fmt(pillars.reduce((s, p) => s + p.packageValue, 0))}</td>
-                  <td className="px-3 py-2 text-right font-mono">{pct(totals.captureRate)}</td>
-                  <td className="px-3 py-2 text-right font-mono">{fmt(totals.o2sRevenue)}</td>
-                  <td className="px-3 py-2 text-right font-mono">{fmt(totals.o2sCost)}</td>
-                  <td className="px-3 py-2 text-right font-mono text-emerald-600">{fmt(totals.o2sProfit)}</td>
-                  <td className="px-3 py-2 text-right font-mono">{pct(totals.profitPct)}</td>
-                  <td className="px-3 py-2 text-right font-mono">—</td>
-                </tr>
-              </tbody>
-            </table>
+                  </tr>
+                </thead>
+                <tbody>
+                  {utilizationData.map((group) => (
+                    <React.Fragment key={group.pillar}>
+                      <tr><td colSpan={7} className="bg-slate-100 font-bold text-xs text-slate-700 px-3 py-2 border-b border-slate-200">{group.pillar}</td></tr>
+                      {group.lines.map((line, li) => (
+                        <React.Fragment key={li}>
+                          <tr className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                            <td className="px-3 py-2 text-xs text-slate-700">{line.name}</td>
+                            <td className="px-3 py-2 text-xs font-semibold text-slate-600">
+                              {line.poc === null ? <span className="text-slate-400 italic">TBD</span> : line.poc === 'TBD' ? <span className="text-amber-600 italic">TBD</span> : line.poc}
+                            </td>
+                            <td className="px-3 py-2"><Badge variant={line.status === 'Started' ? 'blue' : line.status === 'Complete' ? 'green' : 'gray'}>{line.status}</Badge></td>
+                            <td className="px-3 py-2 text-[10px] font-mono text-slate-500">{fmtDate(line.start)}</td>
+                            <td className="px-3 py-2 text-[10px] font-mono text-slate-500">{fmtDate(line.finish)}</td>
+                            <td className="px-3 py-2 text-[10px] font-mono text-slate-500">{line.durationMo} mo</td>
+                            <td className="px-3 py-2">
+                              <div className="flex items-center">
+                                <div className="w-16 h-1.5 bg-slate-200 rounded-full"><div className="bg-indigo-500 rounded-full h-full" style={{ width: `${line.pctComplete}%` }} /></div>
+                                <span className="text-[10px] font-mono text-slate-500 ml-1">{line.pctComplete}%</span>
+                              </div>
+                            </td>
+                          </tr>
+                          {line.subItems && line.subItems.map((sub, si) => (
+                            <tr key={si} className="border-b border-slate-50 hover:bg-slate-50 transition-colors">
+                              <td className="px-3 py-1.5 pl-8 text-xs text-slate-500">{sub.name}</td>
+                              <td className="px-3 py-1.5 text-xs font-semibold text-slate-600">{sub.poc}</td>
+                              <td colSpan={4}></td>
+                              <td className="px-3 py-1.5 text-[10px] font-mono text-slate-500">{sub.tamCapture >= 1e6 ? `$${(sub.tamCapture / 1e6).toFixed(1)}M` : `$${Math.round(sub.tamCapture / 1e3)}k`}</td>
+                            </tr>
+                          ))}
+                        </React.Fragment>
+                      ))}
+                    </React.Fragment>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
