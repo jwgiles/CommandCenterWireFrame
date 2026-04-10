@@ -628,12 +628,15 @@ const MockMarginPlan = () => {
             </div>
           </>
         )}
-        {view === 'utilization' && (
+        {view === 'utilization' && (() => {
+          const revenueByLine = {};
+          pillars.forEach(p => p.lines.forEach(l => { revenueByLine[l.name] = l.rev; }));
+          return (
           <div className="bg-white border border-slate-200 rounded-md shadow-sm">
               <table className="w-full text-left text-xs whitespace-nowrap">
                 <thead className="bg-slate-50 border-b border-slate-200">
                   <tr>
-                    {['Product Line', 'Point of Contact', 'Status', 'Start', 'Finish', 'Duration', '% Complete'].map((h, i) => (
+                    {['Product Line', 'Point of Contact', 'Revenue', 'Status', 'Start', 'Finish', 'Duration', '% Complete'].map((h, i) => (
                       <th key={i} className="px-3 py-2 text-[10px] uppercase tracking-wider text-slate-500 font-semibold">{h}</th>
                     ))}
                   </tr>
@@ -641,7 +644,7 @@ const MockMarginPlan = () => {
                 <tbody>
                   {utilizationData.map((group) => (
                     <React.Fragment key={group.pillar}>
-                      <tr><td colSpan={7} className="bg-slate-100 font-bold text-xs text-slate-700 px-3 py-2 border-b border-slate-200">{group.pillar}</td></tr>
+                      <tr><td colSpan={8} className="bg-slate-100 font-bold text-xs text-slate-700 px-3 py-2 border-b border-slate-200">{group.pillar}</td></tr>
                       {group.lines.map((line, li) => (
                         <React.Fragment key={li}>
                           <tr className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
@@ -649,6 +652,7 @@ const MockMarginPlan = () => {
                             <td className="px-3 py-2 text-xs font-semibold text-slate-600">
                               {line.poc === null ? <span className="text-slate-400 italic">TBD</span> : line.poc === 'TBD' ? <span className="text-amber-600 italic">TBD</span> : line.poc}
                             </td>
+                            <td className="px-3 py-2 text-[10px] font-mono text-slate-500">{revenueByLine[line.name] ? fmt(revenueByLine[line.name]) : '—'}</td>
                             <td className="px-3 py-2"><Badge variant={line.status === 'Started' ? 'blue' : line.status === 'Complete' ? 'green' : 'gray'}>{line.status}</Badge></td>
                             <td className="px-3 py-2 text-[10px] font-mono text-slate-500">{fmtDate(line.start)}</td>
                             <td className="px-3 py-2 text-[10px] font-mono text-slate-500">{fmtDate(line.finish)}</td>
@@ -664,7 +668,7 @@ const MockMarginPlan = () => {
                             <tr key={si} className="border-b border-slate-50 hover:bg-slate-50 transition-colors">
                               <td className="px-3 py-1.5 pl-8 text-xs text-slate-500">{sub.name}</td>
                               <td className="px-3 py-1.5 text-xs font-semibold text-slate-600">{sub.poc}</td>
-                              <td colSpan={4}></td>
+                              <td colSpan={5}></td>
                               <td className="px-3 py-1.5 text-[10px] font-mono text-slate-500">{sub.tamCapture >= 1e6 ? `$${(sub.tamCapture / 1e6).toFixed(1)}M` : `$${Math.round(sub.tamCapture / 1e3)}k`}</td>
                             </tr>
                           ))}
@@ -675,7 +679,8 @@ const MockMarginPlan = () => {
                 </tbody>
               </table>
           </div>
-        )}
+          );
+        })()}
       </div>
     </div>
   );
