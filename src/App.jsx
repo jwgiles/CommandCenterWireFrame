@@ -517,26 +517,110 @@ const MockMarginPlan = () => {
                           <td className="px-3 py-2 text-right font-mono">{pct(pillar.profitPct)}</td>
                           <td className="px-3 py-2 text-right font-mono">—</td>
                         </tr>
-                        {expanded[pillar.name] && pillar.lines.map((line, li) => (
-                          <tr key={li} className="hover:bg-slate-50 transition-colors">
-                            <td className="px-3 py-2 pl-10 text-slate-600">
-                              {line.name}
-                              {line.comment && <span className="text-[9px] text-slate-400 italic ml-1">{line.comment}</span>}
-                              {line.source && (
-                                <span className="ml-2 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider bg-slate-200 text-slate-500 rounded">
-                                  {line.source}
-                                </span>
+                        {expanded[pillar.name] && pillar.lines.map((line, li) => {
+                          const lineKey = `${pillar.name}-${li}`;
+                          const isLineOpen = expandedLine === lineKey;
+                          const stateDot = line.state === 'confirmed' ? 'bg-emerald-500' : line.state === 'in-review' ? 'bg-blue-500' : line.state === 'draft' ? 'bg-amber-500' : 'bg-rose-500';
+                          const riskDot = line.risk === 'Medium' ? 'bg-amber-400' : line.risk === 'High' ? 'bg-rose-400' : null;
+                          return (
+                            <React.Fragment key={li}>
+                              <tr
+                                className="hover:bg-slate-50 transition-colors cursor-pointer"
+                                onClick={() => toggleLine(lineKey)}
+                              >
+                                <td className="px-3 py-2 pl-10 text-slate-600">
+                                  <div className="flex items-center gap-1.5">
+                                    <ChevronRight className={`w-3 h-3 text-slate-400 transition-transform shrink-0 ${isLineOpen ? 'rotate-90' : ''}`} />
+                                    {line.name}
+                                    <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${stateDot}`} />
+                                    {riskDot && <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${riskDot}`} />}
+                                  </div>
+                                </td>
+                                <td className="px-3 py-2 text-right font-mono">{fmt(line.tamOpp)}</td>
+                                <td className="px-3 py-2 text-right font-mono">{line.capture === 0 ? <span className="text-slate-300">—</span> : pct(line.capture)}</td>
+                                <td className="px-3 py-2 text-right font-mono">{line.capture === 0 ? <span className="text-slate-300">—</span> : fmt(line.rev)}</td>
+                                <td className="px-3 py-2 text-right font-mono">{line.capture === 0 ? <span className="text-slate-300">—</span> : fmt(line.cost)}</td>
+                                <td className="px-3 py-2 text-right font-mono text-emerald-600">{line.capture === 0 ? <span className="text-slate-300">—</span> : fmt(line.profit)}</td>
+                                <td className="px-3 py-2 text-right font-mono">{line.capture === 0 ? <span className="text-slate-300">—</span> : pct(line.pct)}</td>
+                                <td className="px-3 py-2 text-right font-mono">{pct(line.prob)}</td>
+                              </tr>
+                              {isLineOpen && (
+                                <tr>
+                                  <td colSpan={8} className="p-0">
+                                    <div className="bg-white px-6 py-4 border-l-4 border-indigo-200">
+                                      <div className="flex gap-6">
+                                        {/* LEFT COLUMN — Pursuit Planning */}
+                                        <div className="w-[60%]">
+                                          <div className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold mb-3">Pursuit Planning</div>
+                                          <div className="bg-indigo-50 border border-indigo-100 rounded px-3 py-2 mb-2">
+                                            <div className="text-[10px] uppercase tracking-wider text-indigo-400 font-semibold mb-1">Pursuit Basis</div>
+                                            <div className="text-xs text-slate-700">{line.pursuitBasis}</div>
+                                          </div>
+                                          <div className="text-[9px] text-slate-400 mb-3">Initial estimate: {line.source}</div>
+                                          <div className="grid grid-cols-4 gap-2 mb-3">
+                                            <div>
+                                              <label className="text-[9px] uppercase tracking-wider text-slate-400 font-semibold block mb-1">TAM ($)</label>
+                                              <input type="number" defaultValue={line.tamOpp} className="w-full text-xs border border-slate-200 rounded px-2 py-1.5 bg-slate-50 outline-none focus:border-indigo-400 font-mono" onClick={e => e.stopPropagation()} />
+                                            </div>
+                                            <div>
+                                              <label className="text-[9px] uppercase tracking-wider text-slate-400 font-semibold block mb-1">Capture %</label>
+                                              <input type="number" defaultValue={Math.round(line.capture * 100)} className="w-full text-xs border border-slate-200 rounded px-2 py-1.5 bg-slate-50 outline-none focus:border-indigo-400 font-mono" onClick={e => e.stopPropagation()} />
+                                            </div>
+                                            <div>
+                                              <label className="text-[9px] uppercase tracking-wider text-slate-400 font-semibold block mb-1">Probability %</label>
+                                              <input type="number" defaultValue={Math.round(line.prob * 100)} className="w-full text-xs border border-slate-200 rounded px-2 py-1.5 bg-slate-50 outline-none focus:border-indigo-400 font-mono" onClick={e => e.stopPropagation()} />
+                                            </div>
+                                            <div>
+                                              <label className="text-[9px] uppercase tracking-wider text-slate-400 font-semibold block mb-1">NOP Margin %</label>
+                                              <input type="number" defaultValue={Math.round(line.pct * 100)} className="w-full text-xs border border-slate-200 rounded px-2 py-1.5 bg-slate-50 outline-none focus:border-indigo-400 font-mono" onClick={e => e.stopPropagation()} />
+                                            </div>
+                                          </div>
+                                          <div className="mb-2">
+                                            <label className="text-[9px] uppercase tracking-wider text-slate-400 font-semibold block mb-1">Rationale</label>
+                                            <textarea rows={3} defaultValue={line.rationale} placeholder="Why is this probability level set? What assumptions drive the capture rate?" className="w-full text-xs border border-slate-200 rounded px-2 py-1.5 bg-slate-50 outline-none focus:border-indigo-400" onClick={e => e.stopPropagation()} />
+                                          </div>
+                                          <p className="text-[9px] text-indigo-400 italic mt-2">Pursuit Phase — High-level production estimates. Detailed specs expected at Pre-Award.</p>
+                                        </div>
+                                        {/* RIGHT COLUMN — Risk & Opportunity */}
+                                        <div className="w-[40%]">
+                                          <div className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold mb-3">Risk & Opportunity</div>
+                                          <div className="flex items-center gap-2 mb-4">
+                                            <span className={`px-2 py-0.5 text-[9px] font-bold uppercase rounded ${line.capacity === 'Available' ? 'bg-emerald-100 text-emerald-700' : line.capacity === 'Constrained' ? 'bg-amber-100 text-amber-700' : 'bg-slate-100 text-slate-500'}`}>{line.capacity}</span>
+                                            <span className={`px-2 py-0.5 text-[9px] font-bold uppercase rounded ${line.deal === 'Strong' ? 'bg-emerald-100 text-emerald-700' : line.deal === 'Moderate' ? 'bg-amber-100 text-amber-700' : line.deal === 'Weak' ? 'bg-rose-100 text-rose-700' : 'bg-slate-100 text-slate-500'}`}>{line.deal}</span>
+                                            <span className={`px-2 py-0.5 text-[9px] font-bold uppercase rounded ${line.risk === 'Low' ? 'bg-emerald-100 text-emerald-700' : line.risk === 'Medium' ? 'bg-amber-100 text-amber-700' : line.risk === 'High' ? 'bg-rose-100 text-rose-700' : 'bg-slate-100 text-slate-500'}`}>{line.risk} Risk</span>
+                                          </div>
+                                          <div className="space-y-1 mb-4">
+                                            <div className="flex items-center gap-2 border-l-2 border-emerald-300 pl-2 py-1">
+                                              <span className="text-[9px] text-slate-400 w-16">Min NOP</span>
+                                              <span className="text-xs font-mono text-slate-700">{fmt(line.profit * 0.7)}</span>
+                                            </div>
+                                            <div className="flex items-center gap-2 border-l-2 border-indigo-400 pl-2 py-1 bg-indigo-50/50 rounded-r">
+                                              <span className="text-[9px] text-indigo-600 font-semibold w-16">Probable NOP</span>
+                                              <span className="text-xs font-mono font-semibold text-indigo-700">{fmt(line.profit)}</span>
+                                            </div>
+                                            <div className="flex items-center gap-2 border-l-2 border-emerald-500 pl-2 py-1">
+                                              <span className="text-[9px] text-slate-400 w-16">Max NOP</span>
+                                              <span className="text-xs font-mono text-slate-700">{fmt(line.profit * 1.15)}</span>
+                                            </div>
+                                          </div>
+                                          {line.comment && <p className="text-[10px] text-slate-500 italic">{line.comment}</p>}
+                                        </div>
+                                      </div>
+                                      {/* ACTION BUTTONS */}
+                                      <div className="flex items-center gap-2 border-t border-slate-100 pt-3 mt-3">
+                                        <button className="px-4 py-1.5 bg-emerald-600 text-white text-xs font-semibold rounded" onClick={e => e.stopPropagation()}>Confirm Estimate</button>
+                                        <button className="px-4 py-1.5 bg-white text-rose-600 text-xs font-semibold rounded border border-rose-300" onClick={e => e.stopPropagation()}>Flag for Review</button>
+                                        <button className="px-4 py-1.5 bg-white text-blue-600 text-xs font-semibold rounded border border-blue-300" onClick={e => e.stopPropagation()}>Save Draft</button>
+                                        <div className="flex-grow" />
+                                        <button className="px-4 py-1.5 text-slate-500 text-xs font-semibold" onClick={e => { e.stopPropagation(); setExpandedLine(null); }}>Cancel</button>
+                                      </div>
+                                    </div>
+                                  </td>
+                                </tr>
                               )}
-                            </td>
-                            <td className="px-3 py-2 text-right font-mono">{fmt(line.tamOpp)}</td>
-                            <td className="px-3 py-2 text-right font-mono">{line.capture === 0 ? <span className="text-slate-300">—</span> : pct(line.capture)}</td>
-                            <td className="px-3 py-2 text-right font-mono">{line.capture === 0 ? <span className="text-slate-300">—</span> : fmt(line.rev)}</td>
-                            <td className="px-3 py-2 text-right font-mono">{line.capture === 0 ? <span className="text-slate-300">—</span> : fmt(line.cost)}</td>
-                            <td className="px-3 py-2 text-right font-mono text-emerald-600">{line.capture === 0 ? <span className="text-slate-300">—</span> : fmt(line.profit)}</td>
-                            <td className="px-3 py-2 text-right font-mono">{line.capture === 0 ? <span className="text-slate-300">—</span> : pct(line.pct)}</td>
-                            <td className="px-3 py-2 text-right font-mono">{pct(line.prob)}</td>
-                          </tr>
-                        ))}
+                            </React.Fragment>
+                          );
+                        })}
                       </React.Fragment>
                     ))}
                     <tr className="border-t-2 border-slate-300 bg-slate-100 font-bold">
