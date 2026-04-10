@@ -317,12 +317,38 @@ const MockMarginPlan = () => {
           <span key={i} className="text-[10px] text-slate-500">{label}: <span className="font-semibold text-slate-700">{val}</span></span>
         ))}
       </div>
+      <div className="flex items-center gap-6 px-6 py-1.5 bg-slate-50 border-b border-slate-100">
+        {[
+          ['VP Ops', 'Allen Lynn'],
+          ['Ops Director', 'Halverson'],
+          ['Precon Lead', 'Yoder'],
+        ].map(([role, name], i, arr) => (
+          <React.Fragment key={i}>
+            <div className="flex items-center gap-1.5">
+              <Users className="w-3 h-3 text-slate-400" />
+              <span className="text-[10px] text-slate-400 uppercase tracking-wider">{role}</span>
+              <span className="text-[10px] font-semibold text-slate-600">{name}</span>
+            </div>
+            {i < arr.length - 1 && <div className="w-px h-3 bg-slate-200" />}
+          </React.Fragment>
+        ))}
+      </div>
       <div className="p-6 overflow-auto flex-grow flex flex-col gap-4">
         <div className="grid grid-cols-4 gap-4">
           <KPI label="TAM Opportunity" value="$50.8M" />
           <KPI label="Capture Rate" value="58.6%" />
           <KPI label="O2S Revenue" value="$29.8M" />
           <KPI label="O2S Profit" value="$7.46M" trend="+25.1%" subtext="Operating Profit %" />
+        </div>
+        <div className="bg-indigo-50 border border-indigo-100 rounded-md px-4 py-2 flex items-center justify-between">
+          <span className="text-[10px] uppercase tracking-wider font-semibold text-indigo-400">Fee Structure</span>
+          <div className="flex items-center gap-3">
+            <span className="text-xs text-indigo-600 font-mono">Base Fee: 3.0%</span>
+            <div className="w-px h-4 bg-indigo-200" />
+            <span className="text-xs text-indigo-600 font-mono">Self Perform: 3.0%</span>
+            <div className="w-px h-4 bg-indigo-200" />
+            <span className="text-xs font-bold text-indigo-700 font-mono">Total Fee Potential: $10.5M</span>
+          </div>
         </div>
         <div className="bg-white border border-slate-200 rounded-md shadow-sm flex flex-col flex-grow overflow-hidden">
           <div className="flex-grow overflow-auto">
