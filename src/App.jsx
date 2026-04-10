@@ -228,15 +228,15 @@ const MockMarginPlan = () => {
         profitPct: 0.4195,
         minProfit: 4331250, probableProfit: 4331250, maxProfit: 4331250,
         lines: [
-          { name: 'Fleet Vehicles', tamOpp: 350000, capture: 1.0, rev: 350000, cost: 175000, profit: 175000, pct: 0.50, prob: 1.0, comment: 'Incl. job trucks' },
-          { name: 'Owned-Equipment — GC / GR', tamOpp: 350000, capture: 1.0, rev: 350000, cost: 175000, profit: 175000, pct: 0.50, prob: 1.0, comment: 'Safety respect, VDC equipment' },
-          { name: 'Owned-Equipment — Civil', tamOpp: 1750000, capture: 1.0, rev: 1750000, cost: 875000, profit: 875000, pct: 0.50, prob: 1.0 },
-          { name: 'Owned-Equipment — Concrete', tamOpp: 2625000, capture: 1.0, rev: 2625000, cost: 1312500, profit: 1312500, pct: 0.50, prob: 1.0 },
-          { name: 'Owned-Equipment — Electrical', tamOpp: 175000, capture: 0, rev: 0, cost: 0, profit: 0, pct: 0.50, prob: 0 },
-          { name: 'Vendor-sourced Re-rents', tamOpp: 1750000, capture: 1.0, rev: 1750000, cost: 1225000, profit: 525000, pct: 0.30, prob: 1.0 },
-          { name: 'Trade Partner Rental (CCERP / O2RP)', tamOpp: 3500000, capture: 0.75, rev: 2625000, cost: 1968750, profit: 656250, pct: 0.25, prob: 1.0 },
-          { name: 'IT / Computers / Cell Phones', tamOpp: 875000, capture: 1.0, rev: 875000, cost: 262500, profit: 612500, pct: 0.70, prob: 1.0 },
-          { name: 'Temporary Power', tamOpp: 525000, capture: 0, rev: 0, cost: 0, profit: 0, pct: 0.50, prob: 1.0 },
+          { name: 'Fleet Vehicles', tamOpp: 350000, capture: 1.0, rev: 350000, cost: 175000, profit: 175000, pct: 0.50, prob: 1.0, comment: 'Incl. job trucks', source: 'GCGR' },
+          { name: 'Owned-Equipment — GC / GR', tamOpp: 350000, capture: 1.0, rev: 350000, cost: 175000, profit: 175000, pct: 0.50, prob: 1.0, comment: 'Safety respect, VDC equipment', source: 'GCGR' },
+          { name: 'Owned-Equipment — Civil', tamOpp: 1750000, capture: 1.0, rev: 1750000, cost: 875000, profit: 875000, pct: 0.50, prob: 1.0, source: 'HCSS' },
+          { name: 'Owned-Equipment — Concrete', tamOpp: 2625000, capture: 1.0, rev: 2625000, cost: 1312500, profit: 1312500, pct: 0.50, prob: 1.0, source: 'WinEst' },
+          { name: 'Owned-Equipment — Electrical', tamOpp: 175000, capture: 0, rev: 0, cost: 0, profit: 0, pct: 0.50, prob: 0, source: 'Estimate' },
+          { name: 'Vendor-sourced Re-rents', tamOpp: 1750000, capture: 1.0, rev: 1750000, cost: 1225000, profit: 525000, pct: 0.30, prob: 1.0, source: 'Vendor Bid' },
+          { name: 'Trade Partner Rental (CCERP / O2RP)', tamOpp: 3500000, capture: 0.75, rev: 2625000, cost: 1968750, profit: 656250, pct: 0.25, prob: 1.0, source: 'CCERP' },
+          { name: 'IT / Computers / Cell Phones', tamOpp: 875000, capture: 1.0, rev: 875000, cost: 262500, profit: 612500, pct: 0.70, prob: 1.0, source: 'G&A' },
+          { name: 'Temporary Power', tamOpp: 525000, capture: 0, rev: 0, cost: 0, profit: 0, pct: 0.50, prob: 1.0, source: 'GCs' },
         ]
       },
       {
@@ -245,9 +245,9 @@ const MockMarginPlan = () => {
         profitPct: 0.1267,
         minProfit: 525000, probableProfit: 623437.5, maxProfit: 656250,
         lines: [
-          { name: 'EQUIP (EV Chargers)', tamOpp: 17500000, capture: 0.20, rev: 3500000, cost: 2975000, profit: 525000, pct: 0.15, prob: 1.0, comment: 'EV Chargers' },
-          { name: 'Commodity Purchase', tamOpp: 1750000, capture: 0.75, rev: 1312500, cost: 1181250, profit: 131250, pct: 0.10, prob: 0.75, comment: 'Lumber, geofoam' },
-          { name: 'MEP Equipment (CFCI)', tamOpp: 1750000, capture: 1.0, rev: 1750000, cost: 1575000, profit: 175000, pct: 0.10, prob: 0.50 },
+          { name: 'EQUIP (EV Chargers)', tamOpp: 17500000, capture: 0.20, rev: 3500000, cost: 2975000, profit: 525000, pct: 0.15, prob: 1.0, comment: 'EV Chargers', source: 'Spec Bid' },
+          { name: 'Commodity Purchase', tamOpp: 1750000, capture: 0.75, rev: 1312500, cost: 1181250, profit: 131250, pct: 0.10, prob: 0.75, comment: 'Lumber, geofoam', source: 'Estimate' },
+          { name: 'MEP Equipment (CFCI)', tamOpp: 1750000, capture: 1.0, rev: 1750000, cost: 1575000, profit: 175000, pct: 0.10, prob: 0.50, source: 'CFCI' },
         ]
       },
       {
@@ -256,9 +256,9 @@ const MockMarginPlan = () => {
         profitPct: 0.1776,
         minProfit: 1162500, probableProfit: 1556250, maxProfit: 1687500,
         lines: [
-          { name: 'Concrete Formwork', tamOpp: 5250000, capture: 1.0, rev: 5250000, cost: 4200000, profit: 1050000, pct: 0.20, prob: 1.0 },
-          { name: 'Steel Fabrication', tamOpp: 7000000, capture: 0.50, rev: 3500000, cost: 2975000, profit: 525000, pct: 0.15, prob: 0.75, comment: 'Bollards' },
-          { name: 'Electrical', tamOpp: 750000, capture: 1.0, rev: 750000, cost: 637500, profit: 112500, pct: 0.15, prob: 1.0, comment: 'Approx. (2) miles of 12kV ductbank' },
+          { name: 'Concrete Formwork', tamOpp: 5250000, capture: 1.0, rev: 5250000, cost: 4200000, profit: 1050000, pct: 0.20, prob: 1.0, source: 'WinEst' },
+          { name: 'Steel Fabrication', tamOpp: 7000000, capture: 0.50, rev: 3500000, cost: 2975000, profit: 525000, pct: 0.15, prob: 0.75, comment: 'Bollards', source: 'Shop Bid' },
+          { name: 'Electrical', tamOpp: 750000, capture: 1.0, rev: 750000, cost: 637500, profit: 112500, pct: 0.15, prob: 1.0, comment: 'Approx. (2) miles of 12kV ductbank', source: 'Estimate' },
         ]
       },
       {
@@ -267,8 +267,8 @@ const MockMarginPlan = () => {
         profitPct: 0.15,
         minProfit: 131250, probableProfit: 131250, maxProfit: 131250,
         lines: [
-          { name: 'Mapping', tamOpp: 875000, capture: 1.0, rev: 875000, cost: 743750, profit: 131250, pct: 0.15, prob: 1.0 },
-          { name: 'Controls', tamOpp: 875000, capture: 0, rev: 0, cost: 0, profit: 0, pct: 0.20, prob: 1.0 },
+          { name: 'Mapping', tamOpp: 875000, capture: 1.0, rev: 875000, cost: 743750, profit: 131250, pct: 0.15, prob: 1.0, source: 'Vendor Bid' },
+          { name: 'Controls', tamOpp: 875000, capture: 0, rev: 0, cost: 0, profit: 0, pct: 0.20, prob: 1.0, source: 'TBD' },
         ]
       },
       {
@@ -277,9 +277,9 @@ const MockMarginPlan = () => {
         profitPct: 0.15,
         minProfit: 295312.5, probableProfit: 295312.5, maxProfit: 295312.5,
         lines: [
-          { name: 'GC / GR Site Services', tamOpp: 875000, capture: 0.75, rev: 656250, cost: 557812.5, profit: 98437.5, pct: 0.15, prob: 1.0 },
-          { name: 'Trucking / Freight', tamOpp: 875000, capture: 0.75, rev: 656250, cost: 557812.5, profit: 98437.5, pct: 0.15, prob: 1.0 },
-          { name: 'Fuel Depot', tamOpp: 1750000, capture: 0.75, rev: 1312500, cost: 1115625, profit: 196875, pct: 0.15, prob: 1.0 },
+          { name: 'GC / GR Site Services', tamOpp: 875000, capture: 0.75, rev: 656250, cost: 557812.5, profit: 98437.5, pct: 0.15, prob: 1.0, source: 'GCGR' },
+          { name: 'Trucking / Freight', tamOpp: 875000, capture: 0.75, rev: 656250, cost: 557812.5, profit: 98437.5, pct: 0.15, prob: 1.0, source: 'Vendor Bid' },
+          { name: 'Fuel Depot', tamOpp: 1750000, capture: 0.75, rev: 1312500, cost: 1115625, profit: 196875, pct: 0.15, prob: 1.0, source: 'Vendor Bid' },
         ]
       },
       {
@@ -288,7 +288,7 @@ const MockMarginPlan = () => {
         profitPct: 1.0,
         minProfit: 525000, probableProfit: 525000, maxProfit: 525000,
         lines: [
-          { name: 'Archive', tamOpp: 525000, capture: 1.0, rev: 525000, cost: 0, profit: 525000, pct: 1.0, prob: 1.0 },
+          { name: 'Archive', tamOpp: 525000, capture: 1.0, rev: 525000, cost: 0, profit: 525000, pct: 1.0, prob: 1.0, source: 'G&A' },
         ]
       },
     ]
@@ -507,6 +507,11 @@ const MockMarginPlan = () => {
                             <td className="px-3 py-2 pl-10 text-slate-600">
                               {line.name}
                               {line.comment && <span className="text-[9px] text-slate-400 italic ml-1">{line.comment}</span>}
+                              {line.source && (
+                                <span className="ml-2 px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider bg-slate-200 text-slate-500 rounded">
+                                  {line.source}
+                                </span>
+                              )}
                             </td>
                             <td className="px-3 py-2 text-right font-mono">{fmt(line.tamOpp)}</td>
                             <td className="px-3 py-2 text-right font-mono">{line.capture === 0 ? <span className="text-slate-300">—</span> : pct(line.capture)}</td>
