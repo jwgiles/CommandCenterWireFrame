@@ -193,6 +193,8 @@ const MockQuickQuotes = () => {
 const MockMarginPlan = () => {
   const [expanded, setExpanded] = useState({});
   const [view, setView] = useState('margin');
+  const [expandedLine, setExpandedLine] = useState(null);
+  const [persona, setPersona] = useState('rsi');
   const fmt = (v) => v === 0 ? '—' : `$${(v / 1e6).toFixed(2)}M`;
   const pct = (v) => v === 0 ? '—' : `${(v * 100).toFixed(1)}%`;
   const fmtDate = (d) => { const dt = new Date(d + 'T00:00:00'); return dt.toLocaleDateString('en-US', { month: 'short', year: 'numeric' }); };
@@ -228,15 +230,15 @@ const MockMarginPlan = () => {
         profitPct: 0.4195,
         minProfit: 4331250, probableProfit: 4331250, maxProfit: 4331250,
         lines: [
-          { name: 'Fleet Vehicles', tamOpp: 350000, capture: 1.0, rev: 350000, cost: 175000, profit: 175000, pct: 0.50, prob: 1.0, comment: 'Incl. job trucks', source: 'GCGR' },
-          { name: 'Owned-Equipment — GC / GR', tamOpp: 350000, capture: 1.0, rev: 350000, cost: 175000, profit: 175000, pct: 0.50, prob: 1.0, comment: 'Safety respect, VDC equipment', source: 'GCGR' },
-          { name: 'Owned-Equipment — Civil', tamOpp: 1750000, capture: 1.0, rev: 1750000, cost: 875000, profit: 875000, pct: 0.50, prob: 1.0, source: 'HCSS' },
-          { name: 'Owned-Equipment — Concrete', tamOpp: 2625000, capture: 1.0, rev: 2625000, cost: 1312500, profit: 1312500, pct: 0.50, prob: 1.0, source: 'WinEst' },
-          { name: 'Owned-Equipment — Electrical', tamOpp: 175000, capture: 0, rev: 0, cost: 0, profit: 0, pct: 0.50, prob: 0, source: 'Estimate' },
-          { name: 'Vendor-sourced Re-rents', tamOpp: 1750000, capture: 1.0, rev: 1750000, cost: 1225000, profit: 525000, pct: 0.30, prob: 1.0, source: 'Vendor Bid' },
-          { name: 'Trade Partner Rental (CCERP / O2RP)', tamOpp: 3500000, capture: 0.75, rev: 2625000, cost: 1968750, profit: 656250, pct: 0.25, prob: 1.0, source: 'CCERP' },
-          { name: 'IT / Computers / Cell Phones', tamOpp: 875000, capture: 1.0, rev: 875000, cost: 262500, profit: 612500, pct: 0.70, prob: 1.0, source: 'G&A' },
-          { name: 'Temporary Power', tamOpp: 525000, capture: 0, rev: 0, cost: 0, profit: 0, pct: 0.50, prob: 1.0, source: 'GCs' },
+          { name: 'Fleet Vehicles', tamOpp: 350000, capture: 1.0, rev: 350000, cost: 175000, profit: 175000, pct: 0.50, prob: 1.0, comment: 'Incl. job trucks', source: 'GCGR', state: 'confirmed', capacity: 'Available', deal: 'Strong', risk: 'Low', pursuitBasis: '12 fleet trucks × 24 mo @ $1,215/mo', rationale: 'Standard fleet package — fully committed per SOPAC yard schedule.' },
+          { name: 'Owned-Equipment — GC / GR', tamOpp: 350000, capture: 1.0, rev: 350000, cost: 175000, profit: 175000, pct: 0.50, prob: 1.0, comment: 'Safety respect, VDC equipment', source: 'GCGR', state: 'confirmed', capacity: 'Available', deal: 'Strong', risk: 'Low', pursuitBasis: 'Safety equip + VDC hardware, 24 mo on-site', rationale: 'Required for site safety compliance. Non-negotiable scope.' },
+          { name: 'Owned-Equipment — Civil', tamOpp: 1750000, capture: 1.0, rev: 1750000, cost: 875000, profit: 875000, pct: 0.50, prob: 1.0, source: 'HCSS', state: 'confirmed', capacity: 'Available', deal: 'Strong', risk: 'Low', pursuitBasis: '~14,000 production hrs civil earthwork @ $125/hr blended', rationale: 'Capacity confirmed via HCSS preliminary schedule. Nick Nolin assigned.' },
+          { name: 'Owned-Equipment — Concrete', tamOpp: 2625000, capture: 1.0, rev: 2625000, cost: 1312500, profit: 1312500, pct: 0.50, prob: 1.0, source: 'WinEst', state: 'confirmed', capacity: 'Available', deal: 'Strong', risk: 'Low', pursuitBasis: '~21,000 production hrs concrete ops @ $125/hr blended', rationale: 'Deck, beam, vertical formwork all committed. Steve Lane running operations.' },
+          { name: 'Owned-Equipment — Electrical', tamOpp: 175000, capture: 0, rev: 0, cost: 0, profit: 0, pct: 0.50, prob: 0, source: 'Estimate', state: 'draft', capacity: 'Available', deal: 'Weak', risk: 'Low', pursuitBasis: 'Minimal electrical equip — scope TBD pending ductbank design', rationale: '0% capture — no owner commitment yet. Watching for RFP.' },
+          { name: 'Vendor-sourced Re-rents', tamOpp: 1750000, capture: 1.0, rev: 1750000, cost: 1225000, profit: 525000, pct: 0.30, prob: 1.0, source: 'Vendor Bid', state: 'confirmed', capacity: 'Available', deal: 'Strong', risk: 'Low', pursuitBasis: 'Vendor bids received for crane, aerial, and specialty rentals', rationale: 'Vendor pricing locked. 30% margin target achievable.' },
+          { name: 'Trade Partner Rental (CCERP / O2RP)', tamOpp: 3500000, capture: 0.75, rev: 2625000, cost: 1968750, profit: 656250, pct: 0.25, prob: 1.0, source: 'CCERP', state: 'in-review', capacity: 'Available', deal: 'Moderate', risk: 'Low', pursuitBasis: 'CCERP/O2RP program — 75% capture of $3.5M TP rental volume', rationale: '75% capture assumes strong TP participation. Review with Johanna Gamboa.' },
+          { name: 'IT / Computers / Cell Phones', tamOpp: 875000, capture: 1.0, rev: 875000, cost: 262500, profit: 612500, pct: 0.70, prob: 1.0, source: 'G&A', state: 'confirmed', capacity: 'Available', deal: 'Strong', risk: 'Low', pursuitBasis: 'Jobsite IT infrastructure — computers, phones, network for 24 mo', rationale: 'Standard allocation. 70% margin on G&A pass-through.' },
+          { name: 'Temporary Power', tamOpp: 525000, capture: 0, rev: 0, cost: 0, profit: 0, pct: 0.50, prob: 1.0, source: 'GCs', state: 'draft', capacity: 'Available', deal: 'Moderate', risk: 'Low', pursuitBasis: 'Temp power scope — pending GC allocation decision', rationale: '0% capture currently. GC team evaluating self-perform vs 02S. Watching.' },
         ]
       },
       {
@@ -245,9 +247,9 @@ const MockMarginPlan = () => {
         profitPct: 0.1267,
         minProfit: 525000, probableProfit: 623437.5, maxProfit: 656250,
         lines: [
-          { name: 'EQUIP (EV Chargers)', tamOpp: 17500000, capture: 0.20, rev: 3500000, cost: 2975000, profit: 525000, pct: 0.15, prob: 1.0, comment: 'EV Chargers', source: 'Spec Bid' },
-          { name: 'Commodity Purchase', tamOpp: 1750000, capture: 0.75, rev: 1312500, cost: 1181250, profit: 131250, pct: 0.10, prob: 0.75, comment: 'Lumber, geofoam', source: 'Estimate' },
-          { name: 'MEP Equipment (CFCI)', tamOpp: 1750000, capture: 1.0, rev: 1750000, cost: 1575000, profit: 175000, pct: 0.10, prob: 0.50, source: 'CFCI' },
+          { name: 'EQUIP (EV Chargers)', tamOpp: 17500000, capture: 0.20, rev: 3500000, cost: 2975000, profit: 525000, pct: 0.15, prob: 1.0, comment: 'EV Chargers', source: 'Spec Bid', state: 'in-review', capacity: 'Available', deal: 'Moderate', risk: 'Medium', pursuitBasis: '$17.5M EV charger spec — 20% capture target on procurement fee', rationale: 'Spec bid pending owner design finalization. Design interface risk on MEP coordination.' },
+          { name: 'Commodity Purchase', tamOpp: 1750000, capture: 0.75, rev: 1312500, cost: 1181250, profit: 131250, pct: 0.10, prob: 0.75, comment: 'Lumber, geofoam', source: 'Estimate', state: 'in-review', capacity: 'Available', deal: 'Moderate', risk: 'Low', pursuitBasis: 'Lumber + geofoam commodity buy — 75% capture on volume pricing', rationale: '75% probability — owner may direct-purchase some materials.' },
+          { name: 'MEP Equipment (CFCI)', tamOpp: 1750000, capture: 1.0, rev: 1750000, cost: 1575000, profit: 175000, pct: 0.10, prob: 0.50, source: 'CFCI', state: 'draft', capacity: 'Available', deal: 'Weak', risk: 'Medium', pursuitBasis: 'CFCI mechanical equipment procurement — $1.75M', rationale: '50% probability — design interface risk. CFCI scope depends on MEP subcontractor selection.' },
         ]
       },
       {
@@ -256,9 +258,9 @@ const MockMarginPlan = () => {
         profitPct: 0.1776,
         minProfit: 1162500, probableProfit: 1556250, maxProfit: 1687500,
         lines: [
-          { name: 'Concrete Formwork', tamOpp: 5250000, capture: 1.0, rev: 5250000, cost: 4200000, profit: 1050000, pct: 0.20, prob: 1.0, source: 'WinEst' },
-          { name: 'Steel Fabrication', tamOpp: 7000000, capture: 0.50, rev: 3500000, cost: 2975000, profit: 525000, pct: 0.15, prob: 0.75, comment: 'Bollards', source: 'Shop Bid' },
-          { name: 'Electrical', tamOpp: 750000, capture: 1.0, rev: 750000, cost: 637500, profit: 112500, pct: 0.15, prob: 1.0, comment: 'Approx. (2) miles of 12kV ductbank', source: 'Estimate' },
+          { name: 'Concrete Formwork', tamOpp: 5250000, capture: 1.0, rev: 5250000, cost: 4200000, profit: 1050000, pct: 0.20, prob: 1.0, source: 'WinEst', state: 'confirmed', capacity: 'Constrained', deal: 'Strong', risk: 'Medium', pursuitBasis: '~42,000 production hrs formwork detailing + buildup @ $125/hr', rationale: 'Fully committed. Capacity constrained at $30M/yr plant throughput. Steel fab limited.' },
+          { name: 'Steel Fabrication', tamOpp: 7000000, capture: 0.50, rev: 3500000, cost: 2975000, profit: 525000, pct: 0.15, prob: 0.75, comment: 'Bollards', source: 'Shop Bid', state: 'in-review', capacity: 'Constrained', deal: 'Strong', risk: 'Medium', pursuitBasis: 'Bollard fabrication — 50% capture of $7M scope', rationale: '75% probability. Plant capacity constrained. Need shop schedule confirmation from Dave Clarkson.' },
+          { name: 'Electrical', tamOpp: 750000, capture: 1.0, rev: 750000, cost: 637500, profit: 112500, pct: 0.15, prob: 1.0, comment: 'Approx. (2) miles of 12kV ductbank', source: 'Estimate', state: 'confirmed', capacity: 'Available', deal: 'Strong', risk: 'Low', pursuitBasis: '~2 miles 12kV ductbank prefab — conduit + encasement', rationale: 'Scope confirmed. Straightforward production run.' },
         ]
       },
       {
@@ -267,8 +269,8 @@ const MockMarginPlan = () => {
         profitPct: 0.15,
         minProfit: 131250, probableProfit: 131250, maxProfit: 131250,
         lines: [
-          { name: 'Mapping', tamOpp: 875000, capture: 1.0, rev: 875000, cost: 743750, profit: 131250, pct: 0.15, prob: 1.0, source: 'Vendor Bid' },
-          { name: 'Controls', tamOpp: 875000, capture: 0, rev: 0, cost: 0, profit: 0, pct: 0.20, prob: 1.0, source: 'TBD' },
+          { name: 'Mapping', tamOpp: 875000, capture: 1.0, rev: 875000, cost: 743750, profit: 131250, pct: 0.15, prob: 1.0, source: 'Vendor Bid', state: 'confirmed', capacity: 'Available', deal: 'Strong', risk: 'Low', pursuitBasis: 'Survey + mapping services — vendor bid received', rationale: 'Mapping confirmed. Sarah Jin assigned. Vendor pricing locked.' },
+          { name: 'Controls', tamOpp: 875000, capture: 0, rev: 0, cost: 0, profit: 0, pct: 0.20, prob: 1.0, source: 'TBD', state: 'draft', capacity: 'Available', deal: 'Weak', risk: 'Low', pursuitBasis: 'Controls scope TBD — awaiting owner RFP', rationale: '0% capture until owner RFP issued. Watching for scope definition.' },
         ]
       },
       {
@@ -277,9 +279,9 @@ const MockMarginPlan = () => {
         profitPct: 0.15,
         minProfit: 295312.5, probableProfit: 295312.5, maxProfit: 295312.5,
         lines: [
-          { name: 'GC / GR Site Services', tamOpp: 875000, capture: 0.75, rev: 656250, cost: 557812.5, profit: 98437.5, pct: 0.15, prob: 1.0, source: 'GCGR' },
-          { name: 'Trucking / Freight', tamOpp: 875000, capture: 0.75, rev: 656250, cost: 557812.5, profit: 98437.5, pct: 0.15, prob: 1.0, source: 'Vendor Bid' },
-          { name: 'Fuel Depot', tamOpp: 1750000, capture: 0.75, rev: 1312500, cost: 1115625, profit: 196875, pct: 0.15, prob: 1.0, source: 'Vendor Bid' },
+          { name: 'GC / GR Site Services', tamOpp: 875000, capture: 0.75, rev: 656250, cost: 557812.5, profit: 98437.5, pct: 0.15, prob: 1.0, source: 'GCGR', state: 'confirmed', capacity: 'Available', deal: 'Strong', risk: 'Low', pursuitBasis: 'GC/GR site services — 75% capture of $875K scope', rationale: 'Straightforward logistics support. Fayad Faruk assigned.' },
+          { name: 'Trucking / Freight', tamOpp: 875000, capture: 0.75, rev: 656250, cost: 557812.5, profit: 98437.5, pct: 0.15, prob: 1.0, source: 'Vendor Bid', state: 'confirmed', capacity: 'Available', deal: 'Strong', risk: 'Low', pursuitBasis: 'Freight hauling — vendor bid received, 75% capture', rationale: 'Vendor pricing locked. Low risk.' },
+          { name: 'Fuel Depot', tamOpp: 1750000, capture: 0.75, rev: 1312500, cost: 1115625, profit: 196875, pct: 0.15, prob: 1.0, source: 'Vendor Bid', state: 'confirmed', capacity: 'Available', deal: 'Strong', risk: 'Low', pursuitBasis: 'On-site fuel depot — vendor bid received, 75% capture', rationale: 'Johanna Gamboa managing. Vendor pricing locked.' },
         ]
       },
       {
@@ -288,20 +290,11 @@ const MockMarginPlan = () => {
         profitPct: 1.0,
         minProfit: 525000, probableProfit: 525000, maxProfit: 525000,
         lines: [
-          { name: 'Archive', tamOpp: 525000, capture: 1.0, rev: 525000, cost: 0, profit: 525000, pct: 1.0, prob: 1.0, source: 'G&A' },
+          { name: 'Archive', tamOpp: 525000, capture: 1.0, rev: 525000, cost: 0, profit: 525000, pct: 1.0, prob: 1.0, source: 'G&A', state: 'confirmed', capacity: 'N/A', deal: 'N/A', risk: 'None', pursuitBasis: 'Project archive — 100% pass-through', rationale: 'G&A allocation. No risk.' },
         ]
       },
     ]
   };
-
-  const captureAnalysis = [
-    { pillar: 'Equipment', capacity: 'Available', deal: 'Strong', risk: 'Low', narrative: 'Full fleet deployment supported by SOPAC yard. Civil capacity confirmed via HCSS.' },
-    { pillar: 'Procurement', capacity: 'Available', deal: 'Moderate', risk: 'Medium', narrative: 'EV Charger spec bid pending owner design finalization. MEP equipment CFCI at 50% probability — design interface risk.' },
-    { pillar: 'Prefabrication', capacity: 'Constrained', deal: 'Strong', risk: 'Medium', narrative: 'Steel fab limited to $30M/yr plant capacity. Concrete formwork fully committed. Electrical ductbank scope confirmed.' },
-    { pillar: 'Professional Services', capacity: 'Available', deal: 'Weak', risk: 'Low', narrative: 'Mapping confirmed. Controls scope not yet defined — 0% capture until owner RFP.' },
-    { pillar: 'Logistics', capacity: 'Available', deal: 'Strong', risk: 'Low', narrative: 'Site services and freight straightforward. Fuel depot vendor pricing locked.' },
-    { pillar: 'Other', capacity: 'N/A', deal: 'N/A', risk: 'None', narrative: 'Archive — pass-through at 100% margin.' },
-  ];
 
   const utilizationData = [
     { pillar: 'Equipment', lines: [
@@ -361,6 +354,7 @@ const MockMarginPlan = () => {
 
   const { project, totals, pillars } = marginData;
   const togglePillar = (name) => setExpanded(prev => ({ ...prev, [name]: !prev[name] }));
+  const toggleLine = (key) => setExpandedLine(prev => prev === key ? null : key);
 
   return (
     <div className="flex flex-col h-full bg-slate-50">
@@ -465,20 +459,26 @@ const MockMarginPlan = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
-                {captureAnalysis.map((row) => {
-                  const pillarData = pillars.find(p => p.name === row.pillar);
-                  const capacityColor = row.capacity === 'Available' ? 'text-emerald-600' : row.capacity === 'Constrained' ? 'text-amber-600' : 'text-slate-400';
-                  const dealColor = row.deal === 'Strong' ? 'text-emerald-600' : row.deal === 'Moderate' ? 'text-amber-600' : row.deal === 'Weak' ? 'text-rose-500' : 'text-slate-400';
-                  const riskVariant = row.risk === 'Low' ? 'green' : row.risk === 'Medium' ? 'yellow' : row.risk === 'High' ? 'red' : 'gray';
+                {pillars.map((p) => {
+                  const capRank = { 'Constrained': 0, 'Available': 1, 'N/A': 2 };
+                  const dealRank = { 'Weak': 0, 'Moderate': 1, 'Strong': 2, 'N/A': 3 };
+                  const riskRank = { 'High': 0, 'Medium': 1, 'Low': 2, 'None': 3 };
+                  const worstCap = p.lines.reduce((w, l) => (capRank[l.capacity] ?? 2) < (capRank[w] ?? 2) ? l.capacity : w, p.lines[0]?.capacity || 'N/A');
+                  const worstDeal = p.lines.reduce((w, l) => (dealRank[l.deal] ?? 3) < (dealRank[w] ?? 3) ? l.deal : w, p.lines[0]?.deal || 'N/A');
+                  const worstRisk = p.lines.reduce((w, l) => (riskRank[l.risk] ?? 3) < (riskRank[w] ?? 3) ? l.risk : w, p.lines[0]?.risk || 'None');
+                  const narrative = [...new Set(p.lines.map(l => l.rationale).filter(Boolean))].join(' ');
+                  const capacityColor = worstCap === 'Available' ? 'text-emerald-600' : worstCap === 'Constrained' ? 'text-amber-600' : 'text-slate-400';
+                  const dealColor = worstDeal === 'Strong' ? 'text-emerald-600' : worstDeal === 'Moderate' ? 'text-amber-600' : worstDeal === 'Weak' ? 'text-rose-500' : 'text-slate-400';
+                  const riskVariant = worstRisk === 'Low' ? 'green' : worstRisk === 'Medium' ? 'yellow' : worstRisk === 'High' ? 'red' : 'gray';
                   return (
-                    <tr key={row.pillar} className="hover:bg-slate-50 transition-colors">
-                      <td className="px-3 py-2 font-semibold text-slate-800">{row.pillar}</td>
-                      <td className="px-3 py-2 text-right font-mono">{pillarData ? fmt(pillarData.tamOpportunity) : '—'}</td>
-                      <td className="px-3 py-2 text-right font-mono">{pillarData ? pct(pillarData.captureRate) : '—'}</td>
-                      <td className={`px-3 py-2 text-right font-semibold ${capacityColor}`}>{row.capacity}</td>
-                      <td className={`px-3 py-2 text-right font-semibold ${dealColor}`}>{row.deal}</td>
-                      <td className="px-3 py-2 text-right"><Badge variant={riskVariant}>{row.risk}</Badge></td>
-                      <td className="px-3 py-2 text-slate-600 whitespace-normal max-w-xs">{row.narrative}</td>
+                    <tr key={p.name} className="hover:bg-slate-50 transition-colors">
+                      <td className="px-3 py-2 font-semibold text-slate-800">{p.name}</td>
+                      <td className="px-3 py-2 text-right font-mono">{fmt(p.tamOpportunity)}</td>
+                      <td className="px-3 py-2 text-right font-mono">{pct(p.captureRate)}</td>
+                      <td className={`px-3 py-2 text-right font-semibold ${capacityColor}`}>{worstCap}</td>
+                      <td className={`px-3 py-2 text-right font-semibold ${dealColor}`}>{worstDeal}</td>
+                      <td className="px-3 py-2 text-right"><Badge variant={riskVariant}>{worstRisk}</Badge></td>
+                      <td className="px-3 py-2 text-slate-600 whitespace-normal max-w-xs">{narrative}</td>
                     </tr>
                   );
                 })}
