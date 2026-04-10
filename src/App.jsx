@@ -189,35 +189,205 @@ const MockQuickQuotes = () => {
   );
 };
 
-const MockMarginPlan = () => (
-  <div className="flex flex-col h-full bg-slate-50">
-    <Toolbar leftArea={<><div className="bg-blue-600 text-white text-[10px] font-bold px-2 py-0.5 rounded">OPP-9921</div><span className="font-semibold text-slate-800">Project Alpha (Pursuit)</span><GateBadge macro="Active Pursuit" micro="Pursuit Shaped"/></>} rightArea={<span className="text-xs font-mono text-slate-500">Last updated: Today, 09:41 AM</span>}/>
-    <div className="p-6">
-      <div className="grid grid-cols-3 gap-4 mb-6">
-        <KPI label="Target Revenue" value="$4.50M" />
-        <KPI label="Planned Cost" value="$3.15M" />
-        <KPI label="O2S Margin %" value="30.0%" trend="+2.0%" subtext="vs AOP Target" />
-      </div>
-      <h3 className="text-sm font-bold text-slate-800 mb-3">Pillar & Product Line Breakdown</h3>
-      <div className="border border-slate-200 rounded bg-white">
-        <div className="flex font-semibold text-[10px] uppercase tracking-wider text-slate-500 bg-slate-50 border-b border-slate-200 p-3">
-          <div className="w-1/3">Cost Center</div><div className="w-1/6 text-right">Revenue</div><div className="w-1/6 text-right">Cost</div><div className="w-1/6 text-right">Margin $</div><div className="w-1/6 text-right">Margin %</div>
-        </div>
+const MockMarginPlan = () => {
+  const [expanded, setExpanded] = useState({});
+  const fmt = (v) => v === 0 ? '—' : `$${(v / 1e6).toFixed(2)}M`;
+  const pct = (v) => v === 0 ? '—' : `${(v * 100).toFixed(1)}%`;
+
+  const marginData = {
+    project: {
+      jobNumber: '250030',
+      name: 'Disney Eastern PS',
+      contractValue: 350000000,
+      market: 'Parking Structure',
+      contractType: 'Lump-sum',
+      deliveryMethod: 'Design / Build',
+      constructionStart: '2026-06-01',
+      constructionFinish: '2028-05-31',
+      durationMonths: 24,
+    },
+    totals: {
+      tamOpportunity: 50800000,
+      captureRate: 0.5858,
+      o2sRevenue: 29756250,
+      o2sCost: 22293750,
+      o2sProfit: 7462500,
+      profitPct: 0.2508,
+      baseFee: 10500000,
+      baseFeePct: 0.03,
+      selfPerformFee: 10500000,
+      o2sShare: 7462500,
+    },
+    pillars: [
+      {
+        name: 'Equipment',
+        packageValue: 11900000, captureRate: 0.8676, revenue: 10325000, cost: 5993750, profit: 4331250,
+        profitPct: 0.4195,
+        minProfit: 4331250, probableProfit: 4331250, maxProfit: 4331250,
+        lines: [
+          { name: 'Fleet Vehicles', pkgValue: 350000, capture: 1.0, rev: 350000, cost: 175000, profit: 175000, pct: 0.50, prob: 1.0, comment: 'Incl. job trucks' },
+          { name: 'Owned-Equipment — GC / GR', pkgValue: 350000, capture: 1.0, rev: 350000, cost: 175000, profit: 175000, pct: 0.50, prob: 1.0, comment: 'Safety respect, VDC equipment' },
+          { name: 'Owned-Equipment — Civil', pkgValue: 1750000, capture: 1.0, rev: 1750000, cost: 875000, profit: 875000, pct: 0.50, prob: 1.0 },
+          { name: 'Owned-Equipment — Concrete', pkgValue: 2625000, capture: 1.0, rev: 2625000, cost: 1312500, profit: 1312500, pct: 0.50, prob: 1.0 },
+          { name: 'Owned-Equipment — Electrical', pkgValue: 175000, capture: 0, rev: 0, cost: 0, profit: 0, pct: 0.50, prob: 0 },
+          { name: 'Vendor-sourced Re-rents', pkgValue: 1750000, capture: 1.0, rev: 1750000, cost: 1225000, profit: 525000, pct: 0.30, prob: 1.0 },
+          { name: 'Trade Partner Rental (CCERP / O2RP)', pkgValue: 3500000, capture: 0.75, rev: 2625000, cost: 1968750, profit: 656250, pct: 0.25, prob: 1.0 },
+          { name: 'IT / Computers / Cell Phones', pkgValue: 875000, capture: 1.0, rev: 875000, cost: 262500, profit: 612500, pct: 0.70, prob: 1.0 },
+          { name: 'Temporary Power', pkgValue: 525000, capture: 0, rev: 0, cost: 0, profit: 0, pct: 0.50, prob: 1.0 },
+        ]
+      },
+      {
+        name: 'Procurement',
+        packageValue: 21000000, captureRate: 0.3125, revenue: 6562500, cost: 5731250, profit: 831250,
+        profitPct: 0.1267,
+        minProfit: 525000, probableProfit: 623437.5, maxProfit: 656250,
+        lines: [
+          { name: 'EQUIP (EV Chargers)', pkgValue: 17500000, capture: 0.20, rev: 3500000, cost: 2975000, profit: 525000, pct: 0.15, prob: 1.0, comment: 'EV Chargers' },
+          { name: 'Commodity Purchase', pkgValue: 1750000, capture: 0.75, rev: 1312500, cost: 1181250, profit: 131250, pct: 0.10, prob: 0.75, comment: 'Lumber, geofoam' },
+          { name: 'MEP Equipment (CFCI)', pkgValue: 1750000, capture: 1.0, rev: 1750000, cost: 1575000, profit: 175000, pct: 0.10, prob: 0.50 },
+        ]
+      },
+      {
+        name: 'Prefabrication',
+        packageValue: 13000000, captureRate: 0.7308, revenue: 9500000, cost: 7812500, profit: 1687500,
+        profitPct: 0.1776,
+        minProfit: 1162500, probableProfit: 1556250, maxProfit: 1687500,
+        lines: [
+          { name: 'Concrete Formwork', pkgValue: 5250000, capture: 1.0, rev: 5250000, cost: 4200000, profit: 1050000, pct: 0.20, prob: 1.0 },
+          { name: 'Steel Fabrication', pkgValue: 7000000, capture: 0.50, rev: 3500000, cost: 2975000, profit: 525000, pct: 0.15, prob: 0.75, comment: 'Bollards' },
+          { name: 'Electrical', pkgValue: 750000, capture: 1.0, rev: 750000, cost: 637500, profit: 112500, pct: 0.15, prob: 1.0, comment: 'Approx. (2) miles of 12kV ductbank' },
+        ]
+      },
+      {
+        name: 'Professional Services',
+        packageValue: 1750000, captureRate: 0.50, revenue: 875000, cost: 743750, profit: 131250,
+        profitPct: 0.15,
+        minProfit: 131250, probableProfit: 131250, maxProfit: 131250,
+        lines: [
+          { name: 'Mapping', pkgValue: 875000, capture: 1.0, rev: 875000, cost: 743750, profit: 131250, pct: 0.15, prob: 1.0 },
+          { name: 'Controls', pkgValue: 875000, capture: 0, rev: 0, cost: 0, profit: 0, pct: 0.20, prob: 1.0 },
+        ]
+      },
+      {
+        name: 'Logistics',
+        packageValue: 2625000, captureRate: 0.75, revenue: 1968750, cost: 1673437.5, profit: 295312.5,
+        profitPct: 0.15,
+        minProfit: 295312.5, probableProfit: 295312.5, maxProfit: 295312.5,
+        lines: [
+          { name: 'GC / GR Site Services', pkgValue: 875000, capture: 0.75, rev: 656250, cost: 557812.5, profit: 98437.5, pct: 0.15, prob: 1.0 },
+          { name: 'Trucking / Freight', pkgValue: 875000, capture: 0.75, rev: 656250, cost: 557812.5, profit: 98437.5, pct: 0.15, prob: 1.0 },
+          { name: 'Fuel Depot', pkgValue: 1750000, capture: 0.75, rev: 1312500, cost: 1115625, profit: 196875, pct: 0.15, prob: 1.0 },
+        ]
+      },
+      {
+        name: 'Other',
+        packageValue: 525000, captureRate: 1.0, revenue: 525000, cost: 0, profit: 525000,
+        profitPct: 1.0,
+        minProfit: 525000, probableProfit: 525000, maxProfit: 525000,
+        lines: [
+          { name: 'Archive', pkgValue: 525000, capture: 1.0, rev: 525000, cost: 0, profit: 525000, pct: 1.0, prob: 1.0 },
+        ]
+      },
+    ]
+  };
+
+  const { project, totals, pillars } = marginData;
+  const togglePillar = (name) => setExpanded(prev => ({ ...prev, [name]: !prev[name] }));
+
+  return (
+    <div className="flex flex-col h-full bg-slate-50">
+      <Toolbar
+        leftArea={
+          <>
+            <div className="bg-indigo-600 text-white text-[10px] font-bold px-2 py-0.5 rounded">{project.jobNumber}</div>
+            <span className="font-semibold text-slate-800">{project.name} (Pursuit)</span>
+            <GateBadge macro="Active Pursuit" micro="Pursuit Shaped" />
+          </>
+        }
+        rightArea={<span className="text-xs font-mono text-slate-500">Ver. 12/10/25</span>}
+      />
+      <div className="bg-white border-b border-slate-200 px-6 py-2 flex items-center gap-4 shrink-0">
         {[
-          { name: 'Equipment Operations (Total)', rev: '2.00M', cost: '1.40M', mar: '0.60M', pct: '30.0%', isGroup: true },
-          { name: '\u21B3 Heavy Machinery', rev: '1.20M', cost: '0.80M', mar: '0.40M', pct: '33.3%', isGroup: false },
-          { name: '\u21B3 Small Tools', rev: '0.80M', cost: '0.60M', mar: '0.20M', pct: '25.0%', isGroup: false },
-          { name: 'Logistics Operations (Total)', rev: '1.50M', cost: '1.10M', mar: '0.40M', pct: '26.6%', isGroup: true },
-          { name: 'Prefabrication (Total)', rev: '1.00M', cost: '0.65M', mar: '0.35M', pct: '35.0%', isGroup: true },
-        ].map((row, i) => (
-          <div key={i} className={`flex text-xs p-3 border-b border-slate-100 ${row.isGroup ? 'font-bold bg-slate-50/50 text-slate-800' : 'text-slate-600 pl-6'}`}>
-            <div className="w-1/3">{row.name}</div><div className="w-1/6 text-right font-mono">${row.rev}</div><div className="w-1/6 text-right font-mono">${row.cost}</div><div className="w-1/6 text-right font-mono text-emerald-600">${row.mar}</div><div className="w-1/6 text-right font-mono">{row.pct}</div>
-          </div>
+          ['Contract Value', '$350M'],
+          ['Market', project.market],
+          ['Type', project.contractType],
+          ['Delivery', project.deliveryMethod],
+          ['Duration', `${project.durationMonths} mo (Jun 2026 – May 2028)`],
+        ].map(([label, val], i) => (
+          <span key={i} className="text-[10px] text-slate-500">{label}: <span className="font-semibold text-slate-700">{val}</span></span>
         ))}
       </div>
+      <div className="p-6 overflow-auto flex-grow flex flex-col gap-4">
+        <div className="grid grid-cols-4 gap-4">
+          <KPI label="TAM Opportunity" value="$50.8M" />
+          <KPI label="Capture Rate" value="58.6%" />
+          <KPI label="O2S Revenue" value="$29.8M" />
+          <KPI label="O2S Profit" value="$7.46M" trend="+25.1%" subtext="Operating Profit %" />
+        </div>
+        <div className="bg-white border border-slate-200 rounded-md shadow-sm flex flex-col flex-grow overflow-hidden">
+          <div className="flex-grow overflow-auto">
+            <table className="w-full text-left text-xs whitespace-nowrap">
+              <thead className="bg-slate-50 sticky top-0 z-10 border-b border-slate-200">
+                <tr>
+                  {['Pillar / Product Line', 'Pkg Value', '% Capture', 'O2S Revenue', 'O2S Cost', 'Profit ($)', 'Margin %', 'Probability'].map((h, i) => (
+                    <th key={i} className={`px-3 py-2 text-[10px] uppercase tracking-wider text-slate-500 font-semibold ${i > 0 ? 'text-right' : ''}`}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100">
+                {pillars.map((pillar) => (
+                  <React.Fragment key={pillar.name}>
+                    <tr
+                      className="cursor-pointer hover:bg-slate-100 bg-slate-50/50 transition-colors"
+                      onClick={() => togglePillar(pillar.name)}
+                    >
+                      <td className="px-3 py-2 font-bold text-slate-800 flex items-center gap-1">
+                        <ChevronRight className={`w-4 h-4 text-slate-400 transition-transform ${expanded[pillar.name] ? 'rotate-90' : ''}`} />
+                        {pillar.name}
+                      </td>
+                      <td className="px-3 py-2 text-right font-mono">{fmt(pillar.packageValue)}</td>
+                      <td className="px-3 py-2 text-right font-mono">{pct(pillar.captureRate)}</td>
+                      <td className="px-3 py-2 text-right font-mono">{fmt(pillar.revenue)}</td>
+                      <td className="px-3 py-2 text-right font-mono">{fmt(pillar.cost)}</td>
+                      <td className="px-3 py-2 text-right font-mono text-emerald-600">{fmt(pillar.profit)}</td>
+                      <td className="px-3 py-2 text-right font-mono">{pct(pillar.profitPct)}</td>
+                      <td className="px-3 py-2 text-right font-mono">—</td>
+                    </tr>
+                    {expanded[pillar.name] && pillar.lines.map((line, li) => (
+                      <tr key={li} className="hover:bg-slate-50 transition-colors">
+                        <td className="px-3 py-2 pl-10 text-slate-600">
+                          {line.name}
+                          {line.comment && <span className="text-[9px] text-slate-400 italic ml-1">{line.comment}</span>}
+                        </td>
+                        <td className="px-3 py-2 text-right font-mono">{fmt(line.pkgValue)}</td>
+                        <td className="px-3 py-2 text-right font-mono">{line.capture === 0 ? <span className="text-slate-300">—</span> : pct(line.capture)}</td>
+                        <td className="px-3 py-2 text-right font-mono">{line.capture === 0 ? <span className="text-slate-300">—</span> : fmt(line.rev)}</td>
+                        <td className="px-3 py-2 text-right font-mono">{line.capture === 0 ? <span className="text-slate-300">—</span> : fmt(line.cost)}</td>
+                        <td className="px-3 py-2 text-right font-mono text-emerald-600">{line.capture === 0 ? <span className="text-slate-300">—</span> : fmt(line.profit)}</td>
+                        <td className="px-3 py-2 text-right font-mono">{line.capture === 0 ? <span className="text-slate-300">—</span> : pct(line.pct)}</td>
+                        <td className="px-3 py-2 text-right font-mono">{pct(line.prob)}</td>
+                      </tr>
+                    ))}
+                  </React.Fragment>
+                ))}
+                <tr className="border-t-2 border-slate-300 bg-slate-100 font-bold">
+                  <td className="px-3 py-2 text-slate-800">Totals</td>
+                  <td className="px-3 py-2 text-right font-mono">{fmt(pillars.reduce((s, p) => s + p.packageValue, 0))}</td>
+                  <td className="px-3 py-2 text-right font-mono">{pct(totals.captureRate)}</td>
+                  <td className="px-3 py-2 text-right font-mono">{fmt(totals.o2sRevenue)}</td>
+                  <td className="px-3 py-2 text-right font-mono">{fmt(totals.o2sCost)}</td>
+                  <td className="px-3 py-2 text-right font-mono text-emerald-600">{fmt(totals.o2sProfit)}</td>
+                  <td className="px-3 py-2 text-right font-mono">{pct(totals.profitPct)}</td>
+                  <td className="px-3 py-2 text-right font-mono">—</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 const MockAssetDemandForecasting = () => {
   const months = ['Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb'];
