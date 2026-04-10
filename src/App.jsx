@@ -350,6 +350,47 @@ const MockMarginPlan = () => {
             <span className="text-xs font-bold text-indigo-700 font-mono">Total Fee Potential: $10.5M</span>
           </div>
         </div>
+        <div>
+          <h3 className="text-sm font-bold text-slate-800 mb-3">Profit Risk Envelope</h3>
+          <div className="bg-white border border-slate-200 rounded-md shadow-sm p-4">
+            {(() => {
+              const globalMax = Math.max(...pillars.map(p => p.maxProfit));
+              const totalMin = pillars.reduce((s, p) => s + p.minProfit, 0);
+              const totalProb = pillars.reduce((s, p) => s + p.probableProfit, 0);
+              const totalMax = pillars.reduce((s, p) => s + p.maxProfit, 0);
+              return (
+                <>
+                  {pillars.map((p) => {
+                    const minPct = (p.minProfit / globalMax) * 100;
+                    const maxPct = (p.maxProfit / globalMax) * 100;
+                    const probPct = (p.probableProfit / globalMax) * 100;
+                    return (
+                      <div key={p.name} className="flex items-center gap-3 py-1.5 border-b border-slate-50 last:border-0">
+                        <span className="text-xs font-semibold text-slate-700 w-36 shrink-0">{p.name}</span>
+                        <div className="flex-grow h-5 bg-slate-100 rounded-full relative">
+                          <div className="absolute bg-indigo-100 rounded-full h-full" style={{ left: `${minPct}%`, width: `${maxPct - minPct}%` }} />
+                          <div className="w-2 h-2 rounded-full bg-indigo-600 absolute top-1/2 -translate-y-1/2" style={{ left: `${probPct}%` }} />
+                        </div>
+                        <div className="flex gap-4 text-[10px] font-mono shrink-0 w-64">
+                          <span className="text-slate-400">Min: {fmt(p.minProfit)}</span>
+                          <span className="text-indigo-600 font-semibold">Probable: {fmt(p.probableProfit)}</span>
+                          <span className="text-slate-800">Max: {fmt(p.maxProfit)}</span>
+                        </div>
+                      </div>
+                    );
+                  })}
+                  <div className="text-xs font-semibold text-slate-700 pt-2 border-t border-slate-200 mt-1">
+                    Total Envelope: {fmt(totalMin)} — {fmt(totalProb)} — {fmt(totalMax)}
+                  </div>
+                  <div className="text-[9px] text-slate-400 flex items-center gap-4 mt-2">
+                    <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-indigo-600 inline-block" /> Probable</span>
+                    <span className="flex items-center gap-1"><span className="w-3 h-1.5 rounded-full bg-indigo-100 inline-block" /> Min–Max Range</span>
+                  </div>
+                </>
+              );
+            })()}
+          </div>
+        </div>
         <div className="bg-white border border-slate-200 rounded-md shadow-sm flex flex-col flex-grow overflow-hidden">
           <div className="flex-grow overflow-auto">
             <table className="w-full text-left text-xs whitespace-nowrap">
