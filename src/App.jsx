@@ -386,9 +386,9 @@ const MockMarginPlan = () => {
         rightArea={
           <div className="flex items-center gap-3">
             <div className="flex bg-slate-200 p-0.5 rounded-md">
-              {['margin', 'capture', 'utilization'].map(v => (
+              {['margin', 'utilization'].map(v => (
                 <button key={v} onClick={() => setView(v)} className={`px-3 py-1 text-[10px] font-bold uppercase tracking-wider rounded-sm transition-all ${view === v ? 'bg-white text-indigo-700 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}>
-                  {v === 'margin' ? 'Margin' : v === 'capture' ? 'Capture Analysis' : 'Utilization'}
+                  {v === 'margin' ? 'Margin Plan' : 'Utilization'}
                 </button>
               ))}
             </div>
@@ -432,13 +432,6 @@ const MockMarginPlan = () => {
               <KPI label="02S Revenue" value="$29.8M" />
               <KPI label="02S Net Operating Profit" value="$7.46M" subtext="25.1% NOP (incl. G&A)" />
             </>
-          ) : view === 'capture' ? (
-            <>
-              <KPI label="TAM Opportunity" value="$50.8M" />
-              <KPI label="Current Capture" value="58.6%" />
-              <KPI label="Enterprise Goal" value="45.0%" subtext="5-Year Target" />
-              <KPI label="Gap to Goal" value="+13.6pp" subtext="Above target on this project" />
-            </>
           ) : (
             <>
               <KPI label="Total Product Lines" value={String(utilStats.totalLines)} />
@@ -448,44 +441,6 @@ const MockMarginPlan = () => {
             </>
           )}
         </div>
-        {view === 'capture' && (
-          <div className="bg-white border border-slate-200 rounded-md shadow-sm">
-            <table className="w-full text-left text-xs">
-              <thead className="bg-slate-50 border-b border-slate-200">
-                <tr>
-                  {['Pillar', 'TAM Opportunity', 'Capture Rate', 'Capacity', 'Deal Quality', 'Risk Flag', 'Narrative'].map((h, i) => (
-                    <th key={i} className={`px-3 py-2 text-[10px] uppercase tracking-wider text-slate-500 font-semibold ${i === 1 || i === 2 || i === 3 || i === 4 || i === 5 ? 'text-right' : ''}`}>{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-slate-100">
-                {pillars.map((p) => {
-                  const capRank = { 'Constrained': 0, 'Available': 1, 'N/A': 2 };
-                  const dealRank = { 'Weak': 0, 'Moderate': 1, 'Strong': 2, 'N/A': 3 };
-                  const riskRank = { 'High': 0, 'Medium': 1, 'Low': 2, 'None': 3 };
-                  const worstCap = p.lines.reduce((w, l) => (capRank[l.capacity] ?? 2) < (capRank[w] ?? 2) ? l.capacity : w, p.lines[0]?.capacity || 'N/A');
-                  const worstDeal = p.lines.reduce((w, l) => (dealRank[l.deal] ?? 3) < (dealRank[w] ?? 3) ? l.deal : w, p.lines[0]?.deal || 'N/A');
-                  const worstRisk = p.lines.reduce((w, l) => (riskRank[l.risk] ?? 3) < (riskRank[w] ?? 3) ? l.risk : w, p.lines[0]?.risk || 'None');
-                  const narrative = [...new Set(p.lines.map(l => l.rationale).filter(Boolean))].join(' ');
-                  const capacityColor = worstCap === 'Available' ? 'text-emerald-600' : worstCap === 'Constrained' ? 'text-amber-600' : 'text-slate-400';
-                  const dealColor = worstDeal === 'Strong' ? 'text-emerald-600' : worstDeal === 'Moderate' ? 'text-amber-600' : worstDeal === 'Weak' ? 'text-rose-500' : 'text-slate-400';
-                  const riskVariant = worstRisk === 'Low' ? 'green' : worstRisk === 'Medium' ? 'yellow' : worstRisk === 'High' ? 'red' : 'gray';
-                  return (
-                    <tr key={p.name} className="hover:bg-slate-50 transition-colors">
-                      <td className="px-3 py-2 font-semibold text-slate-800">{p.name}</td>
-                      <td className="px-3 py-2 text-right font-mono">{fmt(p.tamOpportunity)}</td>
-                      <td className="px-3 py-2 text-right font-mono">{pct(p.captureRate)}</td>
-                      <td className={`px-3 py-2 text-right font-semibold ${capacityColor}`}>{worstCap}</td>
-                      <td className={`px-3 py-2 text-right font-semibold ${dealColor}`}>{worstDeal}</td>
-                      <td className="px-3 py-2 text-right"><Badge variant={riskVariant}>{worstRisk}</Badge></td>
-                      <td className="px-3 py-2 text-slate-600 whitespace-normal max-w-xs">{narrative}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        )}
         {view === 'margin' && (
           <>
             <div className="bg-indigo-50 border border-indigo-100 rounded-md px-4 py-2 flex items-center justify-between">
