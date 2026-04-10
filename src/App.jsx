@@ -434,7 +434,7 @@ const MockMarginPlan = () => {
           {view === 'margin' ? (
             <>
               <KPI label="TAM Opportunity" value="$50.8M" />
-              <KPI label="Capture Rate" value="58.6%" />
+              <KPI label="Capture Rate" value="58.6%" subtext="Enterprise Goal: 45%" />
               <KPI label="O2S Revenue" value="$29.8M" />
               <KPI label="O2S Net Operating Profit" value="$7.46M" subtext="25.1% NOP (incl. G&A)" />
             </>
