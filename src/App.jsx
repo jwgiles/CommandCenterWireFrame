@@ -435,8 +435,8 @@ const MockMarginPlan = () => {
             <>
               <KPI label="TAM Opportunity" value="$50.8M" />
               <KPI label="Capture Rate" value="58.6%" subtext="Enterprise Goal: 45%" />
-              <KPI label="O2S Revenue" value="$29.8M" />
-              <KPI label="O2S Net Operating Profit" value="$7.46M" subtext="25.1% NOP (incl. G&A)" />
+              <KPI label="02S Revenue" value="$29.8M" />
+              <KPI label="02S Net Operating Profit" value="$7.46M" subtext="25.1% NOP (incl. G&A)" />
             </>
           ) : view === 'capture' ? (
             <>
@@ -491,7 +491,7 @@ const MockMarginPlan = () => {
             <div className="bg-indigo-50 border border-indigo-100 rounded-md px-4 py-2 flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span className="text-[10px] uppercase tracking-wider font-semibold text-indigo-400">Fee Structure</span>
-                <span className="text-[8px] px-1.5 py-0.5 bg-amber-100 text-amber-700 rounded font-semibold uppercase tracking-wider">O2S Only</span>
+                <span className="text-[8px] px-1.5 py-0.5 bg-amber-100 text-amber-700 rounded font-semibold uppercase tracking-wider">02S Only</span>
               </div>
               <div className="flex items-center gap-3">
                 <span className="text-xs text-indigo-600 font-mono">Base Fee: 3.0%</span>
@@ -538,7 +538,7 @@ const MockMarginPlan = () => {
               <table className="w-full text-left text-xs whitespace-nowrap">
                 <thead className="bg-slate-50 border-b border-slate-200">
                   <tr>
-                    {['Pillar / Product Line', 'TAM Opportunity', '% Capture', 'O2S Revenue', 'O2S Cost', 'Profit ($)', 'Margin %', 'Probability'].map((h, i) => (
+                    {['Pillar / Product Line', 'TAM Opportunity', '% Capture', '02S Revenue', '02S Cost', 'Profit ($)', 'Margin %', 'Probability'].map((h, i) => (
                         <th key={i} className={`px-3 py-2 text-[10px] uppercase tracking-wider text-slate-500 font-semibold ${i > 0 ? 'text-right' : ''}`}>{h}</th>
                       ))}
                     </tr>
@@ -842,7 +842,7 @@ const MockPrePopulation = () => {
               <h4 className="text-xs font-bold text-emerald-800 uppercase tracking-wider">Happy Path</h4>
             </div>
             <p className="text-xs text-emerald-700 leading-relaxed">
-              If project team confirms baseline within 10 business days, O2S secures preferred sourcing at MSA rates. Estimated savings vs. constrained path: <span className="font-bold font-mono">$21,400</span>.
+              If project team confirms baseline within 10 business days, 02S secures preferred sourcing at MSA rates. Estimated savings vs. constrained path: <span className="font-bold font-mono">$21,400</span>.
             </p>
           </div>
           <div className="bg-rose-50 border border-rose-200 rounded-lg p-4">
@@ -851,12 +851,12 @@ const MockPrePopulation = () => {
               <h4 className="text-xs font-bold text-rose-800 uppercase tracking-wider">Constrained Path</h4>
             </div>
             <p className="text-xs text-rose-700 leading-relaxed">
-              If baseline remains unconfirmed, O2S begins constrained sourcing prep using baseline assumptions. Projected premium: <span className="font-bold font-mono">+22%</span> based on 14 similar historical projects.
+              If baseline remains unconfirmed, 02S begins constrained sourcing prep using baseline assumptions. Projected premium: <span className="font-bold font-mono">+22%</span> based on 14 similar historical projects.
             </p>
           </div>
         </div>
         <div className="px-4 pb-4">
-          <p className="text-[10px] text-slate-400 italic">O2S operations will execute regardless. Early confirmation determines the cost position from which fulfillment occurs.</p>
+          <p className="text-[10px] text-slate-400 italic">02S operations will execute regardless. Early confirmation determines the cost position from which fulfillment occurs.</p>
         </div>
       </div>
     </div>
@@ -1396,7 +1396,7 @@ const PlanningLineItem = ({ item, isExpanded, onToggle, onAction, flashState }) 
                 </div>
               </div>
               <p className="text-[10px] text-slate-400 italic leading-relaxed">
-                O2S operations will execute regardless. Early confirmation determines the cost position.
+                02S operations will execute regardless. Early confirmation determines the cost position.
               </p>
               {/* Utilization Schedule */}
               <div className="mt-1">
@@ -2326,7 +2326,7 @@ const MockFitScore = () => {
           <KPI label="FP&A Forecast Entries" value="41" />
           <KPI label="Correlated to FP&A Forecast Entries" value="28" />
           <KPI label="High Fit (Equipment)" value="6 opportunities" />
-          <KPI label="Est. O2S Revenue at Stake" value="$18.4M" />
+          <KPI label="Est. 02S Revenue at Stake" value="$18.4M" />
         </div>
 
         <div className="overflow-x-auto border border-slate-200 rounded-md bg-white">
@@ -2826,11 +2826,11 @@ const MockCostOfDelay = ({ persona = 'project-teams' }) => {
                 </div>
               ))}
               <div className="bg-rose-50 border border-rose-200 rounded p-2.5 text-center">
-                <span className="text-xs font-bold text-rose-700">+$47,000 premium cost absorbed by O2S</span>
+                <span className="text-xs font-bold text-rose-700">+$47,000 premium cost absorbed by 02S</span>
               </div>
               {isOps && (
                 <div className="border-t border-slate-200 pt-3 mt-1">
-                  <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">O2S Operations Prep Actions</div>
+                  <div className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">02S Operations Prep Actions</div>
                   <div className="space-y-2">
                     <button className="w-full bg-indigo-600 text-white text-xs font-bold py-2 rounded hover:bg-indigo-700 transition-colors">Pre-position sourcing with baseline specs</button>
                     <button className="w-full bg-white border border-slate-300 text-slate-700 text-xs font-bold py-2 rounded hover:bg-slate-50 transition-colors">Alert regional fleet manager of potential demand</button>
@@ -3019,12 +3019,12 @@ const MockFinancialModel = () => {
   ];
   return (
     <div className="flex flex-col h-full bg-slate-50">
-      <Toolbar leftArea={<><Database className="w-4 h-4 text-emerald-600"/><span className="font-semibold text-slate-800">Financial Handshake Simulator (O2S ↔ FP&A)</span></>} rightArea={<><div className="flex items-center gap-1.5 bg-amber-50 border border-amber-200 text-amber-700 text-[10px] font-semibold px-2 py-0.5 rounded"><span>FP&A Source:</span><span className="font-bold">Smartsheet</span><span className="text-amber-400">→</span><span className="text-amber-500">Anaplan (future)</span></div><button className="flex items-center gap-2 bg-emerald-600 text-white px-3 py-1.5 rounded text-xs font-semibold hover:bg-emerald-700"><RefreshCw className="w-3 h-3"/> Sync to FP&A</button></>}/>
+      <Toolbar leftArea={<><Database className="w-4 h-4 text-emerald-600"/><span className="font-semibold text-slate-800">Financial Handshake Simulator (02S ↔ FP&A)</span></>} rightArea={<><div className="flex items-center gap-1.5 bg-amber-50 border border-amber-200 text-amber-700 text-[10px] font-semibold px-2 py-0.5 rounded"><span>FP&A Source:</span><span className="font-bold">Smartsheet</span><span className="text-amber-400">→</span><span className="text-amber-500">Anaplan (future)</span></div><button className="flex items-center gap-2 bg-emerald-600 text-white px-3 py-1.5 rounded text-xs font-semibold hover:bg-emerald-700"><RefreshCw className="w-3 h-3"/> Sync to FP&A</button></>}/>
       <div className="p-6 flex flex-col flex-grow overflow-hidden gap-4">
         <div className="grid grid-cols-4 gap-4 shrink-0">
           <KPI label="Total Pipeline (Gross)" value="$49.26M" subtext="FP&A Gross Revenue (4 projects)" />
           <KPI label="Risk-Adjusted Revenue" value="$34.97M" trend="-29.0%" subtext="Zone-weighted yield" />
-          <KPI label="O2S Planned Cost Basis" value="$32.19M" subtext="From Margin Plans & Intent" />
+          <KPI label="02S Planned Cost Basis" value="$32.19M" subtext="From Margin Plans & Intent" />
           <KPI label="Blended Adj. Margin" value="7.9%" trend="-2.1%" subtext="vs AOP Target (10%)" />
         </div>
         <div className="bg-white border border-slate-200 rounded-md shadow-sm flex flex-col shrink-0">
@@ -3037,7 +3037,7 @@ const MockFinancialModel = () => {
                 <tr>
                   <th className="px-3 py-2 font-semibold">Opportunity ID</th><th className="px-3 py-2 font-semibold">Project Name</th><th className="px-3 py-2 font-semibold">Zone & Stage</th>
                   <th className="px-3 py-2 font-semibold text-right">FP&A Gross Revenue</th><th className="px-3 py-2 font-semibold text-center border-l border-r border-slate-200">Zone Confidence Multiplier</th>
-                  <th className="px-3 py-2 font-semibold text-right text-emerald-700">Risk-Adjusted Revenue</th><th className="px-3 py-2 font-semibold text-right text-rose-700">O2S Planned Cost</th><th className="px-3 py-2 font-semibold text-right text-indigo-700">Adj. Margin $</th>
+                  <th className="px-3 py-2 font-semibold text-right text-emerald-700">Risk-Adjusted Revenue</th><th className="px-3 py-2 font-semibold text-right text-rose-700">02S Planned Cost</th><th className="px-3 py-2 font-semibold text-right text-indigo-700">Adj. Margin $</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
@@ -3137,7 +3137,7 @@ const PlaceholderCard = ({ label }) => (
 const PERSONAS = [
   { id: 'project-teams', label: 'Project Teams', icon: HardHat },
   { id: 'rsi-fsi', label: 'RSI & FSI', icon: Users },
-  { id: 'o2s-ops', label: 'O2S Operations', icon: Settings },
+  { id: 'o2s-ops', label: '02S Operations', icon: Settings },
   { id: 'leadership', label: 'Leadership', icon: BarChart3 },
   { id: 'finance', label: 'Finance & FP&A', icon: DollarSign },
 ];
@@ -3158,7 +3158,7 @@ const ZONE_GROUPS = [
 ];
 
 const CARD_REGISTRY = {
-  quotes: { title: 'Quick Quotes', description: 'Enable RSIs to generate fast, directional equipment estimates using standardized O2S inputs.', icon: Calculator, colorClass: 'border-indigo-100', highlight: 'bg-indigo-100 text-indigo-600' },
+  quotes: { title: 'Quick Quotes', description: 'Enable RSIs to generate fast, directional equipment estimates using standardized 02S inputs.', icon: Calculator, colorClass: 'border-indigo-100', highlight: 'bg-indigo-100 text-indigo-600' },
   prepop: { title: 'Project Equipment Plan', description: 'Plan, confirm, and refine project equipment needs. Wraps scope, crew, and schedule around each line item with live clarity tracking and path visibility.', icon: Layers, colorClass: 'border-emerald-100', highlight: 'bg-emerald-100 text-emerald-600' },
   adhoc: { title: 'Ad-Hoc Request Intake', description: 'Give project teams a structured way to submit ad-hoc equipment requests outside the pre-populated plan.', icon: PenTool, colorClass: 'border-emerald-100', highlight: 'bg-emerald-100 text-emerald-600' },
   costofdelay: { title: 'Cost of Delay Visibility', description: 'See the financial impact of providing or withholding clarity on each equipment need.', icon: Eye, colorClass: 'border-emerald-200 ring-2 ring-emerald-50', highlight: 'bg-emerald-500 text-white' },
@@ -3169,12 +3169,12 @@ const CARD_REGISTRY = {
   regression: { title: 'Regression Events', description: 'When gate conditions become false, the system re-evaluates zone state and fires regression-specific triggers.', icon: AlertTriangle, colorClass: 'border-rose-200', highlight: 'bg-rose-100 text-rose-600' },
   'prepop-ops': { title: 'Pre-Population & Constraint Alerts', description: 'Pre-populate project-level equipment requests using demand forecasts, schedules, and historical patterns.', icon: Layers, colorClass: 'border-emerald-100', highlight: 'bg-emerald-100 text-emerald-600', resolveId: 'prepop' },
   optimize: { title: 'Owned vs Re-Rent Optimizer', description: 'Use enterprise-wide owned fleet visibility to recommend whether each request should be fulfilled with owned equipment or re-rent.', icon: Search, colorClass: 'border-amber-200 ring-2 ring-amber-50', highlight: 'bg-amber-500 text-white' },
-  source: { title: 'Strategic Sourcing', description: 'Enable O2S to source from the right vendors at the right time using demand signals and supplier performance.', icon: Box, colorClass: 'border-amber-100', highlight: 'bg-amber-100 text-amber-600' },
+  source: { title: 'Strategic Sourcing', description: 'Enable 02S to source from the right vendors at the right time using demand signals and supplier performance.', icon: Box, colorClass: 'border-amber-100', highlight: 'bg-amber-100 text-amber-600' },
   preflight: { title: 'Preflight Validation', description: 'Validate request packs against taxonomy, date feasibility, specifications, and sourcing paths before formal submission.', icon: FileCheck, colorClass: 'border-amber-200', highlight: 'bg-amber-100 text-amber-600' },
   formalrequest: { title: 'Formal Request & Handoff', description: 'Submit validated request packs with full lineage traceability and SLA-tracked routing to fulfillment teams.', icon: Send, colorClass: 'border-amber-100', highlight: 'bg-amber-100 text-amber-600' },
   lifecycle: { title: 'Asset Lifecycle Engine', description: 'Create a unified asset lifecycle view and support better keep / overhaul / redeploy / replace decisions.', icon: RotateCcw, colorClass: 'border-slate-300', highlight: 'bg-slate-200 text-slate-700' },
   capex: { title: 'CapEx Plan', description: 'Translate forward demand and available fleet supply into a prioritized, timing-specific CAPEX plan.', icon: Activity, colorClass: 'border-slate-300', highlight: 'bg-slate-200 text-slate-700' },
-  margin: { title: 'Margin Plan', description: 'Define project-level O2S margin pre-go/no-go by pillar and product line, anchored to AOP targets.', icon: Target, colorClass: 'border-indigo-100', highlight: 'bg-indigo-100 text-indigo-600' },
+  margin: { title: 'Margin Plan', description: 'Define project-level 02S margin pre-go/no-go by pillar and product line, anchored to AOP targets.', icon: Target, colorClass: 'border-indigo-100', highlight: 'bg-indigo-100 text-indigo-600' },
   fpa: { title: 'FP&A Sync', description: 'Risk-adjusted, time-phased revenue and margin forecasts synced to FP&A tools like Anaplan.', icon: DollarSign, colorClass: 'border-emerald-200 ring-2 ring-emerald-50', highlight: 'bg-emerald-500 text-white' },
   execution: { title: 'Execution Dashboard', description: 'Track active deployments, monitor utilization, flag exceptions, and take self-serve actions on in-process equipment orders.', icon: Truck, colorClass: 'border-rose-200', highlight: 'bg-rose-100 text-rose-600' },
   vendorscorecard: { title: 'Vendor Performance Scorecard', description: 'Auto-compiled vendor scorecards from execution actuals covering delivery, billing accuracy, and safety.', icon: Star, colorClass: 'border-rose-100', highlight: 'bg-rose-100 text-rose-600' },
@@ -3343,15 +3343,15 @@ const App = () => {
   const tourDataByPersona = {
     'project-teams': [
       { id: 0, title: "Your Equipment Starts Here", targetNodes: [], highlightSpine: true, transcript: "Welcome to your equipment command center. As a project team, you're used to requesting equipment through emails, phone calls, and spreadsheets — then waiting to find out if what you need is even available. This platform replaces that blind spot with a single demand funnel organized into nine zones. You don't need to manage these zones manually. The system observes your project's progress from system-of-record data and shows you exactly where every equipment need stands. Your job: provide clarity on what you need. The earlier you do, the better the pricing and availability you unlock." },
-      { id: 1, title: "Get Early Pricing Confidence", targetNodes: ['quotes'], highlightSpine: false, transcript: "Before blueprints are finalized, you often need a rough sense of what equipment will cost. Quick Quotes lets you generate a directional equipment estimate by entering basic project parameters — type, duration, square footage, and market. The system runs ML models trained on historical O2S data to return a cost range with a confidence interval. Use this to inform pre-construction budgets, go/no-go decisions, and client conversations. You're not committing to anything here; you're getting early intelligence so you're not blindsided later." },
+      { id: 1, title: "Get Early Pricing Confidence", targetNodes: ['quotes'], highlightSpine: false, transcript: "Before blueprints are finalized, you often need a rough sense of what equipment will cost. Quick Quotes lets you generate a directional equipment estimate by entering basic project parameters — type, duration, square footage, and market. The system runs ML models trained on historical 02S data to return a cost range with a confidence interval. Use this to inform pre-construction budgets, go/no-go decisions, and client conversations. You're not committing to anything here; you're getting early intelligence so you're not blindsided later." },
       { id: 2, title: "Review Your Baseline & Refine Intent", targetNodes: ['prepop', 'adhoc', 'costofdelay', 'clarityscoring', 'projectmaturity'], highlightSpine: false, transcript: "When your project is awarded, the system auto-generates a V0 equipment baseline — a time-phased draft of what you'll likely need, pulled from AI models, historical patterns, and your schedule. You don't start from scratch. Review the baseline, confirm or adjust quantities and timing, and submit ad-hoc requests for anything the model missed. Clarity Scoring shows you how 'decision-ready' each line item is across quantity, specification, and schedule dimensions. Cost of Delay puts a dollar figure on every week you haven't finalized specs — not to pressure you, but to give you ammunition when pushing your own clients and designers for answers. Project Maturity shows which line items are in which zones simultaneously, because your project isn't a single dot on a timeline." },
-      { id: 3, title: "Validate Before It Leaves Your Hands", targetNodes: ['preflight'], highlightSpine: false, transcript: "Before anything crosses the execution threshold, Preflight Validation automatically checks every line item against business rules: Are lead times realistic given supply chain constraints? Do the specifications match your structural documents? Are there budget conflicts? Items that pass get packaged into a conflict-free request pack and handed off to O2S Operations. Items that fail get flagged with specific resolution steps so you can fix them before they become expensive downstream problems. This is your quality gate — it catches the crane-rated-for-40-tons-but-your-panels-weigh-60-tons mistakes before they hit the field." },
+      { id: 3, title: "Validate Before It Leaves Your Hands", targetNodes: ['preflight'], highlightSpine: false, transcript: "Before anything crosses the execution threshold, Preflight Validation automatically checks every line item against business rules: Are lead times realistic given supply chain constraints? Do the specifications match your structural documents? Are there budget conflicts? Items that pass get packaged into a conflict-free request pack and handed off to 02S Operations. Items that fail get flagged with specific resolution steps so you can fix them before they become expensive downstream problems. This is your quality gate — it catches the crane-rated-for-40-tons-but-your-panels-weigh-60-tons mistakes before they hit the field." },
       { id: 4, title: "Track What's Happening on Your Site", targetNodes: ['execution'], highlightSpine: false, transcript: "Once equipment hits the dirt, the Execution Dashboard gives you real-time visibility into mobilization status, utilization rates, and exception flags across your active deployments. You'll see when a generator has been sitting idle for two weeks or when a delivery SLA has been breached — without waiting for a Friday status email. This is your window into the operational reality of your project's equipment, giving you the information you need to make decisions about extensions, returns, and change orders before costs compound." },
     ],
 
     'rsi-fsi': [
-      { id: 0, title: "The Integration Layer", targetNodes: [], highlightSpine: true, transcript: "Welcome to the RSI & FSI command center. As Solutions Integration, you are the connective tissue between Project Teams and O2S Operations. RSIs engage during pursuit and pre-construction — shaping which O2S services apply, generating early estimates, and building engagement strategies. FSIs take over at award and stay through execution — facilitating baseline reviews, chasing clarity, managing handoffs, and closing the feedback loop. The Command Center gives you the tools to do this integration work inside the system rather than through phone calls and emails." },
-      { id: 1, title: "Shape Engagement During Pursuit", targetNodes: ['quotes', 'fitscore', 'forecast'], highlightSpine: false, transcript: "In Zones 1–3, RSIs are the primary operators. Quick Quotes lets you generate directional equipment estimates using standardized O2S inputs to support go/no-go decisions. The Fit Score surfaces which FP&A committed forecast entries align with O2S capabilities — you use this to determine which projects warrant proactive outreach before designs lock. Asset Demand Forecast gives you portfolio-level demand visibility so you can prioritize regional engagement by project type and timing." },
+      { id: 0, title: "The Integration Layer", targetNodes: [], highlightSpine: true, transcript: "Welcome to the RSI & FSI command center. As Solutions Integration, you are the connective tissue between Project Teams and 02S Operations. RSIs engage during pursuit and pre-construction — shaping which 02S services apply, generating early estimates, and building engagement strategies. FSIs take over at award and stay through execution — facilitating baseline reviews, chasing clarity, managing handoffs, and closing the feedback loop. The Command Center gives you the tools to do this integration work inside the system rather than through phone calls and emails." },
+      { id: 1, title: "Shape Engagement During Pursuit", targetNodes: ['quotes', 'fitscore', 'forecast'], highlightSpine: false, transcript: "In Zones 1–3, RSIs are the primary operators. Quick Quotes lets you generate directional equipment estimates using standardized 02S inputs to support go/no-go decisions. The Fit Score surfaces which FP&A committed forecast entries align with 02S capabilities — you use this to determine which projects warrant proactive outreach before designs lock. Asset Demand Forecast gives you portfolio-level demand visibility so you can prioritize regional engagement by project type and timing." },
       { id: 2, title: "Facilitate Baselines & Drive Clarity", targetNodes: ['prepop', 'adhoc', 'costofdelay', 'clarityscoring', 'projectmaturity'], highlightSpine: false, transcript: "At award, the FSI steps in. You facilitate the V0 Baseline Review with the project team — walking through the AI-generated equipment plan, confirming or adjusting each line item. Ad-Hoc Request Intake lets you enter requests on behalf of project teams who call or email. Clarity Scoring is your primary daily tool — monitoring how decision-ready each item is and targeting action to close gaps. Cost of Delay gives you the financial ammunition to push project teams for timely specifications. Project Maturity shows where every package sits so you can triage your day." },
       { id: 3, title: "Quality-Gate the Handoff", targetNodes: ['preflight', 'formalrequest', 'regression'], highlightSpine: false, transcript: "Before anything crosses into Zone 7, you're the quality assurance layer. Preflight Validation results flow through you — you work with the project team to resolve failures before resubmission. You facilitate the Formal Request & Handoff, ensuring the validated request pack is complete and properly routed to the right operations queue. When Regression Events fire — a schedule shift invalidates a preflight, a design reopens — you're the first person both sides call. Your view gives you immediate visibility into what regressed, why, and the downstream impact." },
       { id: 4, title: "Manage Exceptions & Close the Loop", targetNodes: ['execution', 'vendorscorecard', 'flywheel'], highlightSpine: false, transcript: "Through execution, you monitor exceptions across your assigned projects and coordinate resolution between the project team and operations. The Vendor Scorecard captures hard data automatically, but you contribute the qualitative on-the-ground review — how vendors actually performed from the project's perspective. The Learning Flywheel captures variance data, and you provide the narrative context behind the numbers — why a lead time was longer, why the constrained path was taken. Your insight makes the flywheel actionable, not just numerical." },
@@ -3359,7 +3359,7 @@ const App = () => {
 
     'o2s-ops': [
       { id: 0, title: "See Demand Before It Becomes a Fire Drill", targetNodes: [], highlightSpine: true, transcript: "Welcome to your operations command center. Today, equipment requests arrive as urgent emails with no context about where they came from or how confident the project team is. This platform gives you forward visibility into the entire demand pipeline — organized into nine zones from earliest forecast through execution and learning. Zone state is observed from system-of-record data, so the progression you see is trustworthy and ungameable. The earlier you see demand forming, the more time you have to position fleet, negotiate vendor terms, and plan fulfillment from strength rather than scrambling at the last minute." },
-      { id: 1, title: "Forecast Demand & Identify Opportunities Early", targetNodes: ['forecast', 'fitscore'], highlightSpine: false, transcript: "Asset Demand Forecasting aggregates probability-weighted demand by cat class across the entire portfolio, spanning Zones 1 through 7. You can see which asset categories are trending toward constraint and which have surplus capacity — months before requests arrive. The Fit Score evaluates FP&A committed forecast entries against O2S equipment capabilities, surfacing which projects are high-value engagement opportunities. Use this to approach project teams proactively: 'We see your data center will need tower cranes in Q3. Let's plan now so we can fulfill from owned fleet instead of paying spot-market premiums.'" },
+      { id: 1, title: "Forecast Demand & Identify Opportunities Early", targetNodes: ['forecast', 'fitscore'], highlightSpine: false, transcript: "Asset Demand Forecasting aggregates probability-weighted demand by cat class across the entire portfolio, spanning Zones 1 through 7. You can see which asset categories are trending toward constraint and which have surplus capacity — months before requests arrive. The Fit Score evaluates FP&A committed forecast entries against 02S equipment capabilities, surfacing which projects are high-value engagement opportunities. Use this to approach project teams proactively: 'We see your data center will need tower cranes in Q3. Let's plan now so we can fulfill from owned fleet instead of paying spot-market premiums.'" },
       { id: 2, title: "Monitor Clarity & Prepare Both Paths", targetNodes: ['prepop-ops', 'costofdelay', 'clarityscoring', 'projectmaturity'], highlightSpine: false, transcript: "As projects move from forecast to intent, your concern shifts to fulfillment readiness. The V0 Baseline shows the AI-generated equipment plan — your early signal about what's coming. Clarity Scoring tells you exactly how decision-ready each line item is. When clarity is low, the duality principle kicks in: you'll see the happy path (project confirms specs early, you fulfill from MSA rates and owned fleet) and the constrained path (specs are late, you begin pre-positioning with baseline assumptions at higher cost). Cost of Delay quantifies the premium so project teams understand the financial impact of their timeline. Project Maturity shows the full zone distribution so you can identify which items need your attention now versus which are still forming." },
       { id: 3, title: "Optimize Fulfillment & Execute Requests", targetNodes: ['optimize', 'source', 'formalrequest', 'regression'], highlightSpine: false, transcript: "This is where your operational expertise meets data-driven decision support. The Owned vs. Re-Rent Optimizer evaluates enterprise-wide fleet capacity and recommends whether each request should be fulfilled from owned assets (lower cost, higher utilization) or external re-rent (faster availability, no fleet commitment). Strategic Sourcing pushes validated demand to procurement with full context. Formal Request packages everything with lineage traceability and SLA-tracked routing. And when conditions change — a project delays, specs get revised — the Regression Event engine detects backward movement automatically, pauses affected SLAs, and recalculates downstream impact so you're never blindsided by a silent schedule slip." },
       { id: 4, title: "Execute, Score Vendors & Feed the Flywheel", targetNodes: ['execution', 'vendorscorecard', 'flywheel'], highlightSpine: false, transcript: "Equipment hits the field. The Execution Dashboard tracks utilization, mobilization, and exceptions in real time. Triggers fire automatically when anomalies appear — underutilized assets get flagged for redeployment, vendor SLA breaches escalate to the right person. Every vendor interaction feeds the Vendor Scorecard: on-time delivery, damage rates, pricing accuracy. This is institutional memory that makes your next sourcing decision smarter. And the Learning Flywheel closes the loop — every actualized cost, duration, and outcome is compared against the V0 baseline. Variances are analyzed and written back into estimation templates, sourcing logic, and forecasting models. The next project like this one starts with a better baseline because of the work you did on this one." },
@@ -3367,15 +3367,15 @@ const App = () => {
 
     'leadership': [
       { id: 0, title: "One View of Enterprise Equipment Health", targetNodes: [], highlightSpine: true, transcript: "Welcome to the strategic view. As a leader, your concern isn't individual line items — it's portfolio-level health, capital allocation, and organizational capability. The zone spine gives you a single, objective map of where demand sits across the entire enterprise. Because zone state is observed from system-of-record data (not manually reported), this view is ungameable. You're not seeing what people claim is happening; you're seeing what the data says is happening. Use this to identify systemic bottlenecks, measure operational velocity, and make investment decisions grounded in structural reality." },
-      { id: 1, title: "Evaluate Portfolio Fit & Engagement Strategy", targetNodes: ['fitscore'], highlightSpine: false, transcript: "The Fit Score surfaces which FP&A committed forecast entries align with O2S equipment capabilities. At the leadership level, this is your strategic pipeline view: Which project types consistently generate high-value equipment demand? Which regions are trending toward capacity constraints? Where should O2S be engaging proactively during pre-construction rather than reactively at mobilization? Use this to direct your teams' attention toward the highest-impact opportunities before budgets lock." },
+      { id: 1, title: "Evaluate Portfolio Fit & Engagement Strategy", targetNodes: ['fitscore'], highlightSpine: false, transcript: "The Fit Score surfaces which FP&A committed forecast entries align with 02S equipment capabilities. At the leadership level, this is your strategic pipeline view: Which project types consistently generate high-value equipment demand? Which regions are trending toward capacity constraints? Where should 02S be engaging proactively during pre-construction rather than reactively at mobilization? Use this to direct your teams' attention toward the highest-impact opportunities before budgets lock." },
       { id: 2, title: "Track Maturity Across the Portfolio", targetNodes: ['projectmaturity'], highlightSpine: false, transcript: "Project Maturity gives you a cross-project view of zone distribution — how many line items sit in each zone across the active portfolio. This is your leading indicator dashboard. A healthy portfolio has demand flowing steadily through the zones. If you see accumulation in Zones 4–5 (baseline and intent), it means projects are stalling before reaching execution readiness. If Zone 8 is overloaded while Zones 1–3 are thin, you have a pipeline gap forming. This view lets you intervene at the structural level, not the firefighting level." },
       { id: 3, title: "Capital Strategy & Risk Monitoring", targetNodes: ['lifecycle', 'regression'], highlightSpine: false, transcript: "The Asset Lifecycle Engine translates forward demand and fleet condition data into keep/overhaul/redeploy/replace recommendations — the decisions that drive your multi-year capital strategy. When market conditions shift, you need to know how capital decisions made six months ago are holding up. Regression Events surface when projects move backward through zones — a signal that assumptions underpinning capital plans may need revisiting. Together, these give you a dynamic view of capital risk rather than a static annual budget that's stale by Q2." },
       { id: 4, title: "CapEx Planning & Organizational Learning", targetNodes: ['capex', 'flywheel'], highlightSpine: false, transcript: "The CapEx Plan translates aggregated demand signals, fleet utilization trends, and lifecycle data into a prioritized, timing-specific capital expenditure plan. This is where operational reality meets financial strategy. The Learning Flywheel is your mechanism for structural improvement — every execution cycle generates variance data that refines forecasting models, estimation templates, and sourcing logic. Over time, this means your planning accuracy improves, your capital efficiency increases, and your teams spend less time on reactive firefighting. The Command Center doesn't just track work; it compounds organizational learning." },
     ],
 
     'finance': [
-      { id: 0, title: "The Financial Handshake Between O2S and FP&A", targetNodes: [], highlightSpine: true, transcript: "Welcome to the financial control view. As Finance and FP&A, your core concern is that operational forecasts align with enterprise financial plans — and that variances are visible before they become surprises. The Command Center's zone model gives you structural traceability from the FP&A committed forecast (your system of truth for Zones 1–3) through operational execution (Zones 4–8) and back through the learning flywheel (Zone 9). The FP&A forecast system — currently Smartsheet, transitioning to Anaplan — is the authoritative upstream data source. The Command Center reads from it; it never overwrites it." },
-      { id: 1, title: "Margin Planning & Revenue Sync", targetNodes: ['margin', 'fpa'], highlightSpine: false, transcript: "The Margin Plan defines project-level O2S margin targets by pillar and product line, anchored to your AOP targets. This forces the handshake between what operations plans to spend and what finance expects to earn — before a single asset is committed. The FP&A Sync provides a risk-adjusted, time-phased view of revenue and margin forecasts. It shows the gap between gross pipeline revenue and risk-adjusted yield, weighted by zone progression. Zone 1–3 entries carry heavier probability discounts than Zone 6–7 validated requests. Use this to stress-test whether operational plans will deliver on financial commitments — or if adjustments are needed before quarterly close." },
+      { id: 0, title: "The Financial Handshake Between 02S and FP&A", targetNodes: [], highlightSpine: true, transcript: "Welcome to the financial control view. As Finance and FP&A, your core concern is that operational forecasts align with enterprise financial plans — and that variances are visible before they become surprises. The Command Center's zone model gives you structural traceability from the FP&A committed forecast (your system of truth for Zones 1–3) through operational execution (Zones 4–8) and back through the learning flywheel (Zone 9). The FP&A forecast system — currently Smartsheet, transitioning to Anaplan — is the authoritative upstream data source. The Command Center reads from it; it never overwrites it." },
+      { id: 1, title: "Margin Planning & Revenue Sync", targetNodes: ['margin', 'fpa'], highlightSpine: false, transcript: "The Margin Plan defines project-level 02S margin targets by pillar and product line, anchored to your AOP targets. This forces the handshake between what operations plans to spend and what finance expects to earn — before a single asset is committed. The FP&A Sync provides a risk-adjusted, time-phased view of revenue and margin forecasts. It shows the gap between gross pipeline revenue and risk-adjusted yield, weighted by zone progression. Zone 1–3 entries carry heavier probability discounts than Zone 6–7 validated requests. Use this to stress-test whether operational plans will deliver on financial commitments — or if adjustments are needed before quarterly close." },
       { id: 2, title: "Measure Clarity Risk on Financial Outcomes", targetNodes: ['clarityscoring'], highlightSpine: false, transcript: "Clarity Scoring quantifies how decision-ready each equipment need is. From a finance perspective, low clarity is a cost risk: every item below 50% clarity is likely to be fulfilled through constrained-path sourcing at premium rates. This view lets you model the financial exposure created by specification gaps. If 30% of your portfolio's line items are below the clarity threshold, you can quantify the projected cost premium and escalate to leadership with data, not anecdotes. Clarity isn't just an operational metric — it's a leading financial indicator." },
       { id: 3, title: "Catch Billing Errors Before They Post", targetNodes: ['anomaly'], highlightSpine: false, transcript: "Billing Anomaly Detection flags invoice discrepancies before they impact the bottom line. The system compares vendor invoices against contract terms, historical pricing patterns, and project-level commitments to surface rate deviations, duplicate charges, and quantity mismatches. In a high-volume equipment operation, even small per-unit billing errors compound into significant margin erosion over a portfolio. This is your automated first line of defense against revenue leakage — catching errors that would otherwise be buried in monthly reconciliation reports." },
       { id: 4, title: "Close the Loop: Actuals vs. Plan", targetNodes: ['flywheel'], highlightSpine: false, transcript: "The Learning Flywheel compares actualized costs, durations, and vendor outcomes against the original V0 baseline and financial projections. For Finance, this is your variance analysis engine. It answers: Did we earn the margin we planned? Where did assumptions break down? Were cost overruns driven by late clarity, vendor performance, or market conditions? The writeback mechanism feeds calibrated actuals back into upstream templates, which means your next cycle's forecasts start from a more accurate baseline. Over time, the gap between plan and actuals narrows structurally — not because people try harder, but because the models improve with every cycle." },
@@ -3623,7 +3623,7 @@ const App = () => {
           <div className="mb-6 flex justify-between items-end">
             <div>
               <h1 className="text-3xl font-bold text-slate-900 tracking-tight">
-                O2S Command Center — {activePersonaObj.label}
+                02S Command Center — {activePersonaObj.label}
               </h1>
               <p className="text-sm font-medium text-slate-500 mt-1">Demand Funnel Zones &middot; {activePillarObj.label} &middot; Click any workflow card to explore its interactive simulation.</p>
             </div>
@@ -3773,7 +3773,7 @@ const App = () => {
           {/* Orchestration Footer */}
           <div className="bg-slate-50 border border-slate-200 rounded-lg px-6 py-4 text-center">
             <p className="text-xs text-slate-500 leading-relaxed max-w-3xl mx-auto">
-              <span className="font-semibold text-slate-600">The O2S Command Center is an orchestration layer</span> — it does not replace FP&A, ERP, scheduling, and dispatch systems. It connects them into a single demand funnel where every persona sees the same zone-based truth, triggers fire from observed data, and organizational learning compounds automatically.
+              <span className="font-semibold text-slate-600">The 02S Command Center is an orchestration layer</span> — it does not replace FP&A, ERP, scheduling, and dispatch systems. It connects them into a single demand funnel where every persona sees the same zone-based truth, triggers fire from observed data, and organizational learning compounds automatically.
             </p>
           </div>
 
@@ -3782,7 +3782,7 @@ const App = () => {
             <div className="flex items-start gap-6">
               <div className="bg-sky-800 p-3 rounded-xl shrink-0"><Monitor className="w-6 h-6 text-sky-300" /></div>
               <div className="flex-1">
-                <h3 className="font-bold text-lg text-sky-100 tracking-tight">O2S Command Center — Orchestration Layer</h3>
+                <h3 className="font-bold text-lg text-sky-100 tracking-tight">02S Command Center — Orchestration Layer</h3>
                 <p className="text-sm text-sky-200 mt-1 leading-relaxed">Sits above FP&A, ERP, scheduling, and dispatch systems. Does not replace them. Doing the work creates the data.</p>
               </div>
             </div>
