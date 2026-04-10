@@ -796,6 +796,1011 @@ const MockPrePopulation = () => {
   );
 };
 
+const PROJECT_PLANNING_DATA = {
+  project: {
+    name: 'Disney Eastern PS',
+    jobNumber: '250030',
+    contractValue: '$350M',
+    market: 'Parking Structure',
+    zone: 4,
+    vpOps: 'Allen Lynn',
+    opsDirector: 'Halverson',
+    preconLead: 'Yoder',
+  },
+  packages: [
+    {
+      id: 'pkg-earthwork',
+      name: 'Earthwork & Site Prep',
+      items: [
+        {
+          id: 'li-001',
+          type: 'Loaders',
+          model: '950 Front End Loader',
+          spec: 'CAT 950M, 3.5 yd bucket',
+          qty: 2,
+          qtyConfirmed: true,
+          state: 'planned',
+          path: 'happy',
+          clarity: { qty: true, spec: true, schedule: true },
+          costHappy: 10000,
+          costConstrained: 14500,
+          urgencyScore: 32,
+          leadTimeRemaining: '8 weeks',
+          scope: 'Phase 1 Mass Grading',
+          crew: 'Civil Crew Alpha — 8 operators',
+          utilization: [1.0, 1.0, 1.0, 1.0, 0.5, 0, 0, 0],
+          rationale: 'Specs confirmed per earthwork package Rev 2',
+          flagReason: null,
+          source: 'Template',
+        },
+        {
+          id: 'li-002',
+          type: 'Excavators',
+          model: 'CAT 330 Excavator',
+          spec: 'CAT 330 GC, 36" bucket, thumb',
+          qty: 1,
+          qtyConfirmed: true,
+          state: 'planned',
+          path: 'happy',
+          clarity: { qty: true, spec: true, schedule: true },
+          costHappy: 12500,
+          costConstrained: 17000,
+          urgencyScore: 28,
+          leadTimeRemaining: '8 weeks',
+          scope: 'Phase 1 Mass Grading — Utility Trenching',
+          crew: 'Civil Crew Alpha — 8 operators',
+          utilization: [1.0, 1.0, 1.0, 0.5, 0, 0, 0, 0],
+          rationale: 'Confirmed per civil subcontract package',
+          flagReason: null,
+          source: 'Template',
+        },
+        {
+          id: 'li-003',
+          type: 'Loaders',
+          model: 'Skid Steer Loader',
+          spec: null,
+          qty: 3,
+          qtyConfirmed: false,
+          state: 'in-review',
+          path: 'at-risk',
+          clarity: { qty: true, spec: false, schedule: true },
+          costHappy: 2200,
+          costConstrained: 3100,
+          urgencyScore: 74,
+          leadTimeRemaining: '5 weeks',
+          scope: 'Phase 1 Mass Grading — Fine Grading',
+          crew: 'Civil Crew Beta — 6 operators',
+          utilization: [0.5, 1.0, 1.0, 1.0, 1.0, 0.5, 0, 0],
+          rationale: null,
+          flagReason: null,
+          source: 'Forecast',
+        },
+      ],
+    },
+    {
+      id: 'pkg-steel',
+      name: 'Structural Steel Support',
+      items: [
+        {
+          id: 'li-004',
+          type: 'Tower Crane',
+          model: '200T Luffing Jib',
+          spec: null,
+          qty: 1,
+          qtyConfirmed: true,
+          state: 'baseline',
+          path: 'constrained',
+          clarity: { qty: true, spec: false, schedule: false },
+          costHappy: 45000,
+          costConstrained: 67000,
+          urgencyScore: 95,
+          leadTimeRemaining: '2 weeks',
+          scope: 'Phase 2 Superstructure — Steel Erection',
+          crew: 'Iron Workers — 14-person crew, Phase 2',
+          utilization: [0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.5],
+          rationale: null,
+          flagReason: null,
+          source: 'Template',
+        },
+        {
+          id: 'li-005',
+          type: 'Crawler Crane',
+          model: '100T Crawler',
+          spec: null,
+          qty: 1,
+          qtyConfirmed: true,
+          state: 'in-review',
+          path: 'at-risk',
+          clarity: { qty: true, spec: false, schedule: true },
+          costHappy: 18000,
+          costConstrained: 24500,
+          urgencyScore: 68,
+          leadTimeRemaining: '4 weeks',
+          scope: 'Phase 2 Superstructure — Precast Erection',
+          crew: 'Iron Workers — 14-person crew, Phase 2',
+          utilization: [0, 0, 1.0, 1.0, 1.0, 1.0, 0.5, 0],
+          rationale: null,
+          flagReason: null,
+          source: 'Forecast',
+        },
+        {
+          id: 'li-006',
+          type: 'Welders',
+          model: '300 Amp Welder',
+          spec: 'Lincoln Ranger 330MPX',
+          qty: 6,
+          qtyConfirmed: false,
+          state: 'baseline',
+          path: 'happy',
+          clarity: { qty: false, spec: true, schedule: true },
+          costHappy: 700,
+          costConstrained: 950,
+          urgencyScore: 42,
+          leadTimeRemaining: '6 weeks',
+          scope: 'Phase 2 Superstructure — Field Welding',
+          crew: 'Iron Workers — 14-person crew, Phase 2',
+          utilization: [0, 1.0, 1.0, 1.0, 1.0, 1.0, 0, 0],
+          rationale: null,
+          flagReason: null,
+          source: 'Template',
+        },
+        {
+          id: 'li-007',
+          type: 'Boom Lift',
+          model: "60' Boom Lift",
+          spec: 'JLG 600S',
+          qty: 4,
+          qtyConfirmed: true,
+          state: 'planned',
+          path: 'happy',
+          clarity: { qty: true, spec: true, schedule: true },
+          costHappy: 3800,
+          costConstrained: 5200,
+          urgencyScore: 35,
+          leadTimeRemaining: '7 weeks',
+          scope: 'Phase 2 Superstructure — Steel Connection Work',
+          crew: 'Iron Workers — 14-person crew, Phase 2',
+          utilization: [0, 0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.5],
+          rationale: 'Confirmed 4 units per structural pkg Rev 3',
+          flagReason: null,
+          source: 'Template',
+        },
+        {
+          id: 'li-008',
+          type: 'Manlift',
+          model: "40' Manlift",
+          spec: null,
+          qty: 2,
+          qtyConfirmed: false,
+          state: 'baseline',
+          path: 'at-risk',
+          clarity: { qty: false, spec: false, schedule: true },
+          costHappy: 2600,
+          costConstrained: 3800,
+          urgencyScore: 55,
+          leadTimeRemaining: '5 weeks',
+          scope: 'Phase 2 Superstructure — Deck Access',
+          crew: 'Iron Workers — 14-person crew, Phase 2',
+          utilization: [0, 0, 0.5, 1.0, 1.0, 1.0, 0.5, 0],
+          rationale: null,
+          flagReason: null,
+          source: 'Forecast',
+        },
+      ],
+    },
+    {
+      id: 'pkg-mep',
+      name: 'MEP Rough-In Equipment',
+      items: [
+        {
+          id: 'li-009',
+          type: 'Scissor Lift',
+          model: "26' Scissor Lift",
+          spec: 'JLG 2632ES',
+          qty: 6,
+          qtyConfirmed: false,
+          state: 'baseline',
+          path: 'happy',
+          clarity: { qty: false, spec: true, schedule: true },
+          costHappy: 1800,
+          costConstrained: 2400,
+          urgencyScore: 48,
+          leadTimeRemaining: '6 weeks',
+          scope: 'Phase 3 MEP Rough-In — Electrical Distribution',
+          crew: 'Electrical Crew — 10 journeymen',
+          utilization: [0, 0, 0, 0.5, 1.0, 1.0, 1.0, 0.5],
+          rationale: null,
+          flagReason: null,
+          source: 'Template',
+        },
+        {
+          id: 'li-010',
+          type: 'Boom Lift',
+          model: "40' Boom Lift",
+          spec: null,
+          qty: 3,
+          qtyConfirmed: true,
+          state: 'baseline',
+          path: 'at-risk',
+          clarity: { qty: true, spec: false, schedule: false },
+          costHappy: 3200,
+          costConstrained: 4500,
+          urgencyScore: 52,
+          leadTimeRemaining: '5 weeks',
+          scope: 'Phase 3 MEP Rough-In — Mechanical Piping',
+          crew: 'Mechanical Crew — 8 pipefitters',
+          utilization: [0, 0, 0, 0.5, 1.0, 1.0, 1.0, 0.5],
+          rationale: null,
+          flagReason: null,
+          source: 'Forecast',
+        },
+        {
+          id: 'li-011',
+          type: 'Welders',
+          model: 'Portable Welder',
+          spec: 'Miller Bobcat 260',
+          qty: 4,
+          qtyConfirmed: true,
+          state: 'baseline',
+          path: 'happy',
+          clarity: { qty: true, spec: true, schedule: true },
+          costHappy: 600,
+          costConstrained: 850,
+          urgencyScore: 38,
+          leadTimeRemaining: '7 weeks',
+          scope: 'Phase 3 MEP Rough-In — Process Piping',
+          crew: 'Mechanical Crew — 8 pipefitters',
+          utilization: [0, 0, 0, 1.0, 1.0, 1.0, 1.0, 0.5],
+          rationale: null,
+          flagReason: null,
+          source: 'Template',
+        },
+        {
+          id: 'li-012',
+          type: 'Compressors',
+          model: '185 CFM Air Compressor',
+          spec: null,
+          qty: 2,
+          qtyConfirmed: true,
+          state: 'baseline',
+          path: 'at-risk',
+          clarity: { qty: true, spec: false, schedule: false },
+          costHappy: 1400,
+          costConstrained: 2000,
+          urgencyScore: 45,
+          leadTimeRemaining: '5 weeks',
+          scope: 'Phase 3 MEP Rough-In — Pneumatic Tools',
+          crew: 'Mechanical Crew — 8 pipefitters',
+          utilization: [0, 0, 0, 0.5, 1.0, 1.0, 1.0, 0],
+          rationale: null,
+          flagReason: null,
+          source: 'Rule-Based',
+        },
+      ],
+    },
+    {
+      id: 'pkg-temp',
+      name: 'Temporary Facilities',
+      items: [
+        {
+          id: 'li-013',
+          type: 'Connex Box',
+          model: "20' Storage Container",
+          spec: "20' standard steel connex",
+          qty: 8,
+          qtyConfirmed: true,
+          state: 'planned',
+          path: 'happy',
+          clarity: { qty: true, spec: true, schedule: true },
+          costHappy: 600,
+          costConstrained: 750,
+          urgencyScore: 15,
+          leadTimeRemaining: '10 weeks',
+          scope: 'Site Setup — Tool & Material Storage',
+          crew: 'General Conditions',
+          utilization: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+          rationale: 'Standard site setup per GC requirements',
+          flagReason: null,
+          source: 'Template',
+        },
+        {
+          id: 'li-014',
+          type: 'Temp Power',
+          model: 'Distribution Panel',
+          spec: '400A temp power distribution unit',
+          qty: 2,
+          qtyConfirmed: true,
+          state: 'planned',
+          path: 'happy',
+          clarity: { qty: true, spec: true, schedule: true },
+          costHappy: 2800,
+          costConstrained: 3600,
+          urgencyScore: 22,
+          leadTimeRemaining: '9 weeks',
+          scope: 'Site Setup — Temporary Power Grid',
+          crew: 'General Conditions',
+          utilization: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+          rationale: 'Confirmed per electrical site plan',
+          flagReason: null,
+          source: 'Template',
+        },
+        {
+          id: 'li-015',
+          type: 'Light Plant',
+          model: '6kW Light Tower',
+          spec: null,
+          qty: 4,
+          qtyConfirmed: true,
+          state: 'baseline',
+          path: 'happy',
+          clarity: { qty: true, spec: false, schedule: true },
+          costHappy: 700,
+          costConstrained: 950,
+          urgencyScore: 18,
+          leadTimeRemaining: '10 weeks',
+          scope: 'Site Setup — Night Work Illumination',
+          crew: 'General Conditions',
+          utilization: [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+          rationale: null,
+          flagReason: null,
+          source: 'Rule-Based',
+        },
+      ],
+    },
+  ],
+};
+
+const PlanningLineItem = ({ item, isExpanded, onToggle, onAction, flashState }) => {
+  const stateBorder = {
+    baseline: { borderLeft: '4px dashed #fbbf24' },
+    'in-review': { borderLeft: '4px solid #60a5fa' },
+    planned: { borderLeft: '4px solid #34d399' },
+    flagged: { borderLeft: '4px solid #fb7185' },
+  };
+  const stateBorderSolid = {
+    baseline: '4px solid #fbbf24',
+    'in-review': '4px solid #60a5fa',
+    planned: '4px solid #34d399',
+    flagged: '4px solid #fb7185',
+  };
+  const urgencyColor = item.urgencyScore >= 80
+    ? 'bg-rose-500 text-white'
+    : item.urgencyScore >= 50
+      ? 'bg-amber-500 text-white'
+      : 'bg-slate-200 text-slate-600';
+  const pathConfig = {
+    happy: { dot: 'bg-emerald-500', label: 'HP', delta: null, textClass: 'text-slate-400' },
+    'at-risk': { dot: 'bg-amber-500', label: 'AR', delta: item.costConstrained - item.costHappy, textClass: 'text-amber-600' },
+    constrained: { dot: 'bg-rose-500', label: 'CP', delta: item.costConstrained - item.costHappy, textClass: 'text-rose-600' },
+  };
+  const path = pathConfig[item.path];
+  const stateVariant = { baseline: 'gray', 'in-review': 'blue', planned: 'green', flagged: 'red' };
+  const stateLabel = { baseline: 'BASELINE', 'in-review': 'IN REVIEW', planned: 'PLANNED', flagged: 'FLAGGED' };
+  const stripePattern = 'repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px)';
+  const leadWeeks = parseInt(item.leadTimeRemaining) || 0;
+  const leadVariant = leadWeeks > 4 ? 'green' : leadWeeks >= 2 ? 'yellow' : 'red';
+  const monthlyPremium = item.costConstrained - item.costHappy;
+  const flashBg = { planned: 'bg-emerald-50', 'in-review': 'bg-blue-50', flagged: 'bg-rose-50' };
+  const flashClass = flashState ? flashBg[flashState] || '' : '';
+
+  return (
+    <div className="border-b border-slate-100">
+      {/* Collapsed Row */}
+      <div
+        className={`flex items-center gap-3 px-3 py-2 cursor-pointer transition-all duration-500 ${flashClass || (isExpanded ? 'bg-indigo-50/30' : 'bg-white hover:bg-slate-50')}`}
+        style={stateBorder[item.state]}
+        onClick={onToggle}
+      >
+        <div className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 ${urgencyColor}`}>
+          {item.urgencyScore}
+        </div>
+        <div className="flex-grow min-w-0 w-[200px]">
+          <div className="text-xs"><span className="font-medium text-slate-800">{item.type}</span><span className="text-slate-400"> — </span><span className="text-slate-500">{item.model}</span></div>
+          <div className="text-[10px] text-slate-400 italic truncate">{item.scope}</div>
+        </div>
+        <div className="flex items-center gap-1 shrink-0">
+          {[
+            { key: 'qty', label: 'Qty', ok: item.clarity.qty },
+            { key: 'spec', label: 'Spec', ok: item.clarity.spec },
+            { key: 'sched', label: 'Sched', ok: item.clarity.schedule },
+          ].map(c => (
+            <span key={c.key} className={`inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-semibold ${c.ok ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-amber-50 text-amber-700 border border-amber-300'}`}>
+              {c.ok ? <CheckCircle2 className="w-3 h-3" /> : <AlertTriangle className="w-3 h-3" />}{c.label}
+            </span>
+          ))}
+        </div>
+        <div className="flex items-center gap-1.5 shrink-0 w-[140px]">
+          <div className={`w-2 h-2 rounded-full shrink-0 ${path.dot}`} />
+          <span className={`text-[10px] font-bold ${path.textClass}`}>{path.label}</span>
+          {path.delta != null ? (
+            <span className={`text-[10px] font-mono ${item.path === 'constrained' ? 'font-bold text-rose-600' : 'text-amber-600'}`}>
+              +${path.delta.toLocaleString()} {item.path === 'constrained' ? 'premium' : 'projected'}
+            </span>
+          ) : (
+            <span className="text-[10px] font-mono text-slate-400">$0</span>
+          )}
+        </div>
+        <div className="w-[110px] shrink-0 text-[10px] text-slate-600 truncate">{item.crew || <span className="text-slate-300">—</span>}</div>
+        <div className="flex items-center gap-px shrink-0">
+          {item.utilization.map((val, i) => {
+            const fill = val >= 1.0 ? 'bg-emerald-200' : val >= 0.5 ? 'bg-amber-200' : 'bg-slate-100';
+            return (
+              <div
+                key={i}
+                className={`w-3 h-4 rounded-sm ${fill}`}
+                style={item.state === 'baseline' && val > 0 ? { backgroundImage: stripePattern } : undefined}
+              />
+            );
+          })}
+        </div>
+        <div className="shrink-0"><Badge variant={stateVariant[item.state]}>{stateLabel[item.state]}</Badge></div>
+      </div>
+
+      {/* Expansion Panel */}
+      {isExpanded && (
+        <div className="bg-white px-4 py-4" style={{ borderLeft: stateBorderSolid[item.state], marginLeft: 0 }}>
+          <div className="flex gap-6 pl-4">
+            {/* Left Column — Refinement Form (60%) */}
+            <div className="w-[60%] flex flex-col gap-3">
+              <div className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold mb-1">Refinement Fields</div>
+
+              {/* Quantity */}
+              <div className="flex items-center gap-3">
+                <label className="text-xs font-semibold text-slate-600 w-16 shrink-0">Qty</label>
+                <input type="number" defaultValue={item.qty} className="w-20 text-xs border border-slate-200 rounded px-2 py-1.5 bg-slate-50 outline-none focus:border-indigo-400 font-mono" />
+                <label className="flex items-center gap-1.5 text-xs text-slate-600 cursor-pointer">
+                  <input type="checkbox" defaultChecked={item.qtyConfirmed} className="rounded border-slate-300" />
+                  Confirmed
+                </label>
+              </div>
+
+              {/* Specification */}
+              <div className="flex items-center gap-3">
+                <label className="text-xs font-semibold text-slate-600 w-16 shrink-0">Spec</label>
+                <input type="text" defaultValue={item.spec || ''} placeholder="Enter exact specification..." className="flex-grow text-xs border border-slate-200 rounded px-2 py-1.5 bg-slate-50 outline-none focus:border-indigo-400" />
+                {item.spec ? <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" /> : <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0" />}
+              </div>
+
+              {/* Schedule */}
+              <div className="flex items-center gap-3">
+                <label className="text-xs font-semibold text-slate-600 w-16 shrink-0">Need Date</label>
+                <input type="text" placeholder="YYYY-MM-DD" className="w-28 text-xs border border-slate-200 rounded px-2 py-1.5 bg-slate-50 outline-none focus:border-indigo-400 font-mono" />
+                <label className="text-xs font-semibold text-slate-600 ml-2">Demob Date</label>
+                <input type="text" placeholder="YYYY-MM-DD" className="w-28 text-xs border border-slate-200 rounded px-2 py-1.5 bg-slate-50 outline-none focus:border-indigo-400 font-mono" />
+              </div>
+
+              {/* Scope Link */}
+              <div className="flex items-center gap-3">
+                <label className="text-xs font-semibold text-slate-600 w-16 shrink-0">Scope</label>
+                <div className="flex-grow text-xs border border-slate-200 rounded px-2 py-1.5 bg-slate-50 text-slate-600 flex items-center justify-between">
+                  <span className={item.scope ? '' : 'text-slate-400'}>{item.scope || 'Select scope element...'}</span>
+                  <ChevronDown className="w-3 h-3 text-slate-400" />
+                </div>
+              </div>
+
+              {/* Crew Link */}
+              <div className="flex items-center gap-3">
+                <label className="text-xs font-semibold text-slate-600 w-16 shrink-0">Crew</label>
+                <div className="flex-grow text-xs border border-slate-200 rounded px-2 py-1.5 bg-slate-50 text-slate-600 flex items-center justify-between">
+                  <span className={item.crew ? '' : 'text-slate-400'}>{item.crew || 'Assign labor crew...'}</span>
+                  <ChevronDown className="w-3 h-3 text-slate-400" />
+                </div>
+              </div>
+
+              {/* Rationale */}
+              <div className="flex gap-3">
+                <label className="text-xs font-semibold text-slate-600 w-16 shrink-0 pt-1.5">Rationale</label>
+                <textarea
+                  rows={3}
+                  defaultValue={item.rationale || ''}
+                  placeholder="Explain your confidence level... (e.g., 'Specs confirmed per structural package Rev 3')"
+                  className="flex-grow text-xs border border-slate-200 rounded px-2 py-1.5 bg-slate-50 outline-none focus:border-indigo-400 resize-none"
+                />
+              </div>
+            </div>
+
+            {/* Right Column — Path Economics (40%) */}
+            <div className="w-[40%] flex flex-col gap-3">
+              <div className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold mb-1">Path Economics</div>
+              <div className="border border-slate-200 rounded-md overflow-hidden">
+                <div className="flex items-center gap-3 px-3 py-2 border-b border-slate-100" style={{ borderLeft: '3px solid #34d399' }}>
+                  <div className="flex-grow">
+                    <div className="text-[10px] font-semibold text-slate-500 uppercase">Happy Path</div>
+                    <div className="text-sm font-bold font-mono text-emerald-700">${item.costHappy.toLocaleString()}/mo</div>
+                  </div>
+                  <span className="text-[10px] text-slate-400">MSA / Internal Fleet</span>
+                </div>
+                <div className="flex items-center gap-3 px-3 py-2 border-b border-slate-100" style={{ borderLeft: '3px solid #fb7185' }}>
+                  <div className="flex-grow">
+                    <div className="text-[10px] font-semibold text-slate-500 uppercase">Constrained Path</div>
+                    <div className="text-sm font-bold font-mono text-rose-700">${item.costConstrained.toLocaleString()}/mo</div>
+                  </div>
+                  <span className="text-[10px] text-slate-400">Spot Market / Rush</span>
+                </div>
+                <div className="flex items-center justify-between px-3 py-2 border-b border-slate-100 bg-slate-50/50">
+                  <span className="text-[10px] font-semibold text-slate-500 uppercase">Monthly Premium</span>
+                  <span className={`text-sm font-bold font-mono ${monthlyPremium > 0 ? 'text-rose-600' : 'text-slate-400'}`}>
+                    {monthlyPremium > 0 ? `+$${monthlyPremium.toLocaleString()}` : '$0'}
+                  </span>
+                </div>
+                <div className="flex items-center justify-between px-3 py-2">
+                  <span className="text-[10px] font-semibold text-slate-500 uppercase">Lead Time Remaining</span>
+                  <Badge variant={leadVariant}>{item.leadTimeRemaining}</Badge>
+                </div>
+              </div>
+              <p className="text-[10px] text-slate-400 italic leading-relaxed">
+                O2S operations will execute regardless. Early confirmation determines the cost position.
+              </p>
+              {/* Utilization Schedule */}
+              <div className="mt-1">
+                <div className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold mb-2">Utilization Schedule</div>
+                <div className="flex gap-0.5">
+                  {['Oct','Nov','Dec','Jan','Feb','Mar','Apr','May'].map((month, i) => {
+                    const val = item.utilization[i];
+                    const cellBg = val >= 1.0 ? 'bg-emerald-100' : val >= 0.5 ? 'bg-amber-100' : 'bg-slate-50';
+                    const cellText = val >= 1.0 ? 'text-emerald-700' : val >= 0.5 ? 'text-amber-700' : 'text-slate-300';
+                    const stripeStyle = item.state === 'baseline' && val > 0 ? { backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 3px, rgba(0,0,0,0.06) 3px, rgba(0,0,0,0.06) 5px)' } : undefined;
+                    return (
+                      <div key={month} className="flex flex-col items-center gap-0.5">
+                        <span className="text-[8px] text-slate-400 font-medium">{month}</span>
+                        <div
+                          className={`w-9 h-7 rounded-sm flex items-center justify-center text-[10px] font-mono font-semibold ${cellBg} ${cellText} border border-slate-200/50`}
+                          style={stripeStyle}
+                        >
+                          {val > 0 ? val.toFixed(1) : '—'}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="text-[9px] text-slate-400 italic mt-1.5">
+                  {item.state === 'baseline'
+                    ? '▤ Baseline assumption — not yet confirmed against scope/schedule'
+                    : item.state === 'planned'
+                      ? 'Confirmed utilization — anchored to scope & crew schedule'
+                      : 'Utilization subject to refinement'
+                  }
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="flex items-center gap-2 mt-4 pl-4 pt-3 border-t border-slate-100">
+            <button className="px-4 py-1.5 bg-emerald-600 text-white text-xs font-semibold rounded hover:bg-emerald-700 transition-colors" onClick={(e) => { e.stopPropagation(); onAction('confirm'); }}>
+              Confirm & Plan
+            </button>
+            <button className="px-4 py-1.5 bg-white text-blue-600 text-xs font-semibold rounded border border-blue-300 hover:bg-blue-50 transition-colors" onClick={(e) => { e.stopPropagation(); onAction('in-review'); }}>
+              Save as In Review
+            </button>
+            <button className="px-4 py-1.5 bg-white text-rose-600 text-xs font-semibold rounded border border-rose-300 hover:bg-rose-50 transition-colors" onClick={(e) => { e.stopPropagation(); onAction('flag'); }}>
+              Flag Issue
+            </button>
+            <span className="text-[10px] text-slate-400 ml-1">Client undecided · Design in flux · Regulatory hold</span>
+            <div className="flex-grow" />
+            <button className="px-4 py-1.5 text-slate-500 text-xs font-semibold hover:text-slate-700 transition-colors" onClick={(e) => { e.stopPropagation(); onToggle(); }}>
+              Cancel
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+const MockProjectPlanning = () => {
+  const [planData, setPlanData] = useState(() => JSON.parse(JSON.stringify(PROJECT_PLANNING_DATA)));
+  const [activeTab, setActiveTab] = useState('equipment');
+  const [activeSort, setActiveSort] = useState('criticality');
+  const [expandedItemId, setExpandedItemId] = useState(null);
+  const [flashItemId, setFlashItemId] = useState(null);
+  const [flashType, setFlashType] = useState(null);
+  const [expandedPkgs, setExpandedPkgs] = useState(() => {
+    const map = {};
+    PROJECT_PLANNING_DATA.packages.forEach(p => { map[p.id] = true; });
+    return map;
+  });
+  const togglePkg = (id) => setExpandedPkgs(prev => ({ ...prev, [id]: !prev[id] }));
+
+  const handleItemAction = (itemId, action) => {
+    setPlanData(prev => {
+      const next = JSON.parse(JSON.stringify(prev));
+      for (const pkg of next.packages) {
+        const item = pkg.items.find(i => i.id === itemId);
+        if (!item) continue;
+        if (action === 'confirm') {
+          item.state = 'planned';
+          item.path = 'happy';
+          item.clarity = { qty: true, spec: true, schedule: true };
+        } else if (action === 'in-review') {
+          item.state = 'in-review';
+        } else if (action === 'flag') {
+          item.state = 'flagged';
+          item.path = 'constrained';
+          item.flagReason = 'Client undecided';
+        }
+        break;
+      }
+      return next;
+    });
+    setExpandedItemId(null);
+    setFlashItemId(itemId);
+    setFlashType(action === 'confirm' ? 'planned' : action === 'in-review' ? 'in-review' : 'flagged');
+    setTimeout(() => { setFlashItemId(null); setFlashType(null); }, 600);
+  };
+  const pillarTabs = [
+    { id: 'equipment', label: 'Equipment' },
+    { id: 'logistics', label: 'Logistics' },
+    { id: 'prefabrication', label: 'Prefabrication' },
+    { id: 'procurement', label: 'Procurement' },
+    { id: 'professional-services', label: 'Professional Services' },
+  ];
+  const sortOptions = [
+    { id: 'criticality', label: 'Criticality' },
+    { id: 'gap-type', label: 'Gap Type' },
+    { id: 'path', label: 'Path Status' },
+    { id: 'state', label: 'State' },
+  ];
+
+  const allItems = planData.packages.flatMap(p => p.items);
+  const totalItems = allItems.length;
+  const happyTotal = allItems.reduce((sum, item) => {
+    const months = item.utilization.reduce((a, b) => a + b, 0);
+    return sum + item.costHappy * item.qty * months;
+  }, 0);
+  const constrainedTotal = allItems.reduce((sum, item) => {
+    const months = item.utilization.reduce((a, b) => a + b, 0);
+    return sum + item.costConstrained * item.qty * months;
+  }, 0);
+
+  // State composition counts
+  const stateCounts = { baseline: 0, 'in-review': 0, planned: 0, flagged: 0 };
+  allItems.forEach(item => { stateCounts[item.state] = (stateCounts[item.state] || 0) + 1; });
+
+  // KPI: planned count
+  const plannedCount = stateCounts.planned;
+
+  // KPI: happy path exposure (total cost for items on happy path)
+  const happyPathExposure = allItems
+    .filter(i => i.path === 'happy')
+    .reduce((sum, item) => sum + item.costHappy * item.qty * item.utilization.reduce((a, b) => a + b, 0), 0);
+
+  // KPI: constrained premium (cost delta for constrained + at-risk items)
+  const constrainedPremium = allItems
+    .filter(i => i.path === 'constrained' || i.path === 'at-risk')
+    .reduce((sum, item) => sum + (item.costConstrained - item.costHappy) * item.qty * item.utilization.reduce((a, b) => a + b, 0), 0);
+
+  // KPI: avg clarity score
+  const totalClarityFields = allItems.length * 3;
+  const trueClarityFields = allItems.reduce((sum, item) =>
+    sum + (item.clarity.qty ? 1 : 0) + (item.clarity.spec ? 1 : 0) + (item.clarity.schedule ? 1 : 0), 0);
+  const avgClarity = Math.round((trueClarityFields / totalClarityFields) * 100);
+  const allPlanned = allItems.length > 0 && allItems.every(i => i.state === 'planned');
+  const allTerminal = allItems.length > 0 && allItems.every(i => i.state === 'planned' || i.state === 'flagged');
+  const packageCount = planData.packages.length;
+  const happyPathMonthly = allItems.reduce((sum, i) => sum + i.costHappy * i.qty, 0);
+  const blendedMonthly = allItems.reduce((sum, i) => sum + (i.path === 'happy' ? i.costHappy : i.costConstrained) * i.qty, 0);
+  const premiumMonthly = blendedMonthly - happyPathMonthly;
+
+  // Sorting logic
+  const sortItems = (items) => {
+    const sorted = [...items];
+    switch (activeSort) {
+      case 'criticality':
+        return sorted.sort((a, b) => b.urgencyScore - a.urgencyScore);
+      case 'gap-type': {
+        const gapPriority = (item) => {
+          if (!item.clarity.spec) return 0;
+          if (!item.clarity.schedule) return 1;
+          if (!item.clarity.qty) return 2;
+          return 3;
+        };
+        return sorted.sort((a, b) => gapPriority(a) - gapPriority(b) || b.urgencyScore - a.urgencyScore);
+      }
+      case 'path': {
+        const pathOrder = { constrained: 0, 'at-risk': 1, happy: 2 };
+        return sorted.sort((a, b) => pathOrder[a.path] - pathOrder[b.path] || b.urgencyScore - a.urgencyScore);
+      }
+      case 'state': {
+        const stateOrder = { baseline: 0, 'in-review': 1, flagged: 2, planned: 3 };
+        return sorted.sort((a, b) => stateOrder[a.state] - stateOrder[b.state] || b.urgencyScore - a.urgencyScore);
+      }
+      default: return sorted;
+    }
+  };
+  const sortedItems = sortItems(allItems);
+
+  // Sort packages by their highest-priority child in the sorted order
+  const sortedPackages = [...planData.packages].sort((a, b) => {
+    const aFirst = Math.min(...a.items.map(i => sortedItems.indexOf(i)));
+    const bFirst = Math.min(...b.items.map(i => sortedItems.indexOf(i)));
+    return aFirst - bFirst;
+  });
+
+  const pillarClarityDimensions = {
+    logistics: ['Site Services Scope', 'Mobilization Timeline', 'Transport Requirements', 'Permit Status'],
+    prefabrication: ['Design Package Status', 'Fab Slot Availability', 'Cross-Discipline Dependencies', 'Material Lead Times'],
+    procurement: ['Material Quantities', 'Specification Completeness', 'Vendor Sourcing Path', 'Aggregation Eligibility'],
+    'professional-services': ['Survey Scope Definition', 'Site Access Windows', 'Deliverable Format', 'Crew Scheduling'],
+  };
+  const equipmentPlannedPct = totalItems > 0 ? Math.round((plannedCount / totalItems) * 100) : 0;
+
+  return (
+    <div className="flex flex-col h-full bg-slate-50">
+      {/* Row 1 — Project Identity Bar */}
+      <div className="bg-white border-b border-slate-200 px-6 py-2 flex justify-between items-center shrink-0">
+        <div className="flex items-center gap-3">
+          <span className="px-2 py-0.5 rounded text-[10px] font-bold font-mono bg-indigo-100 text-indigo-700 border border-indigo-200">{planData.project.jobNumber}</span>
+          <span className="font-semibold text-sm text-slate-800">{planData.project.name}</span>
+          <span className="text-xs text-slate-500 font-mono">{planData.project.contractValue}</span>
+          <Badge variant="gray">{planData.project.market}</Badge>
+        </div>
+        <div className="flex items-center gap-3">
+          <span className="text-[10px] text-slate-500">VP Ops: <span className="font-semibold text-slate-600">{planData.project.vpOps.split(' ').pop()}</span> · Ops Dir: <span className="font-semibold text-slate-600">{planData.project.opsDirector}</span> · Precon: <span className="font-semibold text-slate-600">{planData.project.preconLead}</span></span>
+          <div className="flex items-center gap-1 text-[9px] text-slate-400 italic">
+            <Lock className="w-3 h-3" />
+            <span>Observed</span>
+          </div>
+        </div>
+      </div>
+      {/* Row 2 — Zone Context Bar */}
+      <div className="bg-emerald-50 border-b border-emerald-200 px-6 py-1.5 flex justify-between items-center shrink-0">
+        <div className="flex items-center gap-3">
+          <div className="w-2 h-2 rounded-full bg-emerald-500" />
+          <span className="text-xs font-semibold text-emerald-700">Zone 4–5: Baseline & Intent</span>
+          <GateBadge macro="Project Awarded" micro="Baseline Populated" />
+        </div>
+        <div className="text-[10px] text-slate-500">
+          <span className="font-semibold text-emerald-600">Equipment: {equipmentPlannedPct}% planned</span>
+          <span className="text-slate-400"> · Logistics: — · Prefab: — · Procurement: — · ProSvcs: —</span>
+        </div>
+      </div>
+      {/* Pillar Tabs */}
+      <div className="bg-white border-b border-slate-200 px-6 flex gap-0 shrink-0">
+        {pillarTabs.map(tab => (
+          <button
+            key={tab.id}
+            onClick={() => setActiveTab(tab.id)}
+            className={`px-4 py-2.5 text-xs border-b-2 transition-colors ${
+              activeTab === tab.id
+                ? 'border-emerald-500 text-emerald-700 font-semibold bg-white'
+                : 'border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-50 font-medium'
+            }`}
+          >
+            {tab.label}
+            {tab.id !== 'equipment' && <span className="ml-1 text-[9px] text-slate-400 font-normal">(Soon)</span>}
+          </button>
+        ))}
+      </div>
+      {/* Content Area */}
+      {activeTab === 'equipment' ? (
+      <>
+      <div className="px-4 pt-4 pb-2 flex flex-col gap-4 shrink-0">
+        {/* State Composition Strip */}
+        <div className="px-2">
+          <div className="flex h-2 rounded-full overflow-hidden bg-slate-100">
+            {stateCounts.baseline > 0 && (
+              <div
+                className="bg-amber-500"
+                style={{ width: `${(stateCounts.baseline / totalItems) * 100}%`, backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(255,255,255,0.3) 2px, rgba(255,255,255,0.3) 4px)' }}
+              />
+            )}
+            {stateCounts['in-review'] > 0 && (
+              <div className="bg-blue-500" style={{ width: `${(stateCounts['in-review'] / totalItems) * 100}%` }} />
+            )}
+            {stateCounts.planned > 0 && (
+              <div className="bg-emerald-500" style={{ width: `${(stateCounts.planned / totalItems) * 100}%` }} />
+            )}
+            {stateCounts.flagged > 0 && (
+              <div className="bg-rose-500" style={{ width: `${(stateCounts.flagged / totalItems) * 100}%` }} />
+            )}
+          </div>
+          <div className="flex gap-4 mt-1.5 text-[10px] font-semibold">
+            <span className="text-amber-600">{stateCounts.baseline} Baseline</span>
+            <span className="text-slate-300">·</span>
+            <span className="text-blue-600">{stateCounts['in-review']} In Review</span>
+            <span className="text-slate-300">·</span>
+            <span className="text-emerald-600">{stateCounts.planned} Planned</span>
+            <span className="text-slate-300">·</span>
+            <span className="text-rose-600">{stateCounts.flagged} Flagged</span>
+          </div>
+        </div>
+
+        {/* Pillar Summary KPIs */}
+        <div className="grid grid-cols-4 gap-3">
+          <div className="bg-white border border-slate-200 p-3 rounded-md shadow-sm">
+            <div className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold mb-1">Items Planned</div>
+            <div className="text-xl font-bold text-slate-800 font-mono">{plannedCount} / {totalItems}</div>
+            <div className="text-xs mt-1 font-medium text-slate-500">{Math.round((plannedCount / totalItems) * 100)}% confirmed</div>
+          </div>
+          <div className="bg-white border border-slate-200 p-3 rounded-md shadow-sm">
+            <div className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold mb-1">Happy Path Exposure</div>
+            <div className="text-xl font-bold text-emerald-700 font-mono">${happyPathExposure.toLocaleString()}</div>
+            <div className="text-xs mt-1 font-medium text-slate-500">{allItems.filter(i => i.path === 'happy').length} items on track</div>
+          </div>
+          <div className="bg-white border border-slate-200 p-3 rounded-md shadow-sm">
+            <div className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold mb-1">Constrained Premium</div>
+            <div className="text-xl font-bold text-rose-700 font-mono">+${constrainedPremium.toLocaleString()}</div>
+            <div className="text-xs mt-1 font-medium text-slate-500">{allItems.filter(i => i.path === 'constrained' || i.path === 'at-risk').length} items at risk or constrained</div>
+          </div>
+          <div className="bg-white border border-slate-200 p-3 rounded-md shadow-sm">
+            <div className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold mb-1">Avg Clarity Score</div>
+            <div className={`text-xl font-bold font-mono ${avgClarity >= 80 ? 'text-emerald-700' : avgClarity >= 60 ? 'text-amber-700' : 'text-rose-700'}`}>{avgClarity}%</div>
+            <div className="text-xs mt-1 font-medium text-slate-500">{trueClarityFields} / {totalClarityFields} fields resolved</div>
+          </div>
+        </div>
+
+        {/* Sort/Filter Bar */}
+        <div className="flex items-center justify-between bg-white border border-slate-200 rounded-md px-4 py-2 shadow-sm">
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold mr-1">Sort by:</span>
+            {sortOptions.map(opt => (
+              <button
+                key={opt.id}
+                onClick={() => setActiveSort(opt.id)}
+                className={`px-3 py-1 rounded text-[11px] font-semibold transition-colors ${
+                  activeSort === opt.id
+                    ? 'bg-indigo-100 text-indigo-600'
+                    : 'bg-white text-slate-500 border border-slate-200 hover:border-slate-300'
+                }`}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+          <span className="text-[9px] italic text-slate-400 ml-auto mr-2">Click any row to expand planning details</span>
+          <button className="flex items-center gap-1 px-3 py-1 rounded text-[11px] font-semibold bg-white text-slate-500 border border-slate-200 hover:border-slate-300">
+            <Filter className="w-3 h-3" />
+            All Packages ▾
+          </button>
+        </div>
+      </div>
+      <div className="flex-grow overflow-auto px-4 pb-4 flex flex-col gap-3">
+        {allPlanned ? (
+          <div className="flex-grow flex items-center justify-center">
+            <div className="text-center py-12">
+              <CheckCircle2 className="w-12 h-12 text-emerald-500 mx-auto mb-4" />
+              <h3 className="text-lg font-bold text-slate-800 mb-2">All equipment needs are confirmed and on Happy Path.</h3>
+              <p className="text-sm text-emerald-600 font-medium cursor-pointer hover:underline">Ready for Preflight Validation →</p>
+            </div>
+          </div>
+        ) : (
+        <>
+        {/* Table Header */}
+        <div className="flex items-center gap-3 px-3 py-2 bg-white border border-slate-200 rounded-md shadow-sm text-[10px] uppercase tracking-wider text-slate-500 font-semibold sticky top-0 z-10" style={{ paddingLeft: '20px' }}>
+          <div className="w-6 shrink-0 text-center">#</div>
+          <div className="flex-grow w-[200px]">Equipment</div>
+          <div className="shrink-0 w-[156px]">Clarity</div>
+          <div className="shrink-0 w-[140px]">Path / Delta</div>
+          <div className="w-[110px] shrink-0">Crew</div>
+          <div className="shrink-0 w-[100px]">Utilization</div>
+          <div className="shrink-0 w-[72px]">Status</div>
+        </div>
+
+        {/* Package Groups */}
+        <div className="flex flex-col gap-3">
+          {sortedPackages.map(pkg => {
+            const pkgItems = sortedItems.filter(i => pkg.items.includes(i));
+            const expanded = expandedPkgs[pkg.id] !== false;
+            const pkgStateCounts = { baseline: 0, 'in-review': 0, planned: 0, flagged: 0 };
+            pkgItems.forEach(i => { pkgStateCounts[i.state]++; });
+            const pkgHappy = pkgItems.filter(i => i.path === 'happy').length;
+            const pkgAtRisk = pkgItems.filter(i => i.path === 'at-risk').length;
+            const pkgConstrained = pkgItems.filter(i => i.path === 'constrained').length;
+            const pkgPremium = pkgItems
+              .filter(i => i.path !== 'happy')
+              .reduce((sum, i) => sum + (i.costConstrained - i.costHappy) * i.qty * i.utilization.reduce((a, b) => a + b, 0), 0);
+
+            return (
+              <div key={pkg.id} className="border border-slate-200 rounded-md shadow-sm overflow-hidden">
+                {/* Package Header */}
+                <div
+                  className="flex items-center gap-3 px-4 py-2.5 bg-slate-50 border-b-2 border-slate-200 cursor-pointer select-none hover:bg-slate-100 transition-colors"
+                  onClick={() => togglePkg(pkg.id)}
+                >
+                  {/* Left: Chevron + Name + Count */}
+                  <div className="flex items-center gap-2 min-w-0">
+                    {expanded
+                      ? <ChevronDown className="w-4 h-4 text-slate-400 shrink-0" />
+                      : <ChevronRight className="w-4 h-4 text-slate-400 shrink-0" />
+                    }
+                    <span className="font-semibold text-sm text-slate-800">{pkg.name}</span>
+                    <Badge variant="gray">{pkgItems.length} items</Badge>
+                  </div>
+
+                  {/* Center: Mini state composition bar */}
+                  <div className="flex-grow flex justify-center">
+                    <div className="flex h-1 w-[100px] rounded-full overflow-hidden bg-slate-200">
+                      {pkgStateCounts.baseline > 0 && (
+                        <div className="bg-amber-400" style={{ width: `${(pkgStateCounts.baseline / pkgItems.length) * 100}%`, backgroundImage: 'repeating-linear-gradient(45deg, transparent, transparent 1px, rgba(255,255,255,0.4) 1px, rgba(255,255,255,0.4) 2px)' }} />
+                      )}
+                      {pkgStateCounts['in-review'] > 0 && (
+                        <div className="bg-blue-400" style={{ width: `${(pkgStateCounts['in-review'] / pkgItems.length) * 100}%` }} />
+                      )}
+                      {pkgStateCounts.planned > 0 && (
+                        <div className="bg-emerald-400" style={{ width: `${(pkgStateCounts.planned / pkgItems.length) * 100}%` }} />
+                      )}
+                      {pkgStateCounts.flagged > 0 && (
+                        <div className="bg-rose-400" style={{ width: `${(pkgStateCounts.flagged / pkgItems.length) * 100}%` }} />
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Right: Path summary + Premium */}
+                  <div className="flex items-center gap-3 shrink-0">
+                    <div className="flex items-center gap-2 text-[10px] font-semibold">
+                      <span className="text-emerald-600">{pkgHappy} HP</span>
+                      <span className="text-slate-300">·</span>
+                      <span className="text-amber-600">{pkgAtRisk} AR</span>
+                      <span className="text-slate-300">·</span>
+                      <span className="text-rose-600">{pkgConstrained} CP</span>
+                    </div>
+                    {pkgPremium > 0 ? (
+                      <span className="text-[10px] font-mono font-semibold text-rose-600">+${pkgPremium.toLocaleString()}</span>
+                    ) : (
+                      <span className="text-[10px] font-mono font-semibold text-emerald-600">$0 exposure</span>
+                    )}
+                  </div>
+                </div>
+
+                {/* Line Items (collapsible) */}
+                {expanded && pkgItems.map(item => (
+                  <PlanningLineItem
+                    key={item.id}
+                    item={item}
+                    isExpanded={expandedItemId === item.id}
+                    onToggle={() => setExpandedItemId(expandedItemId === item.id ? null : item.id)}
+                    onAction={(action) => handleItemAction(item.id, action)}
+                    flashState={flashItemId === item.id ? flashType : null}
+                  />
+                ))}
+              </div>
+            );
+          })}
+        </div>
+        </>
+        )}
+      </div>
+      </>
+      ) : (
+      <div className="flex-grow overflow-auto p-6 flex items-start justify-center">
+        <div className="max-w-lg w-full bg-white border border-slate-200 rounded-lg shadow-sm p-8 mt-8">
+          <h2 className="text-lg font-bold text-slate-800 mb-2">{pillarTabs.find(t => t.id === activeTab)?.label}</h2>
+          <p className="text-sm text-slate-500 mb-6">Planning tool for {pillarTabs.find(t => t.id === activeTab)?.label} is in development.</p>
+          <h3 className="text-xs font-bold uppercase tracking-wider text-slate-600 mb-3">Clarity Dimensions for {pillarTabs.find(t => t.id === activeTab)?.label}:</h3>
+          <ul className="space-y-2 mb-6">
+            {(pillarClarityDimensions[activeTab] || []).map((dim, i) => (
+              <li key={i} className="flex items-center gap-2 text-sm text-slate-600">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
+                {dim}
+              </li>
+            ))}
+          </ul>
+          <p className="text-[11px] text-slate-400 italic leading-relaxed border-t border-slate-100 pt-4">
+            The planning tool will use the same sort-by-criticality, Happy Path / Constrained Path, and Baseline → Planned state model as the Equipment tab — tailored to these pillar-specific clarity dimensions.
+          </p>
+        </div>
+      </div>
+      )}
+      {activeTab === 'equipment' && (
+      <div className="bg-white border-t border-slate-200 px-6 py-3 flex items-center justify-between shrink-0">
+        <span className="text-xs font-semibold text-slate-600">{totalItems} items · {packageCount} packages · Equipment Pillar</span>
+        <div className="flex items-center gap-4 text-xs">
+          <span className="text-slate-600">Happy Path Total: <span className="font-bold font-mono text-emerald-700">${happyPathMonthly.toLocaleString()}/mo</span></span>
+          <span className="text-slate-600">Current Blended: <span className="font-bold font-mono text-slate-800">${blendedMonthly.toLocaleString()}/mo</span></span>
+          <span className="text-slate-600">Premium Exposure: <span className="font-bold font-mono text-rose-600">+${premiumMonthly.toLocaleString()}/mo</span></span>
+        </div>
+        {allTerminal ? (
+          <button className="bg-emerald-600 text-white px-4 py-2 rounded text-xs font-semibold hover:bg-emerald-700 transition-colors">Submit to Preflight</button>
+        ) : (
+          <button disabled className="bg-slate-300 text-slate-500 px-4 py-2 rounded text-xs font-semibold cursor-not-allowed" title="All items must be Planned or Flagged">Submit to Preflight</button>
+        )}
+      </div>
+      )}
+    </div>
+  );
+};
+
 const MockAdHocIntake = () => (
   <div className="flex flex-col h-full bg-slate-50">
     <Toolbar leftArea={<><Box className="w-4 h-4 text-slate-500"/><span className="font-semibold text-slate-800">Zone 5: Ad-Hoc Equipment Intake</span><GateBadge macro="Plan Endorsed" micro="Intent Refined"/></>} />
@@ -2087,7 +3092,7 @@ const ZONE_GROUPS = [
 
 const CARD_REGISTRY = {
   quotes: { title: 'Quick Quotes', description: 'Enable RSIs to generate fast, directional equipment estimates using standardized O2S inputs.', icon: Calculator, colorClass: 'border-indigo-100', highlight: 'bg-indigo-100 text-indigo-600' },
-  prepop: { title: 'V0 Baseline Review', description: 'Pre-populate project-level equipment requests using demand forecasts, schedules, and historical patterns.', icon: Layers, colorClass: 'border-emerald-100', highlight: 'bg-emerald-100 text-emerald-600' },
+  prepop: { title: 'Project Equipment Plan', description: 'Plan, confirm, and refine project equipment needs. Wraps scope, crew, and schedule around each line item with live clarity tracking and path visibility.', icon: Layers, colorClass: 'border-emerald-100', highlight: 'bg-emerald-100 text-emerald-600' },
   adhoc: { title: 'Ad-Hoc Request Intake', description: 'Give project teams a structured way to submit ad-hoc equipment requests outside the pre-populated plan.', icon: PenTool, colorClass: 'border-emerald-100', highlight: 'bg-emerald-100 text-emerald-600' },
   costofdelay: { title: 'Cost of Delay Visibility', description: 'See the financial impact of providing or withholding clarity on each equipment need.', icon: Eye, colorClass: 'border-emerald-200 ring-2 ring-emerald-50', highlight: 'bg-emerald-500 text-white' },
   clarityscoring: { title: 'Clarity & Confidence Scoring', description: 'Assess and track how complete and confident each equipment need is across quantity, specification, and schedule.', icon: Gauge, colorClass: 'border-emerald-200', highlight: 'bg-emerald-100 text-emerald-600' },
@@ -2322,7 +3327,7 @@ const App = () => {
       case 'fitscore': return <MockFitScore />;
       case 'projectmaturity': return <MockProjectMaturity />;
       case 'regression': return <MockRegressionEvent />;
-      case 'prepop': case 'prepop-ops': return <MockPrePopulation />;
+      case 'prepop': case 'prepop-ops': return <MockProjectPlanning />;
       case 'costofdelay': return <MockCostOfDelay persona={activePersona} />;
       case 'clarityscoring': return <MockClarityScoring />;
       case 'adhoc': return <MockAdHocIntake />;
