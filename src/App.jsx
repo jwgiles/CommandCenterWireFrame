@@ -465,39 +465,6 @@ const MockMarginPlan = () => {
                 </div>
               </div>
             )}
-            <div>
-              <h3 className="text-sm font-bold text-slate-800 mb-3">Pillar Probability Summary</h3>
-              <div className="bg-white border border-slate-200 rounded-md shadow-sm p-4">
-                <div className="grid grid-cols-3 gap-3">
-                  {pillars.map((p) => {
-                    const avgProb = p.lines.length > 0
-                      ? p.lines.reduce((s, l) => s + l.prob, 0) / p.lines.length
-                      : 0;
-                    const linesWithRisk = p.lines.filter(l => l.prob < 1.0);
-                    return (
-                      <div key={p.name} className="flex items-center gap-3 p-2 rounded-md bg-slate-50">
-                        <div className="relative w-10 h-10 shrink-0">
-                          <svg viewBox="0 0 36 36" className="w-10 h-10 -rotate-90">
-                            <circle cx="18" cy="18" r="15.9" fill="none" stroke="#e2e8f0" strokeWidth="3" />
-                            <circle cx="18" cy="18" r="15.9" fill="none" stroke={avgProb >= 0.9 ? '#10b981' : avgProb >= 0.7 ? '#f59e0b' : '#ef4444'} strokeWidth="3" strokeDasharray={`${avgProb * 100} ${100 - avgProb * 100}`} strokeLinecap="round" />
-                          </svg>
-                          <span className="absolute inset-0 flex items-center justify-center text-[9px] font-bold text-slate-700">{Math.round(avgProb * 100)}%</span>
-                        </div>
-                        <div>
-                          <div className="text-xs font-semibold text-slate-700">{p.name}</div>
-                          <div className="text-[9px] text-slate-400">
-                            {linesWithRisk.length === 0
-                              ? 'All lines at 100%'
-                              : `${linesWithRisk.length} line${linesWithRisk.length > 1 ? 's' : ''} below 100%`
-                            }
-                          </div>
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
             <div className="bg-white border border-slate-200 rounded-md shadow-sm">
               <table className="w-full text-left text-xs whitespace-nowrap">
                 <thead className="bg-slate-50 border-b border-slate-200">
@@ -508,7 +475,12 @@ const MockMarginPlan = () => {
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-slate-100">
-                    {pillars.map((pillar) => (
+                    {pillars.map((pillar) => {
+                      const avgProb = pillar.lines.length > 0 ? pillar.lines.reduce((s, l) => s + l.prob, 0) / pillar.lines.length : 0;
+                      const worstRisk = pillar.lines.some(l => l.risk === 'High') ? 'High' : pillar.lines.some(l => l.risk === 'Medium') ? 'Medium' : 'Low';
+                      const stateCounts = { confirmed: 0, 'in-review': 0, draft: 0, flagged: 0 };
+                      pillar.lines.forEach(l => { if (l.state && stateCounts[l.state] !== undefined) stateCounts[l.state]++; });
+                      return (
                       <React.Fragment key={pillar.name}>
                         <tr
                           className="cursor-pointer hover:bg-slate-100 bg-slate-50/50 transition-colors"
@@ -517,6 +489,14 @@ const MockMarginPlan = () => {
                           <td className="px-3 py-2 font-bold text-slate-800 flex items-center gap-1">
                             <ChevronRight className={`w-4 h-4 text-slate-400 transition-transform ${expanded[pillar.name] ? 'rotate-90' : ''}`} />
                             {pillar.name}
+                            <span className={`ml-2 text-[9px] font-bold px-1.5 py-0.5 rounded ${avgProb >= 0.9 ? 'bg-emerald-50 text-emerald-700' : avgProb >= 0.7 ? 'bg-amber-50 text-amber-700' : 'bg-rose-50 text-rose-700'}`}>{Math.round(avgProb * 100)}% avg</span>
+                            <span className={`w-2 h-2 rounded-full inline-block ml-1 ${worstRisk === 'High' ? 'bg-rose-500' : worstRisk === 'Medium' ? 'bg-amber-500' : 'bg-emerald-500'}`} />
+                            <span className="flex items-center gap-px ml-2">
+                              {stateCounts.confirmed > 0 && <span className="w-1.5 h-3 bg-emerald-500 rounded-sm" title={`${stateCounts.confirmed} confirmed`} />}
+                              {stateCounts['in-review'] > 0 && <span className="w-1.5 h-3 bg-blue-500 rounded-sm" title={`${stateCounts['in-review']} in review`} />}
+                              {stateCounts.draft > 0 && <span className="w-1.5 h-3 bg-amber-400 rounded-sm" title={`${stateCounts.draft} draft`} />}
+                              {stateCounts.flagged > 0 && <span className="w-1.5 h-3 bg-rose-500 rounded-sm" title={`${stateCounts.flagged} flagged`} />}
+                            </span>
                           </td>
                           <td className="px-3 py-2 text-right font-mono">{fmt(pillar.tamOpportunity)}</td>
                           <td className="px-3 py-2 text-right font-mono">{pct(pillar.captureRate)}</td>
@@ -524,7 +504,7 @@ const MockMarginPlan = () => {
                           <td className="px-3 py-2 text-right font-mono">{fmt(pillar.cost)}</td>
                           <td className="px-3 py-2 text-right font-mono text-emerald-600">{fmt(pillar.profit)}</td>
                           <td className="px-3 py-2 text-right font-mono">{pct(pillar.profitPct)}</td>
-                          <td className="px-3 py-2 text-right font-mono">—</td>
+                          <td className="px-3 py-2 text-right font-mono">{pct(avgProb)}</td>
                         </tr>
                         {expanded[pillar.name] && pillar.lines.map((line, li) => {
                           const lineKey = `${pillar.name}-${li}`;
@@ -631,7 +611,8 @@ const MockMarginPlan = () => {
                           );
                         })}
                       </React.Fragment>
-                    ))}
+                      );
+                    })}
                     <tr className="border-t-2 border-slate-300 bg-slate-100 font-bold">
                       <td className="px-3 py-2 text-slate-800">Totals</td>
                       <td className="px-3 py-2 text-right font-mono">{fmt(pillars.reduce((s, p) => s + p.tamOpportunity, 0))}</td>
