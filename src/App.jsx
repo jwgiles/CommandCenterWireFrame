@@ -469,7 +469,7 @@ const MockMarginPlan = () => {
               <table className="w-full text-left text-xs whitespace-nowrap">
                 <thead className="bg-slate-50 border-b border-slate-200">
                   <tr>
-                    {['Pillar / Product Line', 'TAM Opportunity', '% Capture', '02S Revenue', '02S Cost', 'Profit ($)', 'Margin %', 'Probability'].map((h, i) => (
+                    {['Pillar / Product Line', 'TAM Opportunity', '% Capture', '02S Revenue', '02S Cost', 'NOP ($)', 'NOP %', 'Probability'].map((h, i) => (
                         <th key={i} className={`px-3 py-2 text-[10px] uppercase tracking-wider text-slate-500 font-semibold ${i > 0 ? 'text-right' : ''}`}>{h}</th>
                       ))}
                     </tr>
