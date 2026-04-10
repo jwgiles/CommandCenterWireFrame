@@ -381,6 +381,7 @@ const MockMarginPlan = () => {
                 );
               })}
             </div>
+            <span className="text-[9px] text-indigo-400 font-medium ml-1 italic">High-level estimates — detail at Pre-Award</span>
           </>
         }
         rightArea={
