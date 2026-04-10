@@ -370,6 +370,23 @@ const MockMarginPlan = () => {
             <div className="bg-indigo-600 text-white text-[10px] font-bold px-2 py-0.5 rounded">{project.jobNumber}</div>
             <span className="font-semibold text-slate-800">{project.name} (Pursuit)</span>
             <GateBadge macro="Active Pursuit" micro="Pursuit Shaped" />
+            <div className="flex items-center gap-0.5 ml-2">
+              {['Go/No-Go', 'Pursuit', 'Pre-Award', 'Committed', 'Execution'].map((phase, i) => {
+                const activeIdx = 1;
+                const isActive = i === activeIdx;
+                const isPast = i < activeIdx;
+                return (
+                  <React.Fragment key={phase}>
+                    {i > 0 && <div className={`w-3 h-px ${isPast ? 'bg-indigo-400' : 'bg-slate-300'}`} />}
+                    <div className={`px-1.5 py-0.5 text-[8px] font-bold uppercase tracking-wider rounded ${
+                      isActive ? 'bg-indigo-600 text-white' : isPast ? 'bg-indigo-100 text-indigo-600' : 'bg-slate-100 text-slate-400'
+                    }`}>
+                      {phase}
+                    </div>
+                  </React.Fragment>
+                );
+              })}
+            </div>
           </>
         }
         rightArea={
