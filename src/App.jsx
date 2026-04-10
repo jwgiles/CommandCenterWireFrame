@@ -212,16 +212,16 @@ const MockMarginPlan = () => {
       durationMonths: 24,
     },
     totals: {
-      tamOpportunity: 50800000,
-      captureRate: 0.5858,
-      o2sRevenue: 29756250,
-      o2sCost: 22293750,
-      o2sProfit: 7462500,
-      profitPct: 0.2508,
+      tamOpportunity: 51675000,
+      captureRate: 0.5886,
+      o2sRevenue: 30412500,
+      o2sCost: 22512500,
+      o2sProfit: 7900000,
+      profitPct: 0.2597,
       baseFee: 10500000,
       baseFeePct: 0.03,
       selfPerformFee: 10500000,
-      o2sShare: 7462500,
+      o2sShare: 7900000,
     },
     pillars: [
       {
@@ -275,9 +275,9 @@ const MockMarginPlan = () => {
       },
       {
         name: 'Logistics',
-        tamOpportunity: 2625000, captureRate: 0.75, revenue: 1968750, cost: 1673437.5, profit: 295312.5,
+        tamOpportunity: 3500000, captureRate: 0.75, revenue: 2625000, cost: 2231250, profit: 393750,
         profitPct: 0.15,
-        minProfit: 295312.5, probableProfit: 295312.5, maxProfit: 295312.5,
+        minProfit: 393750, probableProfit: 393750, maxProfit: 393750,
         lines: [
           { name: 'GC / GR Site Services', tamOpp: 875000, capture: 0.75, rev: 656250, cost: 557812.5, profit: 98437.5, pct: 0.15, prob: 1.0, source: 'GCGR', state: 'confirmed', capacity: 'Available', deal: 'Strong', risk: 'Low', pursuitBasis: 'GC/GR site services — 75% capture of $875K scope', rationale: 'Straightforward logistics support. Fayad Faruk assigned.' },
           { name: 'Trucking / Freight', tamOpp: 875000, capture: 0.75, rev: 656250, cost: 557812.5, profit: 98437.5, pct: 0.15, prob: 1.0, source: 'Vendor Bid', state: 'confirmed', capacity: 'Available', deal: 'Strong', risk: 'Low', pursuitBasis: 'Freight hauling — vendor bid received, 75% capture', rationale: 'Vendor pricing locked. Low risk.' },
@@ -438,10 +438,10 @@ const MockMarginPlan = () => {
         <div className="grid grid-cols-4 gap-4">
           {view === 'margin' ? (
             <>
-              <KPI label="TAM Opportunity" value="$50.8M" />
-              <KPI label="Capture Rate" value="58.6%" subtext="Enterprise Goal: 45%" />
-              <KPI label="02S Revenue" value="$29.8M" />
-              <KPI label="02S Net Operating Profit" value="$7.46M" subtext="25.1% NOP (incl. G&A)" />
+              <KPI label="TAM Opportunity" value="$51.7M" />
+              <KPI label="Capture Rate" value="58.9%" subtext="Enterprise Goal: 45%" />
+              <KPI label="02S Revenue" value="$30.4M" />
+              <KPI label="02S Net Operating Profit" value="$7.90M" subtext="26.0% NOP (incl. G&A)" />
             </>
           ) : (
             <>
@@ -2452,9 +2452,9 @@ const MockProjectMaturity = () => {
         <div className="bg-white border border-slate-200 rounded-md p-4 shadow-sm">
           <h4 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3">Zone Distribution</h4>
           <div className="flex h-8 rounded-lg overflow-hidden border border-slate-200 mb-3">
-            <div className="bg-emerald-500 flex items-center justify-center text-white text-[10px] font-bold" style={{ width: '60%' }}>Zone 7+ — 60%</div>
-            <div className="bg-amber-400 flex items-center justify-center text-amber-900 text-[10px] font-bold" style={{ width: '25%' }}>Z5–6 — 25%</div>
-            <div className="bg-slate-300 flex items-center justify-center text-slate-700 text-[10px] font-bold" style={{ width: '15%' }}>Z3–4</div>
+            <div className="bg-emerald-500 flex items-center justify-center text-white text-[10px] font-bold" style={{ width: '59%' }}>Zone 7+ — 59%</div>
+            <div className="bg-amber-400 flex items-center justify-center text-amber-900 text-[10px] font-bold" style={{ width: '27%' }}>Z5–6 — 27%</div>
+            <div className="bg-slate-300 flex items-center justify-center text-slate-700 text-[10px] font-bold" style={{ width: '14%' }}>Z3–4</div>
           </div>
           <div className="grid grid-cols-3 gap-3 text-[10px]">
             <div className="flex items-center gap-1.5"><div className="w-2.5 h-2.5 rounded-full bg-emerald-500 shrink-0" /><span className="text-slate-600"><strong>13 line items</strong> submitted & in execution</span></div>
@@ -2670,12 +2670,12 @@ const MockClarityScoring = () => {
       <div className="p-6 overflow-auto flex flex-col gap-5">
         <div className="grid grid-cols-4 gap-4">
           <div className="bg-white border border-slate-200 p-3 rounded-md shadow-sm flex items-center gap-3">
-            <CircularProgress value={68} color="text-amber-500" />
-            <div><div className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold">Overall Clarity</div><div className="text-sm font-bold text-slate-800">68%</div></div>
+            <CircularProgress value={72} color="text-amber-500" />
+            <div><div className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold">Overall Clarity</div><div className="text-sm font-bold text-slate-800">72%</div></div>
           </div>
           <div className="bg-white border border-slate-200 p-3 rounded-md shadow-sm flex items-center gap-3">
-            <CircularProgress value={54} color="text-amber-500" />
-            <div><div className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold">Overall Confidence</div><div className="text-sm font-bold text-slate-800">54%</div></div>
+            <CircularProgress value={60} color="text-amber-500" />
+            <div><div className="text-[10px] uppercase tracking-wider text-slate-500 font-semibold">Overall Confidence</div><div className="text-sm font-bold text-slate-800">60%</div></div>
           </div>
           <KPI label="Lines at Full Clarity" value="8 / 22" />
           <div className="bg-white border border-slate-200 p-3 rounded-md shadow-sm">
@@ -3058,9 +3058,9 @@ const MockFinancialModel = () => {
       <div className="p-6 flex flex-col flex-grow overflow-hidden gap-4">
         <div className="grid grid-cols-4 gap-4 shrink-0">
           <KPI label="Total Pipeline (Gross)" value="$49.26M" subtext="FP&A Gross Revenue (4 projects)" />
-          <KPI label="Risk-Adjusted Revenue" value="$34.97M" trend="-29.0%" subtext="Zone-weighted yield" />
+          <KPI label="Risk-Adjusted Revenue" value="$37.40M" trend="-24.1%" subtext="Zone-weighted yield" />
           <KPI label="02S Planned Cost Basis" value="$32.19M" subtext="From Margin Plans & Intent" />
-          <KPI label="Blended Adj. Margin" value="7.9%" trend="-2.1%" subtext="vs AOP Target (10%)" />
+          <KPI label="Blended Adj. Margin" value="13.9%" trend="+3.9%" subtext="vs AOP Target (10%)" />
         </div>
         <div className="bg-white border border-slate-200 rounded-md shadow-sm flex flex-col shrink-0">
           <div className="p-3 border-b border-slate-200 bg-slate-50 flex justify-between items-center shrink-0">
