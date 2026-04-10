@@ -6,7 +6,7 @@ import {
   Settings, Database, ChevronRight, Zap, RefreshCw, ShoppingCart, ShieldAlert,
   HardHat, BarChart3, Lock, ChevronDown, TrendingUp,
   FileCheck, Send, Truck, Star, Repeat, GitBranch, Bell, Eye, Gauge, Crosshair, ClipboardList,
-  Users, Rocket
+  Users, Rocket, Calendar, GripVertical, ArrowLeftRight, Minus, Plus
 } from 'lucide-react';
 
 const Badge = ({ children, variant = 'gray' }) => {
@@ -1490,9 +1490,372 @@ const PlanningLineItem = ({ item, isExpanded, onToggle, onAction, flashState }) 
   );
 };
 
+/* ──────────────────────────────────────────────────────────────────
+   SCHEDULE GRID VIEW — 24-month Gantt + clickable utilization cells
+   ────────────────────────────────────────────────────────────────── */
+
+const SCHEDULE_MONTHS = (() => {
+  const months = [];
+  const startYear = 2026;
+  const startMonth = 5; // Jun 2026 (0-indexed)
+  const labels = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  for (let i = 0; i < 24; i++) {
+    const m = (startMonth + i) % 12;
+    const y = startYear + Math.floor((startMonth + i) / 12);
+    months.push({ label: labels[m], year: y, key: `${y}-${String(m + 1).padStart(2, '0')}`, quarter: Math.floor(m / 3) + 1, idx: i });
+  }
+  return months;
+})();
+
+const SCHEDULE_YEARS = [...new Set(SCHEDULE_MONTHS.map(m => m.year))];
+
+const buildScheduleItems = (planData) => {
+  const items = [];
+  planData.packages.forEach(pkg => {
+    pkg.items.forEach(item => {
+      // Map the 8-month utilization array to the 24-month grid
+      // Original utilization covers Oct(idx 4)–May(idx 11) of year 1
+      const util24 = new Array(24).fill(0);
+      const offsetStart = 4; // Oct 2026 = month index 4
+      item.utilization.forEach((val, i) => {
+        if (offsetStart + i < 24) util24[offsetStart + i] = val;
+      });
+      items.push({
+        ...item,
+        packageId: pkg.id,
+        packageName: pkg.name,
+        util24,
+        rate: item.costHappy,
+        rateConstrained: item.costConstrained,
+      });
+    });
+  });
+  return items;
+};
+
+const ScheduleGridView = ({ planData }) => {
+  const [scheduleItems, setScheduleItems] = useState(() => buildScheduleItems(planData));
+  const [hoveredCell, setHoveredCell] = useState(null);
+  const [dragItem, setDragItem] = useState(null);
+  const [dragStartMonth, setDragStartMonth] = useState(null);
+  const [expandedPkgs, setExpandedPkgs] = useState(() => {
+    const map = {};
+    planData.packages.forEach(p => { map[p.id] = true; });
+    return map;
+  });
+
+  const cycleUtilization = (itemId, monthIdx) => {
+    setScheduleItems(prev => prev.map(item => {
+      if (item.id !== itemId) return item;
+      const next = [...item.util24];
+      const current = next[monthIdx];
+      next[monthIdx] = current === 0 ? 0.5 : current === 0.5 ? 1.0 : 0;
+      return { ...item, util24: next };
+    }));
+  };
+
+  const shiftItemSchedule = (itemId, direction) => {
+    setScheduleItems(prev => prev.map(item => {
+      if (item.id !== itemId) return item;
+      const next = new Array(24).fill(0);
+      item.util24.forEach((val, i) => {
+        const ni = i + direction;
+        if (ni >= 0 && ni < 24) next[ni] = val;
+      });
+      return { ...item, util24: next };
+    }));
+  };
+
+  // Group by package
+  const grouped = planData.packages.map(pkg => ({
+    ...pkg,
+    schedItems: scheduleItems.filter(si => si.packageId === pkg.id),
+  }));
+
+  // Monthly totals
+  const monthlyTotals = SCHEDULE_MONTHS.map((_, mi) =>
+    scheduleItems.reduce((sum, item) => sum + item.rate * item.qty * item.util24[mi], 0)
+  );
+  const grandTotal = monthlyTotals.reduce((a, b) => a + b, 0);
+
+  // Path color for left border
+  const pathBorder = { happy: '#34d399', 'at-risk': '#fbbf24', constrained: '#fb7185' };
+  const stateBg = { baseline: 'bg-amber-50/40', 'in-review': 'bg-blue-50/40', planned: 'bg-emerald-50/30', flagged: 'bg-rose-50/40' };
+
+  return (
+    <div className="flex flex-col h-full">
+      {/* Schedule Header */}
+      <div className="px-4 pt-4 pb-2 flex items-center justify-between shrink-0">
+        <div className="flex items-center gap-3">
+          <Calendar className="w-4 h-4 text-indigo-500" />
+          <span className="text-sm font-bold text-slate-800">Equipment Schedule Grid</span>
+          <Badge variant="gray">24-month view</Badge>
+          <span className="text-[10px] text-slate-400 italic ml-2">Click cells to cycle utilization (0 → 0.5 → 1.0) · Use arrows to shift schedule</span>
+        </div>
+        <div className="flex items-center gap-4 text-xs">
+          <span className="text-slate-600">Total Project Cost: <span className="font-bold font-mono text-indigo-700">${grandTotal.toLocaleString()}</span></span>
+          <span className="text-slate-600">{scheduleItems.length} items</span>
+        </div>
+      </div>
+
+      {/* Scrollable Grid */}
+      <div className="flex-grow overflow-auto px-4 pb-4">
+        <div className="min-w-max">
+          {/* Sticky Column Headers */}
+          <div className="flex sticky top-0 z-20 bg-slate-50">
+            {/* Frozen left columns */}
+            <div className="sticky left-0 z-30 bg-slate-50 flex shrink-0 border-b-2 border-slate-300">
+              <div className="w-[28px] px-1 py-2 text-[8px] uppercase tracking-wider text-slate-400 font-bold border-r border-slate-200" />
+              <div className="w-[180px] px-2 py-2 text-[9px] uppercase tracking-wider text-slate-500 font-bold border-r border-slate-200">Equipment</div>
+              <div className="w-[50px] px-1 py-2 text-[9px] uppercase tracking-wider text-slate-500 font-bold text-center border-r border-slate-200">Qty</div>
+              <div className="w-[80px] px-1 py-2 text-[9px] uppercase tracking-wider text-slate-500 font-bold text-right border-r border-slate-200">Rate/mo</div>
+              <div className="w-[48px] px-1 py-2 text-[9px] uppercase tracking-wider text-slate-500 font-bold text-center border-r border-slate-200">Shift</div>
+            </div>
+            {/* Month columns */}
+            <div className="flex shrink-0 border-b-2 border-slate-300">
+              {SCHEDULE_MONTHS.map((m, i) => {
+                const isYearBoundary = i === 0 || m.year !== SCHEDULE_MONTHS[i - 1]?.year;
+                const isQuarterBoundary = i === 0 || m.quarter !== SCHEDULE_MONTHS[i - 1]?.quarter || isYearBoundary;
+                return (
+                  <div
+                    key={m.key}
+                    className={`w-[36px] text-center py-1 ${isQuarterBoundary ? 'border-l-2 border-slate-300' : 'border-l border-slate-200'}`}
+                  >
+                    {isYearBoundary && <div className="text-[7px] font-bold text-indigo-600 leading-tight">{m.year}</div>}
+                    <div className={`text-[8px] font-semibold ${m.label === 'Jan' ? 'text-indigo-600' : 'text-slate-500'}`}>{m.label}</div>
+                  </div>
+                );
+              })}
+              {/* Running total column */}
+              <div className="w-[80px] text-center py-2 border-l-2 border-slate-300">
+                <div className="text-[8px] font-bold text-slate-500 uppercase">Total</div>
+              </div>
+            </div>
+          </div>
+
+          {/* Package Groups */}
+          {grouped.map(pkg => {
+            const expanded = expandedPkgs[pkg.id] !== false;
+            const pkgMonthly = SCHEDULE_MONTHS.map((_, mi) =>
+              pkg.schedItems.reduce((sum, item) => sum + item.rate * item.qty * item.util24[mi], 0)
+            );
+            const pkgTotal = pkgMonthly.reduce((a, b) => a + b, 0);
+            return (
+              <div key={pkg.id}>
+                {/* Package Header Row */}
+                <div className="flex sticky top-[40px] z-10 cursor-pointer hover:bg-slate-100 transition-colors" onClick={() => setExpandedPkgs(prev => ({ ...prev, [pkg.id]: !prev[pkg.id] }))}>
+                  <div className="sticky left-0 z-20 bg-slate-100 flex items-center shrink-0 border-b border-slate-200">
+                    <div className="w-[28px] px-1 flex items-center justify-center">
+                      {expanded ? <ChevronDown className="w-3 h-3 text-slate-400" /> : <ChevronRight className="w-3 h-3 text-slate-400" />}
+                    </div>
+                    <div className="w-[180px] px-2 py-2">
+                      <span className="text-[11px] font-bold text-slate-700">{pkg.name}</span>
+                      <span className="ml-2 text-[9px] text-slate-400">{pkg.schedItems.length} items</span>
+                    </div>
+                    <div className="w-[50px]" />
+                    <div className="w-[80px]" />
+                    <div className="w-[48px]" />
+                  </div>
+                  <div className="flex shrink-0 bg-slate-100 border-b border-slate-200">
+                    {SCHEDULE_MONTHS.map((m, mi) => {
+                      const val = pkgMonthly[mi];
+                      const isQuarterBoundary = mi === 0 || m.quarter !== SCHEDULE_MONTHS[mi - 1]?.quarter || (mi > 0 && m.year !== SCHEDULE_MONTHS[mi - 1]?.year);
+                      return (
+                        <div
+                          key={m.key}
+                          className={`w-[36px] py-2 text-center ${isQuarterBoundary ? 'border-l-2 border-slate-300' : 'border-l border-slate-200'}`}
+                        >
+                          {val > 0 && <div className="text-[7px] font-mono font-semibold text-slate-500">{(val / 1000).toFixed(0)}k</div>}
+                        </div>
+                      );
+                    })}
+                    <div className="w-[80px] py-2 text-center border-l-2 border-slate-300">
+                      <span className="text-[9px] font-mono font-bold text-slate-600">${(pkgTotal / 1000).toFixed(0)}k</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Item Rows */}
+                {expanded && pkg.schedItems.map(item => {
+                  const firstActive = item.util24.findIndex(v => v > 0);
+                  const lastActive = 23 - [...item.util24].reverse().findIndex(v => v > 0);
+                  const hasActive = firstActive >= 0;
+                  const itemTotal = item.util24.reduce((sum, v, mi) => sum + item.rate * item.qty * v, 0);
+
+                  return (
+                    <div key={item.id} className={`flex ${stateBg[item.state] || ''} hover:bg-indigo-50/20 transition-colors`}>
+                      {/* Frozen left */}
+                      <div className="sticky left-0 z-10 flex items-center shrink-0 border-b border-slate-100" style={{ borderLeft: `3px solid ${pathBorder[item.path] || '#94a3b8'}`, background: 'inherit' }}>
+                        <div className={`sticky left-0 z-10 flex items-center shrink-0 ${stateBg[item.state] || 'bg-white'}`} style={{ background: 'inherit' }}>
+                          <div className="w-[28px] px-1 flex items-center justify-center">
+                            <GripVertical className="w-3 h-3 text-slate-300 cursor-grab" />
+                          </div>
+                          <div className="w-[180px] px-2 py-1.5">
+                            <div className="text-[11px] font-medium text-slate-800 truncate">{item.type}</div>
+                            <div className="text-[9px] text-slate-400 truncate">{item.model}</div>
+                          </div>
+                          <div className="w-[50px] text-center text-[11px] font-mono font-semibold text-slate-700">{item.qty}</div>
+                          <div className="w-[80px] text-right pr-2 text-[10px] font-mono text-slate-600">${item.rate.toLocaleString()}</div>
+                          <div className="w-[48px] flex items-center justify-center gap-0.5">
+                            <button
+                              onClick={(e) => { e.stopPropagation(); shiftItemSchedule(item.id, -1); }}
+                              className="w-5 h-5 flex items-center justify-center rounded hover:bg-slate-200 text-slate-400 hover:text-slate-600 transition-colors"
+                              title="Shift schedule earlier"
+                            >
+                              <ChevronRight className="w-3 h-3 rotate-180" />
+                            </button>
+                            <button
+                              onClick={(e) => { e.stopPropagation(); shiftItemSchedule(item.id, 1); }}
+                              className="w-5 h-5 flex items-center justify-center rounded hover:bg-slate-200 text-slate-400 hover:text-slate-600 transition-colors"
+                              title="Shift schedule later"
+                            >
+                              <ChevronRight className="w-3 h-3" />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                      {/* Month cells */}
+                      <div className="flex shrink-0 border-b border-slate-100">
+                        {SCHEDULE_MONTHS.map((m, mi) => {
+                          const val = item.util24[mi];
+                          const isQuarterBoundary = mi === 0 || m.quarter !== SCHEDULE_MONTHS[mi - 1]?.quarter || (mi > 0 && m.year !== SCHEDULE_MONTHS[mi - 1]?.year);
+                          const inGanttRange = hasActive && mi >= firstActive && mi <= lastActive;
+
+                          // Cell appearance
+                          let cellBg = 'bg-white';
+                          let cellText = 'text-slate-300';
+                          let cellContent = '';
+                          if (val >= 1.0) {
+                            cellBg = 'bg-emerald-200';
+                            cellText = 'text-emerald-800';
+                            cellContent = '1.0';
+                          } else if (val >= 0.5) {
+                            cellBg = 'bg-amber-200';
+                            cellText = 'text-amber-800';
+                            cellContent = '0.5';
+                          } else if (inGanttRange) {
+                            cellBg = 'bg-slate-100';
+                            cellText = 'text-slate-400';
+                            cellContent = '—';
+                          }
+
+                          // Gantt bar borders
+                          const isFirst = hasActive && mi === firstActive;
+                          const isLast = hasActive && mi === lastActive;
+                          const ganttBorder = inGanttRange
+                            ? `${isFirst ? 'rounded-l-sm ' : ''}${isLast ? 'rounded-r-sm ' : ''}border-t border-b ${isFirst ? 'border-l ' : ''}${isLast ? 'border-r ' : ''}border-slate-300`
+                            : '';
+
+                          const isHovered = hoveredCell?.itemId === item.id && hoveredCell?.monthIdx === mi;
+                          return (
+                            <div
+                              key={m.key}
+                              className={`w-[36px] h-[32px] flex items-center justify-center cursor-pointer select-none transition-all ${isQuarterBoundary ? 'border-l-2 border-l-slate-300' : 'border-l border-l-slate-200'} ${cellBg} ${ganttBorder} ${isHovered ? 'ring-2 ring-indigo-400 ring-inset z-10' : ''}`}
+                              onClick={() => cycleUtilization(item.id, mi)}
+                              onMouseEnter={() => setHoveredCell({ itemId: item.id, monthIdx: mi })}
+                              onMouseLeave={() => setHoveredCell(null)}
+                              title={`${m.label} ${m.year}: ${val > 0 ? val.toFixed(1) : 'off'} · $${(item.rate * item.qty * val).toLocaleString()}/mo · Click to change`}
+                            >
+                              <span className={`text-[8px] font-mono font-semibold ${cellText}`}>{cellContent}</span>
+                            </div>
+                          );
+                        })}
+                        {/* Running total */}
+                        <div className="w-[80px] flex items-center justify-center border-l-2 border-slate-300">
+                          <span className="text-[9px] font-mono font-bold text-slate-700">${(itemTotal / 1000).toFixed(1)}k</span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            );
+          })}
+
+          {/* Grand Total Row */}
+          <div className="flex sticky bottom-0 z-10 bg-white border-t-2 border-slate-400">
+            <div className="sticky left-0 z-20 bg-white flex items-center shrink-0">
+              <div className="w-[28px]" />
+              <div className="w-[180px] px-2 py-2">
+                <span className="text-[11px] font-bold text-slate-800">Monthly Total</span>
+              </div>
+              <div className="w-[50px]" />
+              <div className="w-[80px]" />
+              <div className="w-[48px]" />
+            </div>
+            <div className="flex shrink-0">
+              {SCHEDULE_MONTHS.map((m, mi) => {
+                const val = monthlyTotals[mi];
+                const isQuarterBoundary = mi === 0 || m.quarter !== SCHEDULE_MONTHS[mi - 1]?.quarter || (mi > 0 && m.year !== SCHEDULE_MONTHS[mi - 1]?.year);
+                const intensity = val > 0 ? Math.min(val / Math.max(...monthlyTotals), 1) : 0;
+                return (
+                  <div
+                    key={m.key}
+                    className={`w-[36px] py-2 text-center ${isQuarterBoundary ? 'border-l-2 border-slate-300' : 'border-l border-slate-200'}`}
+                    style={val > 0 ? { backgroundColor: `rgba(99, 102, 241, ${intensity * 0.15})` } : undefined}
+                  >
+                    <div className="text-[7px] font-mono font-bold text-indigo-700">{val > 0 ? `${(val / 1000).toFixed(0)}k` : ''}</div>
+                  </div>
+                );
+              })}
+              <div className="w-[80px] py-2 text-center border-l-2 border-slate-300 bg-indigo-50">
+                <span className="text-[10px] font-mono font-bold text-indigo-700">${(grandTotal / 1000).toFixed(0)}k</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Cost Burn Sparkline */}
+          <div className="flex mt-2">
+            <div className="sticky left-0 z-20 bg-slate-50 flex items-center shrink-0">
+              <div className="w-[28px]" />
+              <div className="w-[180px] px-2 py-1">
+                <span className="text-[9px] text-slate-400 italic">Running cumulative</span>
+              </div>
+              <div className="w-[50px]" />
+              <div className="w-[80px]" />
+              <div className="w-[48px]" />
+            </div>
+            <div className="flex shrink-0">
+              {SCHEDULE_MONTHS.map((m, mi) => {
+                const cumulative = monthlyTotals.slice(0, mi + 1).reduce((a, b) => a + b, 0);
+                const isQuarterBoundary = mi === 0 || m.quarter !== SCHEDULE_MONTHS[mi - 1]?.quarter || (mi > 0 && m.year !== SCHEDULE_MONTHS[mi - 1]?.year);
+                return (
+                  <div
+                    key={m.key}
+                    className={`w-[36px] py-1 text-center ${isQuarterBoundary ? 'border-l-2 border-slate-300' : 'border-l border-slate-200'}`}
+                  >
+                    <div className="text-[6px] font-mono text-slate-400">{cumulative > 0 ? `${(cumulative / 1000).toFixed(0)}k` : ''}</div>
+                  </div>
+                );
+              })}
+              <div className="w-[80px] py-1 text-center border-l-2 border-slate-300">
+                <span className="text-[8px] font-mono font-semibold text-indigo-600">${(grandTotal / 1000).toFixed(0)}k</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="bg-white border-t border-slate-200 px-6 py-3 flex items-center justify-between shrink-0">
+        <div className="flex items-center gap-4 text-[10px] text-slate-500">
+          <span className="flex items-center gap-1"><div className="w-3 h-3 rounded-sm bg-emerald-200" /> 1.0 Full utilization</span>
+          <span className="flex items-center gap-1"><div className="w-3 h-3 rounded-sm bg-amber-200" /> 0.5 Partial</span>
+          <span className="flex items-center gap-1"><div className="w-3 h-3 rounded-sm bg-slate-100 border border-slate-300" /> 0 In range</span>
+          <span className="flex items-center gap-1"><div className="w-3 h-3 rounded-sm bg-white border border-slate-200" /> Off</span>
+        </div>
+        <div className="flex items-center gap-3 text-xs">
+          <span className="text-slate-500">Happy Path rates shown · <span className="font-semibold text-indigo-600">{scheduleItems.length} items across {planData.packages.length} packages</span></span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const MockProjectPlanning = () => {
   const [planData, setPlanData] = useState(() => JSON.parse(JSON.stringify(PROJECT_PLANNING_DATA)));
   const [activeTab, setActiveTab] = useState('equipment');
+  const [activeView, setActiveView] = useState('plan'); // 'plan' | 'schedule'
   const [activeSort, setActiveSort] = useState('criticality');
   const [expandedItemId, setExpandedItemId] = useState(null);
   const [flashItemId, setFlashItemId] = useState(null);
@@ -1657,25 +2020,54 @@ const MockProjectPlanning = () => {
           <span className="text-slate-400"> · Logistics: — · Prefab: — · Procurement: — · ProSvcs: —</span>
         </div>
       </div>
-      {/* Pillar Tabs */}
-      <div className="bg-white border-b border-slate-200 px-6 flex gap-0 shrink-0">
-        {pillarTabs.map(tab => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`px-4 py-2.5 text-xs border-b-2 transition-colors ${
-              activeTab === tab.id
-                ? 'border-emerald-500 text-emerald-700 font-semibold bg-white'
-                : 'border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-50 font-medium'
-            }`}
-          >
-            {tab.label}
-            {tab.id !== 'equipment' && <span className="ml-1 text-[9px] text-slate-400 font-normal">(Soon)</span>}
-          </button>
-        ))}
+      {/* Pillar Tabs + View Toggle */}
+      <div className="bg-white border-b border-slate-200 px-6 flex gap-0 shrink-0 items-end justify-between">
+        <div className="flex gap-0">
+          {pillarTabs.map(tab => (
+            <button
+              key={tab.id}
+              onClick={() => setActiveTab(tab.id)}
+              className={`px-4 py-2.5 text-xs border-b-2 transition-colors ${
+                activeTab === tab.id
+                  ? 'border-emerald-500 text-emerald-700 font-semibold bg-white'
+                  : 'border-transparent text-slate-500 hover:text-slate-700 hover:bg-slate-50 font-medium'
+              }`}
+            >
+              {tab.label}
+              {tab.id !== 'equipment' && <span className="ml-1 text-[9px] text-slate-400 font-normal">(Soon)</span>}
+            </button>
+          ))}
+        </div>
+        {activeTab === 'equipment' && (
+          <div className="flex items-center gap-1 pb-2">
+            <span className="text-[9px] uppercase tracking-wider text-slate-400 font-semibold mr-1">View:</span>
+            <button
+              onClick={() => setActiveView('plan')}
+              className={`flex items-center gap-1 px-2.5 py-1 rounded text-[10px] font-semibold transition-colors ${
+                activeView === 'plan'
+                  ? 'bg-indigo-100 text-indigo-700 border border-indigo-200'
+                  : 'bg-white text-slate-500 border border-slate-200 hover:border-slate-300'
+              }`}
+            >
+              <Layers className="w-3 h-3" /> Plan
+            </button>
+            <button
+              onClick={() => setActiveView('schedule')}
+              className={`flex items-center gap-1 px-2.5 py-1 rounded text-[10px] font-semibold transition-colors ${
+                activeView === 'schedule'
+                  ? 'bg-indigo-100 text-indigo-700 border border-indigo-200'
+                  : 'bg-white text-slate-500 border border-slate-200 hover:border-slate-300'
+              }`}
+            >
+              <Calendar className="w-3 h-3" /> Schedule
+            </button>
+          </div>
+        )}
       </div>
       {/* Content Area */}
-      {activeTab === 'equipment' ? (
+      {activeTab === 'equipment' && activeView === 'schedule' ? (
+        <ScheduleGridView planData={planData} />
+      ) : activeTab === 'equipment' ? (
       <>
       <div className="px-4 pt-4 pb-2 flex flex-col gap-4 shrink-0">
         {/* State Composition Strip */}
