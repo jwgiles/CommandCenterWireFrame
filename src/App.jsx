@@ -3568,7 +3568,7 @@ const PERSONAS = [
   { id: 'leadership', label: 'Leadership', icon: BarChart3 },
   { id: 'finance', label: 'Finance & FP&A', icon: DollarSign },
   { id: 'command-center-zone-story', label: 'Command Center - Zone Story', icon: Layers },
-  { id: 'command-center-persona-story', label: 'Command Center - Persona Story', icon: ClipboardList },
+  { id: 'command-center-persona-story', label: 'Command Center - View Story', icon: ClipboardList },
 ];
 
 const PILLARS = [
@@ -4229,6 +4229,734 @@ const ZoneLineageStory = ({ onSelectWorkflow }) => {
   );
 };
 
+const ATTENTION_VIEWS = [
+  {
+    id: 'myWork',
+    label: 'My Work',
+    question: 'What needs my attention right now?',
+    icon: CheckCircle2,
+    accent: 'emerald',
+  },
+  {
+    id: 'threadView',
+    label: 'Thread View',
+    question: 'What is happening around this specific item?',
+    icon: Database,
+    accent: 'indigo',
+  },
+  {
+    id: 'systemView',
+    label: 'System View',
+    question: 'How is the whole operation positioned?',
+    icon: Monitor,
+    accent: 'rose',
+  },
+];
+
+const ATTENTION_STORY_SECTIONS = [
+  {
+    id: 'z1-3',
+    zoneLabel: 'Zones 1-3',
+    title: 'See It Early Enough To Shape It',
+    funnelZone: 'Raw Forecasts -> Qualified Forecasts -> Active Pursuits',
+    summary: 'The Command Center sees the tower crane before it becomes a request. This is where early forecast, fit, and Margin Plan assumptions create enough signal for better conversations.',
+    objectState: 'Margin Plan economic anchor',
+    workflowIds: ['margin', 'forecast', 'fitscore'],
+    projectValue: 'The project gets early cost and schedule clarity before the lift plan hardens.',
+    o2sValue: '02S sees demand early enough to shape engagement, capacity posture, and margin assumptions.',
+    myWork: {
+      toolTitle: 'Priority Obligation Queue',
+      toolSummary: 'A targeted RSI action appears because the work, not a role tab, needs attention.',
+      owner: 'RSI',
+      dueWindow: 'Before pursuit review',
+      status: 'Economic assumption open',
+      obligation: 'Confirm Tower Crane - 200T Luffing Jib assumption for the Margin Plan.',
+      appearedBecause: 'FP&A forecast, early lift narrative, and regional crane capacity watch all point to a likely long-lead equipment need.',
+      evidenceGap: 'Pick radius, tower height, and owned-vs-rerent posture are not yet defensible.',
+      nextAction: 'Open the pursuit thread, validate the assumption with the project team, and tag the crane line for early equipment shaping.',
+      permission: 'Read/write planning action; no system-of-record submission yet.',
+      triggerClass: 'Forward movement trigger',
+      signals: 7,
+      actionLabel: 'Shape margin assumption',
+      trail: ['Fit score crossed equipment threshold', 'Margin Plan created draft crane line', 'Capacity watchlist marked Southwest Q3/Q4'],
+      configSummary: ['Personal queue', 'Early-shaping obligation', 'No extra reporting chore'],
+    },
+    threadView: {
+      toolTitle: 'Pursuit Evidence Workspace',
+      toolSummary: 'The thread explains why a crane assumption exists and which evidence supports or weakens it.',
+      headline: 'Margin Plan anchors the first economic story for the crane.',
+      metrics: [
+        { label: 'Target margin', value: '30.0%' },
+        { label: 'Forecast margin', value: '27.4%' },
+        { label: 'Variance', value: '-2.6 pts' },
+        { label: 'Confidence', value: '64%' },
+      ],
+      triggerHistory: ['FP&A pursuit forecast imported', 'Fit Score flagged equipment opportunity', 'Draft Margin Plan line created'],
+      observedEvidence: ['FP&A source: fpa-pursuit-forecast', 'Crane refs: MP-CRN-200T, ASSUMP-LIFT-013', 'Early lift narrative attached'],
+      missingRefs: ['Pick radius not confirmed', 'Tower height still conceptual', 'Load chart owner not assigned'],
+      systemLinks: ['Margin Plan', 'Fit Score', 'Asset Demand Forecast'],
+      pathComparison: {
+        happy: 'Early clarity lets 02S shape owned fleet or preferred vendor strategy before the bid hardens.',
+        constrained: 'Late clarity leaves the project with a budget assumption but fewer fulfillment options.',
+      },
+      configSummary: ['Evidence-first thread', 'Observed assumption refs', 'Happy vs constrained path'],
+    },
+    systemView: {
+      toolTitle: 'Portfolio Signal Console',
+      toolSummary: 'The enterprise view shows whether this crane assumption is part of a larger capacity pattern.',
+      portfolioSignal: 'Tower crane demand is forming across pursuits before any single project submits a formal request.',
+      filters: ['Pillar: Equipment', 'Asset class: Tower Crane', 'Stage: Forecast + Pursuit', 'Region: Southwest'],
+      conflicts: ['6 pursuits include 200T luffing jib demand', 'Fit score: 91 high-value 02S engagement', 'Capacity watchlist: Southwest Q3/Q4', '2 potential owned-vs-rerent conflicts'],
+      moduleSummaries: ['Forecast: demand rising', 'Fit Score: proactive engagement', 'Margin Plan: economics still draft'],
+      notifications: ['Equipment strategy review suggested', 'Leadership watchlist updated'],
+      impactedProjects: ['Civic Tower', 'Hospital Expansion - Phoenix', 'Data Center - Dallas'],
+      route: 'Open crane pursuit threads',
+      dataCoverage: 'Forecast and Margin Plan evidence available; lift-plan detail still partial.',
+      configSummary: ['Portfolio pattern', 'Capacity watchlist', 'Route to pursuit threads'],
+    },
+  },
+  {
+    id: 'z4-6',
+    zoneLabel: 'Zones 4-6',
+    title: 'Clarify, Validate, And Protect The Handoff',
+    funnelZone: 'Awarded + First Intents -> Project-Approved Intents -> Planned Requests',
+    summary: 'Award evidence creates the V0 Equipment Plan, project intent sharpens the crane line, and preflight refuses to pass unclear demand downstream.',
+    objectState: 'Equipment Plan operating object',
+    workflowIds: ['prepop', 'clarityscoring', 'costofdelay', 'preflight', 'regression'],
+    projectValue: 'The project sees what is missing while the gaps are still cheaper to fix.',
+    o2sValue: '02S gets cleaner demand, fewer blind handoffs, and earlier visibility into constrained execution risk.',
+    myWork: {
+      toolTitle: 'Obligation Engine',
+      toolSummary: 'The same person may review a baseline, provide clarity, and resolve a validation failure in one operating surface.',
+      owner: 'Equipment request owner',
+      due: 'Today',
+      status: 'Validation failed',
+      obligation: 'Resolve the failed crane validation before the request can be sent.',
+      appearedBecause: 'Award was observed in CMIC, the V0 Equipment Plan generated a crane line, and preflight found missing lift-plan evidence.',
+      evidenceGap: 'Stamped load chart, pick radius approval, alley closure permit, and schedule tie are incomplete.',
+      nextAction: 'Confirm spec, duration, access constraints, timing, and rerun preflight.',
+      permission: 'Approval required before formal request can leave planning.',
+      triggerClass: 'Forward movement + validation trigger',
+      signals: 11,
+      actionLabel: 'Resolve preflight blockers',
+      trail: ['Zone 4 baseline created from award evidence', 'Zone 5 clarity score fell below threshold', 'Zone 6 preflight failed with four blockers'],
+      configSummary: ['Assigned action', 'Evidence gap visible', 'Preflight protected handoff'],
+    },
+    threadView: {
+      toolTitle: 'Observed Evidence Workspace',
+      toolSummary: 'The thread shows why the crane is not ready by checking conditions instead of trusting manual status.',
+      headline: 'Equipment Plan V0 becomes a refined request only when the evidence is strong enough.',
+      metrics: [
+        { label: 'Clarity', value: '58%' },
+        { label: 'Confidence', value: '71%' },
+        { label: 'Delay cost', value: '$22K/wk' },
+        { label: 'Preflight', value: 'Failed' },
+      ],
+      triggerHistory: ['Award gate observed and job number created', 'V0 crane line generated', 'Project refined spec and dates', 'Preflight run PF-447 failed'],
+      observedEvidence: ['CMIC award event', 'P6 schedule observation: steel start moved +3 weeks', 'Demand units: 1 crane package', 'Rerent quote expires in 6 days'],
+      missingRefs: ['PF-LOAD-CHART', 'SCH-OBS-228', 'LOG-PERMIT-ALLEY', 'PROC-QUOTE-EXP'],
+      systemLinks: ['Equipment Plan V0', 'Clarity Scoring', 'Cost of Delay', 'Preflight Validation', 'Schedule', 'Logistics', 'Procurement'],
+      pathComparison: {
+        happy: 'Confirmed lift windows let 02S hold owned fleet and route logistics with runway.',
+        constrained: 'Late evidence forces rerent premium, permit compression, and a weaker handoff.',
+      },
+      configSummary: ['Observed gates', 'Readiness score', 'Blocked refs + dependencies'],
+    },
+    systemView: {
+      toolTitle: 'Readiness And Regression Console',
+      toolSummary: 'The system view shows whether this is one blocked crane or a repeated operating pattern.',
+      portfolioSignal: 'Long-lead make-ready triggers and validation failures are clustering around crane evidence.',
+      filters: ['Zones: 4-6', 'Pillar: Equipment + Logistics', 'Gate: preflight readiness', 'Risk: late clarity'],
+      conflicts: ['18 blocked requests in Zone 6', '6 crane-category regressions this week', 'Top blocker: schedule dates invalidated after preflight', '4 crane lines below 60% clarity'],
+      moduleSummaries: ['Equipment: rerent posture pending', 'Logistics: permit dependency open', 'Procurement: quote clock active', 'Schedule: steel start moved'],
+      notifications: ['Equipment Ops queue notified', 'FSI escalation suggested', 'Regression blast radius calculated'],
+      impactedProjects: ['Civic Tower', 'Logistics Hub NV', 'Hospital Expansion - Phoenix', 'Data Center - Dallas'],
+      route: 'Open blocked Zone 6 queue',
+      dataCoverage: 'Award, schedule, and preflight evidence available; permit data still partial.',
+      configSummary: ['Blocked-count pattern', 'Regression blast radius', 'Coverage honesty'],
+    },
+  },
+  {
+    id: 'z7-8',
+    zoneLabel: 'Zones 7-8',
+    title: 'Execute, Watch Exceptions, And Learn',
+    funnelZone: 'Sent Requests -> Orders / On-Rent / Execution',
+    summary: 'The formal request is both the end of project planning and the start of 02S work-in-process. Execution then creates the data that feeds exceptions, redeployment, and learning.',
+    objectState: 'Formal request, active execution, and learning record',
+    workflowIds: ['formalrequest', 'source', 'execution', 'anomaly', 'vendorscorecard', 'flywheel'],
+    projectValue: 'The project sees whether the crane work is happening the way it was planned.',
+    o2sValue: '02S turns execution reality into SLA control, utilization decisions, and institutional memory.',
+    myWork: {
+      toolTitle: 'Execution Obligation Queue',
+      toolSummary: 'Actions move from submit, to exception resolution, to variance review as real work creates data.',
+      owner: 'Execution exception owner',
+      due: 'Next operating window',
+      status: 'Exception active',
+      obligation: 'Resolve idle crane exposure and approve the off-rent/redeployment decision.',
+      appearedBecause: 'The request was submitted into the Equipment SOR, the SLA clock started, and utilization dropped below plan.',
+      evidenceGap: 'Off-rent decision and billing rate mismatch need confirmation before closeout.',
+      nextAction: 'Route to the redeployment thread, decide whether to transfer the crane, and capture the variance reason.',
+      permission: 'Operational action with approval and reconciliation required.',
+      triggerClass: 'Exception + closeout trigger',
+      signals: 13,
+      actionLabel: 'Resolve execution exception',
+      trail: ['Formal request submitted', 'SOR acknowledgement pending', 'Utilization feed flagged idle days', 'Learning review assigned'],
+      configSummary: ['Execution action', 'SLA and exception state', 'Closeout learning'],
+    },
+    threadView: {
+      toolTitle: 'Handoff And Actuals Thread',
+      toolSummary: 'The thread preserves request lineage, watches execution, and records what changed from plan to actual.',
+      headline: 'One request event has two meanings: project handoff complete, 02S work-in-process started.',
+      metrics: [
+        { label: 'SLA remaining', value: '3d 14h' },
+        { label: 'On-rent', value: 'Active' },
+        { label: 'Utilization', value: '42%' },
+        { label: 'Actual vs plan', value: '+6 idle days' },
+      ],
+      triggerHistory: ['Preflight passed', 'Formal request submitted to Equipment SOR', 'Yard Hub handoff queued', 'Utilization exception fired', 'Variance review assigned'],
+      observedEvidence: ['Payload lineage: Margin Plan -> V0 Equipment Plan -> refined intent -> preflight pass', 'SOR acknowledgement pending', 'Dispatch order active', 'Procurement timeline: rerent extension pending'],
+      missingRefs: ['OFFRENT-DECISION', 'BILL-RATE-MISMATCH', 'CAL-APPROVAL-200T'],
+      systemLinks: ['Formal Request', 'Yard Hub', 'Execution Dashboard', 'Procurement', 'Logistics', 'Billing Anomaly', 'Learning Flywheel'],
+      pathComparison: {
+        happy: 'Clean handoff and active utilization preserve margin while the project gets schedule certainty.',
+        constrained: 'Idle days, rate mismatch, and late off-rent decisions create margin leakage and learning candidates.',
+      },
+      configSummary: ['Request lineage', 'Execution actuals', 'Plan diff + variance'],
+    },
+    systemView: {
+      toolTitle: 'Enterprise Execution Console',
+      toolSummary: 'System View turns one crane exception into portfolio action and future learning.',
+      portfolioSignal: 'A crane sitting underused on one project can satisfy demand on another if the redeployment economics make sense.',
+      filters: ['Zones: 7-8', 'Asset class: Tower Crane', 'Signal: idle + demand match', 'Learning: variance candidate'],
+      conflicts: ['Same crane class requested by Hospital Expansion - Phoenix', 'Redeployment match: 81%', 'Portfolio utilization: 68%', 'Margin exposure: $44K constrained premium avoided if redeployed'],
+      moduleSummaries: ['SOR handoff: SLA active', 'Execution: idle days flagged', 'Billing: rate mismatch detected', 'Flywheel: calibration candidate created'],
+      notifications: ['Route-to-thread action ready', 'Vendor scorecard update pending', 'Template update awaiting review'],
+      impactedProjects: ['Civic Tower', 'Hospital Expansion - Phoenix', 'Data Center - Dallas'],
+      route: 'Route to redeployment thread',
+      dataCoverage: 'Execution, utilization, and billing evidence available; calibration writeback requires governed approval.',
+      configSummary: ['Cross-project conflict', 'Redeployment economics', 'Learning flywheel'],
+    },
+    learningCoda: {
+      title: 'Learning coda',
+      summary: 'Doing the work creates the data: execution actuals become variance records, scorecard signals, and governed template recommendations.',
+      items: ['Constrained premium captured: $44K', 'Schedule delay: +9 days', 'Template update: require lift-plan evidence by Zone 5', 'Forecast update: Southwest Q3 crane capacity tightened'],
+    },
+  },
+];
+
+const attentionAccentStyles = {
+  emerald: {
+    border: 'border-emerald-200',
+    soft: 'bg-emerald-50',
+    text: 'text-emerald-700',
+    icon: 'bg-emerald-500 text-white',
+    ring: 'ring-emerald-200',
+  },
+  indigo: {
+    border: 'border-indigo-200',
+    soft: 'bg-indigo-50',
+    text: 'text-indigo-700',
+    icon: 'bg-indigo-500 text-white',
+    ring: 'ring-indigo-200',
+  },
+  rose: {
+    border: 'border-rose-200',
+    soft: 'bg-rose-50',
+    text: 'text-rose-700',
+    icon: 'bg-rose-500 text-white',
+    ring: 'ring-rose-200',
+  },
+};
+
+const getAttentionBadgeVariant = (status = '') => {
+  if (status.includes('failed') || status.includes('Exception')) return 'red';
+  if (status.includes('risk') || status.includes('pending') || status.includes('open')) return 'yellow';
+  return 'green';
+};
+
+const AttentionChipList = ({ items, color = 'slate' }) => {
+  const colors = {
+    slate: 'bg-slate-100 text-slate-600',
+    emerald: 'bg-emerald-50 text-emerald-700 ring-1 ring-emerald-100',
+    indigo: 'bg-indigo-50 text-indigo-700 ring-1 ring-indigo-100',
+    rose: 'bg-rose-50 text-rose-700 ring-1 ring-rose-100',
+  };
+  return (
+    <div className="flex flex-wrap gap-1.5">
+      {items.map(item => (
+        <span key={item} className={`rounded-full px-2.5 py-1 text-[10px] font-bold ${colors[color]}`}>{item}</span>
+      ))}
+    </div>
+  );
+};
+
+const AttentionMetricGrid = ({ metrics }) => (
+  <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
+    {metrics.map(metric => (
+      <div key={metric.label} className="rounded-md border border-slate-200 bg-white p-3">
+        <div className="text-[9px] font-bold uppercase tracking-widest text-slate-400">{metric.label}</div>
+        <div className="mt-1 text-lg font-bold text-slate-900">{metric.value}</div>
+      </div>
+    ))}
+  </div>
+);
+
+const AttentionViewPanel = ({ section, activeViewId, onSelectView }) => {
+  const view = ATTENTION_VIEWS.find(item => item.id === activeViewId) || ATTENTION_VIEWS[0];
+  const data = section[view.id];
+  const Icon = view.icon;
+  const styles = attentionAccentStyles[view.accent];
+
+  return (
+    <div className={`overflow-hidden rounded-lg border ${styles.border} bg-white shadow-sm`}>
+      <div className="border-b border-slate-200 bg-slate-50 p-3">
+        <div className="flex gap-2 overflow-x-auto">
+          {ATTENTION_VIEWS.map(option => {
+            const OptionIcon = option.icon;
+            const optionStyles = attentionAccentStyles[option.accent];
+            const isActive = option.id === activeViewId;
+            return (
+              <button
+                key={option.id}
+                type="button"
+                onClick={() => onSelectView(option.id)}
+                className={`min-w-[190px] rounded-md border px-3 py-2 text-left transition-all ${
+                  isActive
+                    ? `${optionStyles.border} ${optionStyles.soft} shadow-sm`
+                    : 'border-slate-200 bg-white text-slate-500 hover:border-slate-300 hover:text-slate-800'
+                }`}
+              >
+                <div className="flex items-center gap-2">
+                  <OptionIcon className={`h-4 w-4 ${isActive ? optionStyles.text : 'text-slate-400'}`} />
+                  <span className={`text-xs font-bold ${isActive ? optionStyles.text : 'text-slate-600'}`}>{option.label}</span>
+                </div>
+                <div className="mt-1 text-[11px] font-semibold leading-snug text-slate-500">{option.question}</div>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="p-5 md:p-6">
+        <div className="mb-5 flex flex-col gap-4 border-b border-slate-200 pb-5 lg:flex-row lg:items-start lg:justify-between">
+          <div className="min-w-0">
+            <div className={`text-[10px] font-bold uppercase tracking-[0.22em] ${styles.text}`}>{view.label} configuration</div>
+            <h3 className="mt-1 text-2xl font-bold tracking-tight text-slate-950">{data.toolTitle}</h3>
+            <p className="mt-2 max-w-3xl text-sm font-medium leading-relaxed text-slate-600">{data.toolSummary}</p>
+          </div>
+          <div className="rounded-md border border-slate-200 bg-slate-50 p-3 lg:w-[260px]">
+            <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Through-line Object</div>
+            <div className="mt-1 text-sm font-bold text-slate-900">Tower Crane - 200T Luffing Jib</div>
+            <div className="mt-1 text-xs font-bold uppercase tracking-widest text-indigo-600">{section.objectState}</div>
+          </div>
+        </div>
+
+        {view.id === 'myWork' && (
+          <div className="grid gap-4 xl:grid-cols-[minmax(0,1.35fr)_minmax(280px,0.65fr)]">
+            <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4">
+              <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                <div>
+                  <div className="text-[10px] font-bold uppercase tracking-widest text-emerald-700">Assigned Obligation</div>
+                  <div className="mt-2 text-xl font-bold leading-tight text-slate-950">{data.obligation}</div>
+                  <div className="mt-2 text-sm font-semibold text-slate-600">Owner: {data.owner}</div>
+                </div>
+                <Badge variant={getAttentionBadgeVariant(data.status)}>{data.status}</Badge>
+              </div>
+              <div className="mt-4 grid gap-2 sm:grid-cols-3">
+                <div className="rounded-md border border-white/80 bg-white p-3">
+                  <div className="text-[9px] font-bold uppercase tracking-widest text-slate-400">Due Window</div>
+                  <div className="mt-1 text-sm font-bold text-slate-800">{data.dueWindow || data.due}</div>
+                </div>
+                <div className="rounded-md border border-white/80 bg-white p-3">
+                  <div className="text-[9px] font-bold uppercase tracking-widest text-slate-400">Signals</div>
+                  <div className="mt-1 text-sm font-bold text-slate-800">{data.signals} active</div>
+                </div>
+                <div className="rounded-md border border-white/80 bg-white p-3">
+                  <div className="text-[9px] font-bold uppercase tracking-widest text-slate-400">Trigger Class</div>
+                  <div className="mt-1 text-sm font-bold text-slate-800">{data.triggerClass}</div>
+                </div>
+              </div>
+              <div className="mt-4 grid gap-3 md:grid-cols-2">
+                <div className="rounded-md border border-emerald-100 bg-white p-3">
+                  <div className="text-[10px] font-bold uppercase tracking-widest text-emerald-700">Why It Appeared</div>
+                  <p className="mt-2 text-sm font-medium leading-relaxed text-slate-600">{data.appearedBecause}</p>
+                </div>
+                <div className="rounded-md border border-amber-200 bg-amber-50 p-3">
+                  <div className="text-[10px] font-bold uppercase tracking-widest text-amber-700">Evidence Gap</div>
+                  <p className="mt-2 text-sm font-medium leading-relaxed text-slate-700">{data.evidenceGap}</p>
+                </div>
+              </div>
+              <div className="mt-4 rounded-md border border-slate-200 bg-white p-3">
+                <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Next Action</div>
+                <p className="mt-2 text-sm font-semibold leading-relaxed text-slate-700">{data.nextAction}</p>
+                <button className="mt-3 flex items-center gap-2 rounded-md bg-slate-900 px-3 py-2 text-xs font-bold text-white transition-colors hover:bg-slate-800">
+                  {data.actionLabel}
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            </div>
+            <div className="space-y-3">
+              <div className="rounded-lg border border-slate-200 bg-white p-4">
+                <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Permission / Action Type</div>
+                <p className="mt-2 text-sm font-semibold leading-relaxed text-slate-700">{data.permission}</p>
+              </div>
+              <div className="rounded-lg border border-slate-200 bg-white p-4">
+                <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Obligation Trail</div>
+                <div className="mt-3 space-y-2">
+                  {data.trail.map(item => (
+                    <div key={item} className="flex items-start gap-2 text-sm font-medium text-slate-600">
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-500" />
+                      <span>{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {view.id === 'threadView' && (
+          <div className="space-y-4">
+            <div className="rounded-lg border border-indigo-200 bg-indigo-50 p-4">
+              <div className="text-[10px] font-bold uppercase tracking-widest text-indigo-700">Thread Headline</div>
+              <div className="mt-2 text-xl font-bold leading-tight text-slate-950">{data.headline}</div>
+            </div>
+            <AttentionMetricGrid metrics={data.metrics} />
+            <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(320px,0.8fr)]">
+              <div className="rounded-lg border border-slate-200 bg-white p-4">
+                <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Trigger History</div>
+                <div className="mt-4 space-y-3">
+                  {data.triggerHistory.map((item, index) => (
+                    <div key={item} className="flex gap-3">
+                      <div className="flex flex-col items-center">
+                        <div className="flex h-6 w-6 items-center justify-center rounded-full bg-indigo-600 text-[10px] font-bold text-white">{index + 1}</div>
+                        {index < data.triggerHistory.length - 1 && <div className="mt-1 h-full min-h-[18px] w-px bg-indigo-100" />}
+                      </div>
+                      <div className="pt-0.5 text-sm font-semibold leading-relaxed text-slate-700">{item}</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="space-y-3">
+                <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4">
+                  <div className="text-[10px] font-bold uppercase tracking-widest text-emerald-700">Observed Gate Evidence</div>
+                  <div className="mt-3 space-y-2">
+                    {data.observedEvidence.map(item => (
+                      <div key={item} className="flex items-start gap-2 text-sm font-medium text-slate-700">
+                        <Database className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
+                        <span>{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+                <div className="rounded-lg border border-rose-200 bg-rose-50 p-4">
+                  <div className="text-[10px] font-bold uppercase tracking-widest text-rose-700">Missing / Blocked Refs</div>
+                  <div className="mt-3">
+                    <AttentionChipList items={data.missingRefs} color="rose" />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="grid gap-4 lg:grid-cols-2">
+              <div className="rounded-lg border border-slate-200 bg-white p-4">
+                <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400">System-of-Record Links</div>
+                <div className="mt-3">
+                  <AttentionChipList items={data.systemLinks} color="indigo" />
+                </div>
+              </div>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-4">
+                  <div className="text-[10px] font-bold uppercase tracking-widest text-emerald-700">Happy Path</div>
+                  <p className="mt-2 text-sm font-semibold leading-relaxed text-slate-700">{data.pathComparison.happy}</p>
+                </div>
+                <div className="rounded-lg border border-amber-200 bg-amber-50 p-4">
+                  <div className="text-[10px] font-bold uppercase tracking-widest text-amber-700">Constrained Path</div>
+                  <p className="mt-2 text-sm font-semibold leading-relaxed text-slate-700">{data.pathComparison.constrained}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {view.id === 'systemView' && (
+          <div className="grid gap-4 xl:grid-cols-[minmax(0,1fr)_minmax(300px,0.7fr)]">
+            <div className="space-y-4">
+              <div className="rounded-lg border border-rose-200 bg-rose-50 p-4">
+                <div className="text-[10px] font-bold uppercase tracking-widest text-rose-700">Portfolio Signal</div>
+                <div className="mt-2 text-xl font-bold leading-tight text-slate-950">{data.portfolioSignal}</div>
+                <div className="mt-3">
+                  <AttentionChipList items={data.filters} color="rose" />
+                </div>
+              </div>
+              <div className="grid gap-3 md:grid-cols-2">
+                {data.conflicts.map(item => (
+                  <div key={item} className="flex items-start gap-2 rounded-md border border-slate-200 bg-white p-3 text-sm font-semibold text-slate-700">
+                    <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-rose-500" />
+                    <span>{item}</span>
+                  </div>
+                ))}
+              </div>
+              <div className="rounded-lg border border-slate-200 bg-white p-4">
+                <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Data Coverage Honesty</div>
+                <p className="mt-2 text-sm font-semibold leading-relaxed text-slate-700">{data.dataCoverage}</p>
+              </div>
+            </div>
+            <div className="space-y-3">
+              <div className="rounded-lg border border-slate-200 bg-white p-4">
+                <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Module Summaries</div>
+                <div className="mt-3 space-y-2">
+                  {data.moduleSummaries.map(item => (
+                    <div key={item} className="rounded-md bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-700">{item}</div>
+                  ))}
+                </div>
+              </div>
+              <div className="rounded-lg border border-slate-200 bg-white p-4">
+                <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Notifications</div>
+                <div className="mt-3 space-y-2">
+                  {data.notifications.map(item => (
+                    <div key={item} className="flex items-start gap-2 text-sm font-medium text-slate-600">
+                      <Bell className="mt-0.5 h-4 w-4 shrink-0 text-rose-500" />
+                      <span>{item}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <div className="rounded-lg border border-slate-200 bg-white p-4">
+                <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Impacted Projects</div>
+                <div className="mt-3 space-y-1.5">
+                  {data.impactedProjects.map(project => (
+                    <div key={project} className="flex items-center justify-between rounded bg-slate-50 px-3 py-2 text-sm font-semibold text-slate-600">
+                      <span>{project}</span>
+                      <ChevronRight className="h-3.5 w-3.5 text-slate-300" />
+                    </div>
+                  ))}
+                </div>
+                <button className="mt-4 flex w-full items-center justify-center gap-2 rounded-md bg-slate-900 px-3 py-2 text-xs font-bold text-white transition-colors hover:bg-slate-800">
+                  {data.route}
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {section.learningCoda && (
+          <div className="mt-5 rounded-lg border border-rose-200 bg-rose-50 p-4">
+            <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+              <div>
+                <div className="text-[10px] font-bold uppercase tracking-widest text-rose-700">{section.learningCoda.title}</div>
+                <p className="mt-2 text-sm font-semibold leading-relaxed text-slate-700">{section.learningCoda.summary}</p>
+              </div>
+              <GitBranch className="h-6 w-6 shrink-0 text-rose-500" />
+            </div>
+            <div className="mt-3 grid gap-2 md:grid-cols-2">
+              {section.learningCoda.items.map(item => (
+                <div key={item} className="rounded-md border border-white/80 bg-white px-3 py-2 text-xs font-bold text-rose-700">{item}</div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+const OperationalAttentionStory = ({ onSelectWorkflow }) => {
+  const [activeSection, setActiveSection] = useState(ATTENTION_STORY_SECTIONS[0].id);
+  const [activeAttentionView, setActiveAttentionView] = useState(ATTENTION_VIEWS[0].id);
+  const sectionRefs = useRef([]);
+  const tickingRef = useRef(false);
+
+  useEffect(() => {
+    const updateActiveSection = () => {
+      tickingRef.current = false;
+      const viewportAnchor = window.innerHeight * 0.38;
+      let nextSection = ATTENTION_STORY_SECTIONS[0].id;
+
+      sectionRefs.current.forEach((node, index) => {
+        if (!node) return;
+        const rect = node.getBoundingClientRect();
+        if (rect.top <= viewportAnchor) {
+          nextSection = ATTENTION_STORY_SECTIONS[index].id;
+        }
+      });
+
+      setActiveSection(nextSection);
+    };
+
+    const requestUpdate = () => {
+      if (tickingRef.current) return;
+      tickingRef.current = true;
+      window.requestAnimationFrame(updateActiveSection);
+    };
+
+    updateActiveSection();
+    window.addEventListener('scroll', requestUpdate, { passive: true });
+    window.addEventListener('resize', requestUpdate);
+
+    return () => {
+      window.removeEventListener('scroll', requestUpdate);
+      window.removeEventListener('resize', requestUpdate);
+    };
+  }, []); 
+
+  const activeData = ATTENTION_STORY_SECTIONS.find(section => section.id === activeSection) || ATTENTION_STORY_SECTIONS[0];
+  const activeView = ATTENTION_VIEWS.find(view => view.id === activeAttentionView) || ATTENTION_VIEWS[0];
+  const activeViewData = activeData[activeView.id];
+  const activeViewStyles = attentionAccentStyles[activeView.accent];
+  const ActiveViewIcon = activeView.icon;
+
+  return (
+    <div className="bg-slate-50 text-slate-900">
+      <div className="mx-auto max-w-[1540px] px-4 py-6 md:px-8">
+        <div className="mb-5 flex flex-col gap-4 border-b border-slate-200 pb-5 xl:flex-row xl:items-end xl:justify-between">
+          <div>
+            <div className="text-[10px] font-bold uppercase tracking-[0.24em] text-slate-500">Command Center View Story</div>
+            <h1 className="mt-1 text-2xl font-bold tracking-tight text-slate-950 md:text-3xl">One crane, three levels of attention</h1>
+            <p className="mt-2 max-w-3xl text-sm font-medium leading-relaxed text-slate-500">
+              Follow a Tower Crane - 200T Luffing Jib package through the orchestration story: personal obligation, thread evidence, enterprise signal, and learning created by doing the work.
+            </p>
+          </div>
+          <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm xl:w-[520px]">
+            <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Podcast Story Alignment</div>
+            <div className="mt-2 text-sm font-semibold leading-relaxed text-slate-700">
+              The Command Center is not another reporting chore. It connects systems, observes evidence, surfaces useful triggers, supports action, and captures learning.
+            </div>
+          </div>
+        </div>
+
+        <div className="grid gap-5 lg:grid-cols-[190px_minmax(0,1fr)_330px]">
+          <aside className="sticky top-[72px] z-20 -mx-4 min-w-0 border-y border-slate-200 bg-white/95 px-4 py-3 shadow-sm backdrop-blur lg:mx-0 lg:h-[calc(100vh-96px)] lg:rounded-lg lg:border lg:py-4">
+            <div className="mb-3 hidden text-[10px] font-bold uppercase tracking-widest text-slate-400 lg:block">Grouped Funnel</div>
+            <div className="flex min-w-0 gap-2 overflow-x-auto lg:flex-col lg:overflow-visible">
+              {ATTENTION_STORY_SECTIONS.map((section, index) => {
+                const isActive = section.id === activeSection;
+                return (
+                  <button
+                    key={section.id}
+                    onClick={() => sectionRefs.current[index]?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                    className={`min-w-[150px] rounded-md border px-3 py-2 text-left transition-all lg:min-w-0 ${
+                      isActive
+                        ? 'border-slate-900 bg-slate-900 text-white shadow-md'
+                        : 'border-slate-200 bg-white text-slate-500 hover:border-slate-300 hover:text-slate-800'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-[10px] font-bold uppercase tracking-widest">{section.zoneLabel}</span>
+                      <span className={`h-2 w-2 rounded-full ${isActive ? 'bg-emerald-400' : 'bg-slate-300'}`} />
+                    </div>
+                    <div className="mt-1 text-xs font-bold leading-tight">{section.title}</div>
+                  </button>
+                );
+              })}
+            </div>
+          </aside>
+
+          <main className="min-w-0 space-y-5">
+            {ATTENTION_STORY_SECTIONS.map((section, index) => (
+              <section
+                key={section.id}
+                ref={(node) => { sectionRefs.current[index] = node; }}
+                className={`scroll-mt-24 rounded-lg border bg-white p-5 shadow-sm md:p-6 xl:min-h-[calc(100vh-112px)] ${section.id === 'z9' ? 'border-rose-200' : 'border-slate-200'}`}
+                aria-label={`${section.zoneLabel}: ${section.title}`}
+              >
+                <div className="mb-5 flex flex-col gap-3 border-b border-slate-200 pb-5 xl:flex-row xl:items-start xl:justify-between">
+                  <div>
+                    <div className="text-[10px] font-bold uppercase tracking-[0.24em] text-slate-400">{section.zoneLabel}</div>
+                    <h2 className="mt-1 text-2xl font-bold tracking-tight text-slate-950">{section.title}</h2>
+                    <div className="mt-1 text-sm font-bold text-slate-500">{section.funnelZone}</div>
+                    <p className="mt-3 max-w-3xl text-sm leading-relaxed text-slate-600">{section.summary}</p>
+                  </div>
+                  <div className="rounded-md border border-slate-200 bg-slate-50 p-3 xl:w-[280px]">
+                    <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Through-line Object</div>
+                    <div className="mt-1 text-sm font-bold text-slate-900">Tower Crane - 200T Luffing Jib</div>
+                    <div className="mt-1 text-xs font-bold uppercase tracking-widest text-indigo-600">{section.objectState}</div>
+                    <div className="mt-2 text-xs font-medium leading-relaxed text-slate-500">Same package, configured by attention level.</div>
+                  </div>
+                </div>
+
+                <AttentionViewPanel section={section} activeViewId={activeAttentionView} onSelectView={setActiveAttentionView} />
+
+                <div className="mt-5 grid gap-3 md:grid-cols-2">
+                  <div className="rounded-md border border-emerald-200 bg-emerald-50 p-4">
+                    <div className="text-[10px] font-bold uppercase tracking-widest text-emerald-700">Project Value</div>
+                    <div className="mt-1 text-sm font-semibold leading-relaxed text-slate-700">{section.projectValue}</div>
+                  </div>
+                  <div className="rounded-md border border-indigo-200 bg-indigo-50 p-4">
+                    <div className="text-[10px] font-bold uppercase tracking-widest text-indigo-700">02S Value</div>
+                    <div className="mt-1 text-sm font-semibold leading-relaxed text-slate-700">{section.o2sValue}</div>
+                  </div>
+                </div>
+              </section>
+            ))}
+          </main>
+
+          <aside className="sticky top-[72px] h-fit rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="text-[10px] font-bold uppercase tracking-[0.24em] text-slate-400">Current Group</div>
+            <h2 className="mt-2 text-xl font-bold leading-tight text-slate-950">{activeData.zoneLabel}: {activeData.title}</h2>
+            <div className="mt-1 text-sm font-semibold text-slate-500">{activeData.funnelZone}</div>
+            <p className="mt-4 text-sm leading-relaxed text-slate-600">{activeData.summary}</p>
+
+            <div className={`mt-5 rounded-lg border ${activeViewStyles.border} ${activeViewStyles.soft} p-4`}>
+              <div className="flex items-center gap-2">
+                <ActiveViewIcon className={`h-4 w-4 ${activeViewStyles.text}`} />
+                <div className={`text-[10px] font-bold uppercase tracking-widest ${activeViewStyles.text}`}>{activeView.label} Tool Card</div>
+              </div>
+              <div className="mt-2 text-sm font-bold leading-tight text-slate-900">{activeViewData.toolTitle}</div>
+              <p className="mt-2 text-xs font-semibold leading-relaxed text-slate-600">{activeViewData.toolSummary}</p>
+              <div className="mt-3 space-y-1.5">
+                {activeViewData.configSummary.map(item => (
+                  <div key={item} className="flex items-center gap-2 text-xs font-semibold text-slate-600">
+                    <span className={`h-1.5 w-1.5 rounded-full ${activeViewStyles.icon.split(' ')[0]}`} />
+                    {item}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-5 border-t border-slate-200 pt-4">
+              <div className="mb-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">Related Workflows</div>
+              <div className="space-y-3">
+                {activeData.workflowIds.map(workflowId => {
+                  const card = CARD_REGISTRY[workflowId];
+                  if (!card) return null;
+                  const Icon = card.icon;
+                  return (
+                    <button
+                      key={workflowId}
+                      type="button"
+                      onClick={() => onSelectWorkflow?.({
+                        id: workflowId,
+                        title: card.title,
+                        description: card.description,
+                        icon: card.icon,
+                        colorClass: card.colorClass,
+                        highlight: card.highlight,
+                        zone: `${activeData.zoneLabel}: ${activeData.title}`,
+                      })}
+                      className="group w-full rounded-md border border-slate-200 bg-slate-50 p-3 text-left transition-all hover:-translate-y-0.5 hover:border-indigo-200 hover:bg-white hover:shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className={`rounded-md p-2 ${card.highlight}`}>
+                          <Icon className="h-3.5 w-3.5" />
+                        </div>
+                        <div className="min-w-0">
+                          <div className="text-sm font-bold leading-tight text-slate-800">{card.title}</div>
+                          <div className="mt-1 line-clamp-2 text-[11px] font-medium leading-snug text-slate-500">{card.description}</div>
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const App = () => {
   const [selectedNode, setSelectedNode] = useState(null);
   const [isTourActive, setIsTourActive] = useState(false);
@@ -4291,11 +5019,10 @@ const App = () => {
     ],
 
     'command-center-persona-story': [
-      { id: 0, title: "The Full Persona Story", targetNodes: [], highlightSpine: true, transcript: "This view tells the Command Center story by who uses it. Project teams, RSI and FSI, 02S Operations, Leadership, and Finance all see the same zone truth, but each persona gets the workflows that match their decisions." },
-      { id: 1, title: "Pursuit and Financial Alignment", targetNodes: ['quotes', 'fitscore', 'fpa'], highlightSpine: false, transcript: "RSI and FSI shape early engagement with Quick Quotes and Fit Score, while Finance uses FP&A Sync to keep operational plans aligned with forecast commitments." },
-      { id: 2, title: "Project Team Clarity", targetNodes: ['prepop', 'adhoc', 'clarityscoring', 'projectmaturity'], highlightSpine: false, transcript: "Project teams and FSIs work together to confirm the baseline, enter ad-hoc needs, improve clarity, and track which packages are ready for the next gate." },
-      { id: 3, title: "Operations Fulfillment", targetNodes: ['optimize', 'source', 'formalrequest'], highlightSpine: false, transcript: "02S Operations turns validated demand into fulfillment decisions: owned versus re-rent, strategic sourcing, and formal request routing with lineage attached." },
-      { id: 4, title: "Leadership and Learning", targetNodes: ['execution', 'anomaly', 'flywheel'], highlightSpine: false, transcript: "Leadership and Finance monitor execution health, catch billing issues, and use the learning loop to make the next project plan more accurate than the last." },
+      { id: 0, title: "The Command Center View Story", targetNodes: [], highlightSpine: true, transcript: "This view tells the Command Center story by level of operational attention. My Work shows the next personal obligation, Thread View explains the project evidence, and System View exposes the portfolio pattern." },
+      { id: 1, title: "See It Early Enough To Shape It", targetNodes: ['margin', 'forecast', 'fitscore'], highlightSpine: false, transcript: "Zones 1-3 use the Tower Crane - 200T Luffing Jib package to show how early forecast, fit, and Margin Plan evidence create enough signal to shape the work before it hardens." },
+      { id: 2, title: "Clarify, Validate, And Protect The Handoff", targetNodes: ['prepop', 'clarityscoring', 'costofdelay', 'preflight', 'regression'], highlightSpine: false, transcript: "Zones 4-6 show award evidence creating a V0 Equipment Plan, the project sharpening intent, and preflight preventing unclear demand from becoming an operational handoff." },
+      { id: 3, title: "Execute, Watch Exceptions, And Learn", targetNodes: ['formalrequest', 'execution', 'anomaly', 'flywheel'], highlightSpine: false, transcript: "Zones 7-8 show the formal request becoming 02S work-in-process. Execution actuals then create exception signals, redeployment options, and learning records without adding a separate reporting chore." },
     ],
   };
 
@@ -4333,6 +5060,7 @@ const App = () => {
   const activePersonaObj = PERSONAS.find(p => p.id === activePersona);
   const activePillarObj = PILLARS.find(p => p.id === activePillar);
   const isEquipment = activePillar === 'equipment';
+  const isStoryMode = activePersona === 'command-center-zone-story' || activePersona === 'command-center-persona-story';
   const grid = isEquipment ? PERSONA_EQUIPMENT_GRID[activePersona] : null;
 
   const activePhases = new Set();
@@ -4359,7 +5087,14 @@ const App = () => {
                 return (
                   <button
                     key={persona.id}
-                    onClick={() => { setActivePersona(persona.id); if (isTourActive) setTourStep(0); }}
+                    onClick={() => {
+                      setActivePersona(persona.id);
+                      if (isTourActive) setTourStep(0);
+                      if (persona.id.startsWith('command-center')) {
+                        setIsTourActive(false);
+                        setSelectedNode(null);
+                      }
+                    }}
                     className={`flex items-center gap-1.5 px-2 py-2 rounded-lg text-[11px] font-semibold whitespace-nowrap transition-all ${
                       isActive
                         ? 'bg-indigo-600 text-white shadow-md'
@@ -4374,7 +5109,7 @@ const App = () => {
             </div>
 
             <div className="flex items-center gap-3">
-              {activePersona !== 'command-center-zone-story' && (
+              {!isStoryMode && (
                 <>
                   {/* Trigger Bell */}
                   <button
@@ -4429,9 +5164,11 @@ const App = () => {
       </div>
 
       {/* Main Content */}
-      <div className={`flex-grow ${activePersona === 'command-center-zone-story' ? 'p-0 bg-white' : 'p-4 md:p-8 overflow-x-auto'}`}>
+      <div className={`flex-grow ${isStoryMode ? 'p-0 bg-white' : 'p-4 md:p-8 overflow-x-auto'}`}>
         {activePersona === 'command-center-zone-story' ? (
           <ZoneLineageStory onSelectWorkflow={setSelectedNode} />
+        ) : activePersona === 'command-center-persona-story' ? (
+          <OperationalAttentionStory onSelectWorkflow={setSelectedNode} />
         ) : (
         <div className={`transition-all duration-500 ${selectedNode ? 'blur-sm scale-95 opacity-50' : 'blur-0 scale-100 opacity-100'} min-w-[1000px] max-w-7xl mx-auto space-y-6`}>
           {/* Wave Sequencing — Build Roadmap */}
@@ -4748,7 +5485,7 @@ const App = () => {
       </div>
 
       {/* Trigger Panel */}
-      {activePersona !== 'command-center-zone-story' && triggerPanelOpen && (
+      {!isStoryMode && triggerPanelOpen && (
         <>
           <div className="fixed inset-0 z-40 bg-slate-900/20" onClick={() => setTriggerPanelOpen(false)} />
           <div className="fixed top-0 right-0 h-full w-[420px] bg-white shadow-2xl z-50 flex flex-col border-l border-slate-200">
@@ -4877,7 +5614,7 @@ const App = () => {
       )}
 
       {/* Tour Overlay */}
-      {activePersona !== 'command-center-zone-story' && isTourActive && (
+      {!isStoryMode && isTourActive && (
         <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-white rounded-2xl shadow-2xl border border-slate-200 p-6 w-[600px]">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
