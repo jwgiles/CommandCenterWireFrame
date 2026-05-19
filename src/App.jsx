@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Calculator, Target, BarChart, Layers, PenTool, RotateCcw, Activity,
   Search, Box, DollarSign, Monitor, ArrowRight, ArrowDown, X,
@@ -3567,6 +3567,8 @@ const PERSONAS = [
   { id: 'o2s-ops', label: '02S Operations', icon: Settings },
   { id: 'leadership', label: 'Leadership', icon: BarChart3 },
   { id: 'finance', label: 'Finance & FP&A', icon: DollarSign },
+  { id: 'command-center-zone-story', label: 'Command Center - Zone Story', icon: Layers },
+  { id: 'command-center-persona-story', label: 'Command Center - Persona Story', icon: ClipboardList },
 ];
 
 const PILLARS = [
@@ -3691,6 +3693,18 @@ const PERSONA_EQUIPMENT_GRID = {
     'z6-7': { cards: [], placeholders: ['Request Cost Validation — Coming in Prompt 8'] },
     'z8-9': { cards: ['anomaly', 'flywheel'], placeholders: [] },
   },
+  'command-center-zone-story': {
+    'z1-3': { cards: ['forecast', 'fitscore', 'margin'], placeholders: [] },
+    'z4-5': { cards: ['prepop', 'costofdelay', 'clarityscoring', 'projectmaturity'], placeholders: [] },
+    'z6-7': { cards: ['preflight', 'formalrequest', 'regression'], placeholders: [] },
+    'z8-9': { cards: ['execution', 'vendorscorecard', 'flywheel'], placeholders: [] },
+  },
+  'command-center-persona-story': {
+    'z1-3': { cards: ['quotes', 'fitscore', 'fpa'], placeholders: [] },
+    'z4-5': { cards: ['prepop', 'adhoc', 'clarityscoring', 'projectmaturity'], placeholders: [] },
+    'z6-7': { cards: ['optimize', 'source', 'formalrequest'], placeholders: [] },
+    'z8-9': { cards: ['execution', 'anomaly', 'flywheel'], placeholders: [] },
+  },
 };
 
 const ZONE_SPINE = [
@@ -3755,6 +3769,466 @@ const SPINE_STYLES = {
   },
 };
 
+const LINEAGE_ZONES = [
+  {
+    num: 1,
+    label: 'Raw Forecasts',
+    subtitle: 'Uncorrelated AOP Planning',
+    story: 'The lineage begins as uncorrelated portfolio demand. At this point, the command center is watching AOP signals and early demand shape before a CRM opportunity has enough definition to carry a Margin Plan.',
+    state: 'Signal forming',
+    group: 'z1-3',
+  },
+  {
+    num: 2,
+    label: 'Qualified Forecast',
+    subtitle: 'CRM Opportunity',
+    story: 'A qualified opportunity creates the first faint Margin Plan. The object exists, but it is still low confidence because product-line economics and delivery assumptions are not fully colored in.',
+    state: 'Margin Plan appears',
+    group: 'z1-3',
+  },
+  {
+    num: 3,
+    label: 'Active Pursuits',
+    subtitle: 'Pillar Product Lines',
+    story: 'The Margin Plan becomes decision-ready. Equipment, Logistics, Professional Services, PreFab, and Procurement are now visible as product lines inside the same economic object.',
+    state: 'Pillars loaded',
+    group: 'z1-3',
+  },
+  {
+    num: 4,
+    label: 'Awarded + First Intents',
+    subtitle: 'Automated Planning',
+    story: 'Crossing Awarded changes the object. The Margin Plan breaks into five pillar planning tools so each operating team can plan its own work while preserving upstream lineage.',
+    state: 'Automated Planning',
+    group: 'z4-5',
+  },
+  {
+    num: 5,
+    label: 'Project-Approved Intents',
+    subtitle: 'Approved Planning Tools',
+    story: 'Each planning tool is reviewed against the project reality. The tools are no longer just modeled assumptions; they become approved project intent with visible ownership.',
+    state: 'Project Approved',
+    group: 'z4-5',
+  },
+  {
+    num: 6,
+    label: 'Verification',
+    subtitle: 'Ready for Request',
+    story: 'The approved intents are verified before they are allowed to become formal 02S requests. This is the quality gate that protects execution from unclear demand.',
+    state: 'Verified',
+    group: 'z6-7',
+  },
+  {
+    num: 7,
+    label: 'Sent Requests',
+    subtitle: 'Formal Request',
+    story: 'Once the tools cross the Formal Request boundary, operational efficiency starts being tracked and improved. The lineage now has SLA and handoff accountability attached.',
+    state: 'Sent Requests',
+    group: 'z6-7',
+  },
+  {
+    num: 8,
+    label: 'Project Actuals',
+    subtitle: 'Project Delivery',
+    story: 'The request reaches project delivery and becomes actual field performance. The clock changes from operational efficiency to actuals tracking, comparing what happened to what was planned.',
+    state: 'Project Actuals',
+    group: 'z8-9',
+  },
+];
+
+const LINEAGE_PILLARS = [
+  { id: 'equipment', product: 'Equipment', planning: 'Equipment Planning', color: 'bg-indigo-500', soft: 'bg-indigo-50', text: 'text-indigo-700', border: 'border-indigo-200', x: 14 },
+  { id: 'logistics', product: 'Logistics', planning: 'Logistics Planning', color: 'bg-emerald-500', soft: 'bg-emerald-50', text: 'text-emerald-700', border: 'border-emerald-200', x: 32 },
+  { id: 'prefab', product: 'PreFab', planning: 'PreFab Planning', color: 'bg-amber-500', soft: 'bg-amber-50', text: 'text-amber-700', border: 'border-amber-200', x: 50 },
+  { id: 'services', product: 'Professional Services', planning: 'Professional Services Planning', color: 'bg-sky-500', soft: 'bg-sky-50', text: 'text-sky-700', border: 'border-sky-200', x: 68 },
+  { id: 'procurement', product: 'Procurement', planning: 'Procurement Planning', color: 'bg-rose-500', soft: 'bg-rose-50', text: 'text-rose-700', border: 'border-rose-200', x: 86 },
+];
+
+const getLineageStageLabel = (zoneNum) => {
+  if (zoneNum >= 8) return 'Project Actuals';
+  if (zoneNum >= 7) return 'Sent Requests';
+  if (zoneNum >= 6) return 'Verified';
+  if (zoneNum >= 5) return 'Project Approved';
+  return 'Automated Planning';
+};
+
+const LineageMilestone = ({ label, className = '' }) => (
+  <div className={`absolute z-20 flex items-center gap-2 ${className}`}>
+    <div className="h-px flex-1 border-t border-dashed border-slate-400" />
+    <span className="rounded-full border border-dashed border-slate-300 bg-white px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-slate-500 shadow-sm">
+      {label}
+    </span>
+    <div className="h-px flex-1 border-t border-dashed border-slate-400" />
+  </div>
+);
+
+const MarginPlanLineageCard = ({ faded = false, showProducts = false }) => (
+  <div className={`w-[310px] rounded-lg border border-indigo-200 bg-white p-4 shadow-lg transition-all duration-500 ${faded ? 'opacity-45 grayscale' : 'opacity-100'}`}>
+    <div className="flex items-start justify-between gap-4">
+      <div>
+        <div className="text-[10px] font-bold uppercase tracking-widest text-indigo-500">Core Object</div>
+        <div className="mt-1 text-lg font-bold text-slate-950">Margin Plan</div>
+      </div>
+      <Target className="h-6 w-6 text-indigo-500" />
+    </div>
+    <div className={`grid grid-cols-2 gap-2 overflow-hidden transition-all duration-500 ${showProducts ? 'mt-3 max-h-40 opacity-100' : 'mt-0 max-h-0 opacity-0'}`}>
+      {LINEAGE_PILLARS.map(pillar => (
+        <div key={pillar.id} className={`rounded border ${pillar.border} ${pillar.soft} px-2 py-1.5`}>
+          <div className={`h-1.5 w-8 rounded-full ${pillar.color}`} />
+          <div className={`mt-1 text-[10px] font-bold ${pillar.text}`}>{pillar.product}</div>
+        </div>
+      ))}
+    </div>
+  </div>
+);
+
+const PlanningLaneCards = ({ zoneNum }) => (
+  <div className="grid grid-cols-1 gap-2 md:grid-cols-5">
+    {LINEAGE_PILLARS.map(pillar => (
+      <div key={pillar.id} className={`rounded-lg border ${pillar.border} ${pillar.soft} p-3 text-center shadow-sm`}>
+        <div className={`mx-auto mb-2 h-2 w-10 rounded-full ${pillar.color}`} />
+        <div className={`text-xs font-bold leading-tight ${pillar.text}`}>{pillar.planning}</div>
+        <div className="mt-2 text-[10px] font-semibold uppercase tracking-wider text-slate-400">{getLineageStageLabel(zoneNum)}</div>
+      </div>
+    ))}
+  </div>
+);
+
+const clamp01 = (value) => Math.min(1, Math.max(0, value));
+
+const LineageTravelingObject = ({ activeZone, progress }) => {
+  const lineagePosition = activeZone - 1 + progress;
+  const drift = Math.round((lineagePosition / (LINEAGE_ZONES.length - 1)) * 170);
+  const top = `calc(${lineagePosition * 78}vh + ${drift - 220}px)`;
+  const rawToMargin = clamp01((lineagePosition - 0.72) / 0.35);
+  const productLines = clamp01((lineagePosition - 1.72) / 0.45);
+  const planningMorph = clamp01((lineagePosition - 2.95) / 0.45);
+  const exitToLearning = 1 - clamp01((lineagePosition - 7.52) / 0.22);
+  const currentZone = Math.min(8, Math.max(1, Math.floor(lineagePosition) + 1));
+
+  return (
+    <div
+      className="pointer-events-none absolute inset-x-6 z-30 transition-[top] duration-150 ease-out"
+      style={{ top, opacity: exitToLearning }}
+      aria-hidden="true"
+    >
+      <div className="relative min-h-[170px]">
+        <div
+          className="absolute left-1/2 top-0 w-[240px] -translate-x-1/2 rounded-lg border border-slate-200 bg-slate-50 p-4 text-center shadow-sm transition-opacity duration-200"
+          style={{ opacity: Math.max(0, 1 - rawToMargin) }}
+        >
+          <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400">AOP Signal</div>
+          <div className="mt-1 text-lg font-bold text-slate-900">Raw Forecast</div>
+          <div className="mt-2 text-xs font-medium text-slate-500">Not yet correlated to a qualified opportunity.</div>
+        </div>
+
+        <div
+          className="absolute left-1/2 top-0 -translate-x-1/2 transition-all duration-200"
+          style={{
+            opacity: Math.min(rawToMargin, 1 - planningMorph),
+            transform: `translateX(-50%) scale(${1 - planningMorph * 0.08})`,
+          }}
+        >
+          <MarginPlanLineageCard faded={lineagePosition < 1.55} showProducts={productLines > 0.2} />
+        </div>
+
+        <div
+          className="absolute inset-x-0 top-0 transition-all duration-200"
+          style={{
+            opacity: planningMorph,
+            transform: `scale(${0.96 + planningMorph * 0.04})`,
+          }}
+        >
+          <PlanningLaneCards zoneNum={currentZone} />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const LineageRailScene = ({ zone, isActive, progress }) => {
+  const isSplit = zone.num >= 4;
+  const isForkZone = zone.num === 4;
+  const isFiveRailZone = zone.num >= 5;
+  const railOpacity = isActive ? 'opacity-100' : 'opacity-55';
+
+  return (
+    <div className="relative min-h-[78vh] overflow-hidden bg-white">
+      {zone.num === 4 && <LineageMilestone label="Project Awarded" className="inset-x-8 top-0" />}
+      {zone.num === 7 && <LineageMilestone label="Formal Request" className="inset-x-8 top-0" />}
+      {zone.num === 8 && <LineageMilestone label="Project Delivery" className="inset-x-8 top-0" />}
+
+      {(zone.num === 7 || zone.num === 8) && (
+        <div className="absolute right-5 top-5 z-30 flex max-w-[230px] items-start gap-3 rounded-lg border border-slate-200 bg-white p-3 shadow-lg">
+          <div className="rounded-full bg-slate-900 p-2 text-white">
+            <Clock className="h-4 w-4" />
+          </div>
+          <div>
+            <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Tracking Clock</div>
+            <div className="mt-1 text-xs font-bold leading-tight text-slate-800">
+              {zone.num >= 8 ? 'Actuals Tracking' : 'Pillar Operational Efficiency Tracked and Improved'}
+            </div>
+          </div>
+        </div>
+      )}
+
+      <svg className={`absolute inset-0 h-full w-full transition-opacity duration-500 ${railOpacity}`} viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        {!isSplit && (
+          <line x1="50" y1="0" x2="50" y2="100" stroke="#0f172a" strokeWidth="0.32" strokeLinecap="round" />
+        )}
+        {isForkZone && (
+          <>
+            <path d="M50 0 L50 24" fill="none" stroke="#0f172a" strokeWidth="0.32" strokeLinecap="round" />
+            {LINEAGE_PILLARS.map(pillar => (
+              <path
+                key={pillar.id}
+                d={`M50 24 C50 34 ${pillar.x} 30 ${pillar.x} 44 L${pillar.x} 100`}
+                fill="none"
+                stroke="#0f172a"
+                strokeWidth="0.24"
+                strokeLinecap="round"
+              />
+            ))}
+          </>
+        )}
+        {isFiveRailZone && LINEAGE_PILLARS.map(pillar => (
+          <line
+            key={pillar.id}
+            x1={pillar.x}
+            y1="0"
+            x2={pillar.x}
+            y2="100"
+            stroke="#0f172a"
+            strokeWidth="0.24"
+            strokeLinecap="round"
+          />
+        ))}
+      </svg>
+    </div>
+  );
+};
+
+const ZoneLineageStory = ({ onSelectWorkflow }) => {
+  const [activeZone, setActiveZone] = useState(1);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const sectionRefs = useRef([]);
+  const tickingRef = useRef(false);
+
+  const personaToolsByZone = useMemo(() => {
+    const normalPersonas = PERSONAS.filter(persona => !persona.id.startsWith('command-center'));
+
+    return LINEAGE_ZONES.reduce((zoneMap, zone) => {
+      const toolMap = new Map();
+
+      normalPersonas.forEach((persona) => {
+        const cards = PERSONA_EQUIPMENT_GRID[persona.id]?.[zone.group]?.cards || [];
+        cards.forEach((cardId) => {
+          const resolvedId = CARD_REGISTRY[cardId]?.resolveId || cardId;
+          const card = CARD_REGISTRY[resolvedId];
+          if (!card) return;
+
+          if (!toolMap.has(resolvedId)) {
+            toolMap.set(resolvedId, {
+              id: resolvedId,
+              title: card.title,
+              description: card.description,
+              icon: card.icon,
+              colorClass: card.colorClass,
+              highlight: card.highlight,
+              personas: [],
+            });
+          }
+          toolMap.get(resolvedId).personas.push(persona.label);
+        });
+      });
+
+      zoneMap[zone.num] = Array.from(toolMap.values()).slice(0, 5);
+      return zoneMap;
+    }, {});
+  }, []);
+
+  useEffect(() => {
+    const updateActiveZone = () => {
+      tickingRef.current = false;
+      const viewportAnchor = window.innerHeight * 0.42;
+      let nextZone = 1;
+      let nextProgress = 0;
+
+      sectionRefs.current.forEach((node, index) => {
+        if (!node) return;
+        const rect = node.getBoundingClientRect();
+        if (rect.top <= viewportAnchor) {
+          nextZone = index + 1;
+          nextProgress = Math.min(1, Math.max(0, (viewportAnchor - rect.top) / Math.max(rect.height, 1)));
+        }
+      });
+
+      setActiveZone(nextZone);
+      setScrollProgress(nextProgress);
+    };
+
+    const requestUpdate = () => {
+      if (tickingRef.current) return;
+      tickingRef.current = true;
+      window.requestAnimationFrame(updateActiveZone);
+    };
+
+    updateActiveZone();
+    window.addEventListener('scroll', requestUpdate, { passive: true });
+    window.addEventListener('resize', requestUpdate);
+
+    return () => {
+      window.removeEventListener('scroll', requestUpdate);
+      window.removeEventListener('resize', requestUpdate);
+    };
+  }, []);
+
+  const activeZoneData = LINEAGE_ZONES.find(zone => zone.num === activeZone) || LINEAGE_ZONES[0];
+  const tools = personaToolsByZone[activeZone] || [];
+
+  return (
+    <div className="bg-slate-50 text-slate-900">
+      <div className="mx-auto max-w-[1500px] px-4 py-6 md:px-8">
+        <div className="mb-5 flex flex-col gap-2 border-b border-slate-200 pb-5 md:flex-row md:items-end md:justify-between">
+          <div>
+            <div className="text-[10px] font-bold uppercase tracking-[0.24em] text-slate-500">Command Center Zone Story</div>
+            <h1 className="mt-1 text-2xl font-bold tracking-tight text-slate-950 md:text-3xl">Zone Lineage: Margin Plan to Actuals</h1>
+          </div>
+          <div className="max-w-xl text-sm font-medium leading-relaxed text-slate-500">
+            Follow one core object as it becomes pillar planning tools, formal requests, project actuals, and finally learning that improves the next cycle.
+          </div>
+        </div>
+
+        <div className="grid gap-5 lg:grid-cols-[170px_minmax(0,1fr)_340px]">
+          <aside className="sticky top-[72px] z-20 -mx-4 border-y border-slate-200 bg-white/95 px-4 py-3 shadow-sm backdrop-blur lg:mx-0 lg:h-[calc(100vh-96px)] lg:rounded-lg lg:border lg:py-4">
+            <div className="mb-3 hidden text-[10px] font-bold uppercase tracking-widest text-slate-400 lg:block">Zones 1-8</div>
+            <div className="flex gap-2 overflow-x-auto lg:flex-col lg:overflow-visible">
+              {LINEAGE_ZONES.map(zone => {
+                const isActive = zone.num === activeZone;
+                return (
+                  <button
+                    key={zone.num}
+                    onClick={() => sectionRefs.current[zone.num - 1]?.scrollIntoView({ behavior: 'smooth', block: 'center' })}
+                    className={`min-w-[132px] rounded-md border px-3 py-2 text-left transition-all lg:min-w-0 ${
+                      isActive
+                        ? 'border-slate-900 bg-slate-900 text-white shadow-md'
+                        : 'border-slate-200 bg-white text-slate-500 hover:border-slate-300 hover:text-slate-800'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-[10px] font-bold uppercase tracking-widest">Zone {zone.num}</span>
+                      <span className={`h-2 w-2 rounded-full ${isActive ? 'bg-emerald-400' : 'bg-slate-300'}`} />
+                    </div>
+                    <div className="mt-1 text-xs font-bold leading-tight">{zone.label}</div>
+                  </button>
+                );
+              })}
+            </div>
+          </aside>
+
+          <main className="relative min-w-0 overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm">
+            <LineageTravelingObject activeZone={activeZone} progress={scrollProgress} />
+            {LINEAGE_ZONES.map((zone, index) => (
+              <section
+                key={zone.num}
+                ref={(node) => { sectionRefs.current[index] = node; }}
+                className="scroll-mt-24"
+                aria-label={`Zone ${zone.num}: ${zone.label}`}
+              >
+                <LineageRailScene
+                  zone={zone}
+                  isActive={activeZone === zone.num}
+                  progress={activeZone === zone.num ? scrollProgress : 0}
+                />
+              </section>
+            ))}
+
+            <section className="min-h-screen bg-white p-6 pt-16 md:p-8 md:pt-20">
+              <div className="mb-8 max-w-3xl">
+                <div className="text-[10px] font-bold uppercase tracking-[0.24em] text-rose-500">Zone 9</div>
+                <h2 className="mt-2 text-3xl font-bold tracking-tight text-slate-950">Learning Zones</h2>
+                <p className="mt-3 text-sm leading-relaxed text-slate-600">
+                  Zone 9 asks what changed between the Margin Plan, the Planning Tool, and the Actuals. The answer is written back as better defaults, better scoring, and better early warnings for every upstream zone.
+                </p>
+              </div>
+              <div className="grid gap-4 md:grid-cols-3">
+                {['Margin Plan', 'Planning Tool', 'Actuals'].map((label, index) => (
+                  <div key={label} className="rounded-lg border border-slate-200 bg-slate-50 p-5">
+                    <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-full bg-slate-900 text-sm font-bold text-white">{index + 1}</div>
+                    <h3 className="text-lg font-bold text-slate-900">{label}</h3>
+                    <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                      {index === 0 && 'What did we believe the opportunity economics and pillar needs would be?'}
+                      {index === 1 && 'What did each pillar plan, approve, verify, and send into the operational handoff?'}
+                      {index === 2 && 'What actually happened in the project, including cost, timing, utilization, exceptions, and vendor performance?'}
+                    </p>
+                  </div>
+                ))}
+              </div>
+              <div className="mt-8 rounded-lg border border-rose-200 bg-rose-50 p-5">
+                <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+                  <div>
+                    <div className="text-[10px] font-bold uppercase tracking-widest text-rose-600">Learning Writeback</div>
+                    <div className="mt-1 text-lg font-bold text-slate-950">Lessons learned return to Zones 1-8</div>
+                  </div>
+                  <div className="flex flex-wrap items-center gap-2 text-xs font-bold text-rose-700">
+                    {LINEAGE_ZONES.map(zone => (
+                      <span key={zone.num} className="rounded-full border border-rose-200 bg-white px-2.5 py-1">Zone {zone.num}</span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </section>
+          </main>
+
+          <aside className="sticky top-[72px] h-fit rounded-lg border border-slate-200 bg-white p-5 shadow-sm">
+            <div className="text-[10px] font-bold uppercase tracking-[0.24em] text-slate-400">Current Story</div>
+            <h2 className="mt-2 text-xl font-bold leading-tight text-slate-950">Zone {activeZone}: {activeZoneData.label}</h2>
+            <div className="mt-1 text-sm font-semibold text-slate-500">{activeZoneData.subtitle}</div>
+            <p className="mt-4 text-sm leading-relaxed text-slate-600">{activeZoneData.story}</p>
+
+            <div className="mt-5 border-t border-slate-200 pt-4">
+              <div className="mb-3 text-[10px] font-bold uppercase tracking-widest text-slate-400">Available Tools & Personas</div>
+              <div className="space-y-3">
+                {tools.map(tool => (
+                  <button
+                    key={tool.id}
+                    type="button"
+                    onClick={() => onSelectWorkflow?.({
+                      id: tool.id,
+                      title: tool.title,
+                      description: tool.description,
+                      icon: tool.icon,
+                      colorClass: tool.colorClass,
+                      highlight: tool.highlight,
+                      zone: `Zone ${activeZone}: ${activeZoneData.label}`,
+                    })}
+                    className="group w-full rounded-md border border-slate-200 bg-slate-50 p-3 text-left transition-all hover:-translate-y-0.5 hover:border-indigo-200 hover:bg-white hover:shadow-md focus:outline-none focus:ring-2 focus:ring-indigo-500/30"
+                  >
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="text-sm font-bold text-slate-800">{tool.title}</div>
+                      <ChevronRight className="h-4 w-4 shrink-0 text-slate-300 transition-colors group-hover:text-indigo-500" />
+                    </div>
+                    <div className="mt-2 flex flex-wrap gap-1">
+                      {tool.personas.map(persona => (
+                        <span key={persona} className="rounded-full bg-white px-2 py-0.5 text-[10px] font-semibold text-slate-500 ring-1 ring-slate-200">{persona}</span>
+                      ))}
+                    </div>
+                  </button>
+                ))}
+                {tools.length === 0 && (
+                  <div className="rounded-md border border-dashed border-slate-300 p-4 text-sm text-slate-500">
+                    No direct workflow cards are mapped to this zone yet.
+                  </div>
+                )}
+              </div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 const App = () => {
   const [selectedNode, setSelectedNode] = useState(null);
   const [isTourActive, setIsTourActive] = useState(false);
@@ -3806,6 +4280,22 @@ const App = () => {
       { id: 2, title: "Measure Clarity Risk on Financial Outcomes", targetNodes: ['clarityscoring'], highlightSpine: false, transcript: "Clarity Scoring quantifies how decision-ready each equipment need is. From a finance perspective, low clarity is a cost risk: every item below 50% clarity is likely to be fulfilled through constrained-path sourcing at premium rates. This view lets you model the financial exposure created by specification gaps. If 30% of your portfolio's line items are below the clarity threshold, you can quantify the projected cost premium and escalate to leadership with data, not anecdotes. Clarity isn't just an operational metric — it's a leading financial indicator." },
       { id: 3, title: "Catch Billing Errors Before They Post", targetNodes: ['anomaly'], highlightSpine: false, transcript: "Billing Anomaly Detection flags invoice discrepancies before they impact the bottom line. The system compares vendor invoices against contract terms, historical pricing patterns, and project-level commitments to surface rate deviations, duplicate charges, and quantity mismatches. In a high-volume equipment operation, even small per-unit billing errors compound into significant margin erosion over a portfolio. This is your automated first line of defense against revenue leakage — catching errors that would otherwise be buried in monthly reconciliation reports." },
       { id: 4, title: "Close the Loop: Actuals vs. Plan", targetNodes: ['flywheel'], highlightSpine: false, transcript: "The Learning Flywheel compares actualized costs, durations, and vendor outcomes against the original V0 baseline and financial projections. For Finance, this is your variance analysis engine. It answers: Did we earn the margin we planned? Where did assumptions break down? Were cost overruns driven by late clarity, vendor performance, or market conditions? The writeback mechanism feeds calibrated actuals back into upstream templates, which means your next cycle's forecasts start from a more accurate baseline. Over time, the gap between plan and actuals narrows structurally — not because people try harder, but because the models improve with every cycle." },
+    ],
+
+    'command-center-zone-story': [
+      { id: 0, title: "The Full Zone Story", targetNodes: [], highlightSpine: true, transcript: "This view tells the Command Center story by zone progression. It starts with portfolio signals, moves into baseline and intent, validates each request before handoff, and closes with execution feedback that improves the next cycle." },
+      { id: 1, title: "Forecast and Shape Demand", targetNodes: ['forecast', 'fitscore', 'margin'], highlightSpine: false, transcript: "Zones 1-3 turn early pipeline data into actionable demand. Forecasting estimates what is coming, Fit Score identifies where 02S should engage, and Margin Plan anchors the economic case before operational work begins." },
+      { id: 2, title: "Baseline and Refine Intent", targetNodes: ['prepop', 'costofdelay', 'clarityscoring', 'projectmaturity'], highlightSpine: false, transcript: "Zones 4-5 convert demand signals into a working plan. The baseline is generated, clarity is scored, cost of delay is made visible, and project maturity shows where attention is needed." },
+      { id: 3, title: "Validate and Hand Off", targetNodes: ['preflight', 'formalrequest', 'regression'], highlightSpine: false, transcript: "Zones 6-7 protect execution quality. Preflight catches request defects, Formal Request creates a clean operational handoff, and Regression Events keep the system honest when assumptions change." },
+      { id: 4, title: "Execute and Learn", targetNodes: ['execution', 'vendorscorecard', 'flywheel'], highlightSpine: false, transcript: "Zones 8-9 show whether the plan is working in the field. Execution Dashboard tracks active work, Vendor Scorecard captures fulfillment performance, and the Learning Flywheel writes better defaults back upstream." },
+    ],
+
+    'command-center-persona-story': [
+      { id: 0, title: "The Full Persona Story", targetNodes: [], highlightSpine: true, transcript: "This view tells the Command Center story by who uses it. Project teams, RSI and FSI, 02S Operations, Leadership, and Finance all see the same zone truth, but each persona gets the workflows that match their decisions." },
+      { id: 1, title: "Pursuit and Financial Alignment", targetNodes: ['quotes', 'fitscore', 'fpa'], highlightSpine: false, transcript: "RSI and FSI shape early engagement with Quick Quotes and Fit Score, while Finance uses FP&A Sync to keep operational plans aligned with forecast commitments." },
+      { id: 2, title: "Project Team Clarity", targetNodes: ['prepop', 'adhoc', 'clarityscoring', 'projectmaturity'], highlightSpine: false, transcript: "Project teams and FSIs work together to confirm the baseline, enter ad-hoc needs, improve clarity, and track which packages are ready for the next gate." },
+      { id: 3, title: "Operations Fulfillment", targetNodes: ['optimize', 'source', 'formalrequest'], highlightSpine: false, transcript: "02S Operations turns validated demand into fulfillment decisions: owned versus re-rent, strategic sourcing, and formal request routing with lineage attached." },
+      { id: 4, title: "Leadership and Learning", targetNodes: ['execution', 'anomaly', 'flywheel'], highlightSpine: false, transcript: "Leadership and Finance monitor execution health, catch billing issues, and use the learning loop to make the next project plan more accurate than the last." },
     ],
   };
 
@@ -3860,9 +4350,9 @@ const App = () => {
       {/* Top Navigation Bar */}
       <div className="bg-slate-900 border-b border-slate-700 sticky top-0 z-40 shadow-lg">
         <div className="max-w-7xl mx-auto px-4 md:px-8">
-          <div className="flex items-center justify-between h-14">
+          <div className="flex items-center justify-between min-h-14 gap-3 py-2">
             {/* Persona Tabs */}
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-0.5 min-w-0 overflow-x-auto">
               {PERSONAS.map(persona => {
                 const Icon = persona.icon;
                 const isActive = activePersona === persona.id;
@@ -3870,13 +4360,13 @@ const App = () => {
                   <button
                     key={persona.id}
                     onClick={() => { setActivePersona(persona.id); if (isTourActive) setTourStep(0); }}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-all ${
+                    className={`flex items-center gap-1.5 px-2 py-2 rounded-lg text-[11px] font-semibold whitespace-nowrap transition-all ${
                       isActive
                         ? 'bg-indigo-600 text-white shadow-md'
                         : 'text-slate-400 hover:text-white hover:bg-slate-800'
                     }`}
                   >
-                    <Icon className="w-4 h-4" />
+                    <Icon className="w-3.5 h-3.5" />
                     {persona.label}
                   </button>
                 );
@@ -3884,58 +4374,65 @@ const App = () => {
             </div>
 
             <div className="flex items-center gap-3">
-              {/* Trigger Bell */}
-              <button
-                onClick={() => setTriggerPanelOpen(!triggerPanelOpen)}
-                className="relative p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all"
-              >
-                <Bell className="w-5 h-5" />
-                <span className="absolute -top-0.5 -right-0.5 w-4.5 h-4.5 bg-rose-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center ring-2 ring-slate-900">3</span>
-              </button>
-
-            {/* Pillar Selector */}
-            <div className="relative">
-              <button
-                onClick={() => setPillarDropdownOpen(!pillarDropdownOpen)}
-                className="flex items-center gap-2 bg-slate-800 border border-slate-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-slate-700 transition-colors"
-              >
-                <Box className="w-4 h-4 text-indigo-400" />
-                {activePillarObj.label}
-                <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${pillarDropdownOpen ? 'rotate-180' : ''}`} />
-              </button>
-              {pillarDropdownOpen && (
+              {activePersona !== 'command-center-zone-story' && (
                 <>
-                  <div className="fixed inset-0 z-40" onClick={() => setPillarDropdownOpen(false)} />
-                  <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-lg shadow-xl border border-slate-200 py-1 z-50">
-                    {PILLARS.map(pillar => (
-                      <button
-                        key={pillar.id}
-                        onClick={() => { if (pillar.enabled) { setActivePillar(pillar.id); setPillarDropdownOpen(false); } }}
-                        className={`w-full text-left px-4 py-2.5 text-sm flex items-center justify-between ${
-                          pillar.enabled
-                            ? pillar.id === activePillar
-                              ? 'bg-indigo-50 text-indigo-700 font-semibold'
-                              : 'text-slate-700 hover:bg-slate-50'
-                            : 'text-slate-400 cursor-not-allowed'
-                        }`}
-                      >
-                        <span>{pillar.label}</span>
-                        {!pillar.enabled && (
-                          <span className="text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-400 px-2 py-0.5 rounded-full border border-slate-200">Coming Soon</span>
-                        )}
-                      </button>
-                    ))}
+                  {/* Trigger Bell */}
+                  <button
+                    onClick={() => setTriggerPanelOpen(!triggerPanelOpen)}
+                    className="relative p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all"
+                  >
+                    <Bell className="w-5 h-5" />
+                    <span className="absolute -top-0.5 -right-0.5 w-4.5 h-4.5 bg-rose-500 text-white text-[9px] font-bold rounded-full flex items-center justify-center ring-2 ring-slate-900">3</span>
+                  </button>
+
+                  {/* Pillar Selector */}
+                  <div className="relative">
+                    <button
+                      onClick={() => setPillarDropdownOpen(!pillarDropdownOpen)}
+                      className="flex items-center gap-2 bg-slate-800 border border-slate-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-slate-700 transition-colors"
+                    >
+                      <Box className="w-4 h-4 text-indigo-400" />
+                      {activePillarObj.label}
+                      <ChevronDown className={`w-4 h-4 text-slate-400 transition-transform ${pillarDropdownOpen ? 'rotate-180' : ''}`} />
+                    </button>
+                    {pillarDropdownOpen && (
+                      <>
+                        <div className="fixed inset-0 z-40" onClick={() => setPillarDropdownOpen(false)} />
+                        <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-lg shadow-xl border border-slate-200 py-1 z-50">
+                          {PILLARS.map(pillar => (
+                            <button
+                              key={pillar.id}
+                              onClick={() => { if (pillar.enabled) { setActivePillar(pillar.id); setPillarDropdownOpen(false); } }}
+                              className={`w-full text-left px-4 py-2.5 text-sm flex items-center justify-between ${
+                                pillar.enabled
+                                  ? pillar.id === activePillar
+                                    ? 'bg-indigo-50 text-indigo-700 font-semibold'
+                                    : 'text-slate-700 hover:bg-slate-50'
+                                  : 'text-slate-400 cursor-not-allowed'
+                              }`}
+                            >
+                              <span>{pillar.label}</span>
+                              {!pillar.enabled && (
+                                <span className="text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-400 px-2 py-0.5 rounded-full border border-slate-200">Coming Soon</span>
+                              )}
+                            </button>
+                          ))}
+                        </div>
+                      </>
+                    )}
                   </div>
                 </>
               )}
-            </div>
             </div>
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="flex-grow p-4 md:p-8 overflow-x-auto">
+      <div className={`flex-grow ${activePersona === 'command-center-zone-story' ? 'p-0 bg-white' : 'p-4 md:p-8 overflow-x-auto'}`}>
+        {activePersona === 'command-center-zone-story' ? (
+          <ZoneLineageStory onSelectWorkflow={setSelectedNode} />
+        ) : (
         <div className={`transition-all duration-500 ${selectedNode ? 'blur-sm scale-95 opacity-50' : 'blur-0 scale-100 opacity-100'} min-w-[1000px] max-w-7xl mx-auto space-y-6`}>
           {/* Wave Sequencing — Build Roadmap */}
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
@@ -4247,10 +4744,11 @@ const App = () => {
             </div>
           </div>
         </div>
+        )}
       </div>
 
       {/* Trigger Panel */}
-      {triggerPanelOpen && (
+      {activePersona !== 'command-center-zone-story' && triggerPanelOpen && (
         <>
           <div className="fixed inset-0 z-40 bg-slate-900/20" onClick={() => setTriggerPanelOpen(false)} />
           <div className="fixed top-0 right-0 h-full w-[420px] bg-white shadow-2xl z-50 flex flex-col border-l border-slate-200">
@@ -4379,7 +4877,7 @@ const App = () => {
       )}
 
       {/* Tour Overlay */}
-      {isTourActive && (
+      {activePersona !== 'command-center-zone-story' && isTourActive && (
         <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-white rounded-2xl shadow-2xl border border-slate-200 p-6 w-[600px]">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
